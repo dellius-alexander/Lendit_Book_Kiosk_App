@@ -1,0 +1,91 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.194.3/containers/docker-in-docker
+{
+	"name": "Lendit Book Kiosk App",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"runServices": ["app","db","adminer"],
+	"remoteEnv": { // place local variables here
+		// "PATH": "${containerEnv:PATH}:/some/other/path", 
+		"GIT_USER": "${localEnv:GIT_USER}" ,
+		"GIT_EMAIL": "${localEnv:GIT_EMAIL}" },
+	"overrideCommand": false,
+	
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"maven.executable.path": "/opt/apache-maven-3.8.4/bin/mvn",
+		"java.home": "/usr/local/openjdk-11"
+		// "sqltools.connections": [{
+		// 	"name": "Container database",
+		// 	"driver": "MySQL",
+		// 	"previewLimit": 50,
+		// 	"server": "127.0.0.1",
+		// 	"port": 3306,
+		// 	"database": "Lendit_Book_Kiosk",
+		// 	"username": "root",
+		// 	"password": "developer"
+		// }]
+
+	},
+	
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		// "tomoki1207.pdf",
+		"vscjava.vscode-java-pack",
+		"redhat.java",
+		"redhat.vscode-commons",
+		// "ms-azuretools.vscode-docker",
+		"davidanson.vscode-markdownlint",
+		// "dotjoshjohnson.xml",
+		"vscjava.vscode-maven",
+		"redhat.fabric8-analytics",
+		// // "vscjava.vscode-gradle",
+		"cweijan.vscode-mysql-client2",
+		"pivotal.vscode-boot-dev-pack"
+	],
+
+	// // Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [8081,8082,3306],
+
+	// // Port Attributes listed below
+	// "portsAttributes": {
+	// 	"8081": {
+	// 		"label": "app-dev",
+	// 		"requireLocalPort": false,
+	// 		"onAutoForward": "notify"
+	// 	},
+	// 	"8082": {
+	// 		"label": "app-test",
+	// 		"requireLocalPort": false,
+	// 		"onAutoForward": "notify"
+	// 	},
+	// 	"8080": {
+	// 		"label": "adminer",
+	// 		"requireLocalPort": false,
+	// 		"onAutoForward": "notify"
+	// 	},
+	// 	"3306":{
+	// 		"label": "mysql",
+	// 		"requireLocalPort": false,
+	// 		"onAutoForward": "notify"
+	// 	}
+	// },
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+
+	// Features
+	"features": {
+		"docker-in-docker": "20.10",
+		// "git": "latest",
+		"sshd": "latest"
+	},
+	
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "docker --version && printf \n && docker info && printf \n && java -version && printf \n && javac -version && printf \n && mvn -v && sleep 3 && printf \n && ls -lia ${APP_DIR} && /usr/bin/zsh",
+
+	// Workspace folder in container
+	"workspaceFolder": "/home/vscode/Lendit_Book_Kiosk_App/",
+
+	
+}

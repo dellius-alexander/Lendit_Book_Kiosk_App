@@ -1,0 +1,166 @@
+version: '3'
+services:
+#####################################################################
+  app:
+    # image: dalexander2israel/lendit_book_kiosk:base_v1
+    build:
+      context: .
+      dockerfile: base.Dockerfile      
+      args:
+        UPGRADE_PACKAGES: "true"
+        JAVA_VERSION: "11"
+        SDKMAN_DIR: "/root/.sdkman/bin/sdkman-init.sh"
+        # Update the VARIANT arg to pick a Java version: 11, 16
+        VARIANT: "11"
+        # Options
+        INSTALL_MAVEN: "false"
+        INSTALL_GRADLE: "true"
+        NODE_VERSION: "16"
+        APP_DIR: "/home/vscode/Lendit_Book_Kiosk_App"
+        GIT_REPO: "https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git"
+        GIT_BRANCH: "main"
+        MAVEN_VERSION: "3.8.4"
+        # Add Github USER.NAME
+        GIT_USER: "${GIT_USER}"
+        # Add Github USER.EMAIL
+        GIT_EMAIL: "${GIT_EMAIL}"
+        INSTALL_ZSH: "true"
+        USE_MOBY: "true"
+        # User Info
+        USERNAME: "vscode"
+        USERCRED: /run/secrets/mysql_passwd
+        # Add packages whitespaced apart in quotation => "pkg1 pkg2 pkg3"
+        ADDITIONAL_PACKAGES: ""
+    container_name: Lendit_Book_Kiosk-app
+    environment:
+      - M2=/opt/apache-maven-3.8.4/bin
+      - JAVA_HOME=/usr/local/openjdk-11
+      - M2_HOME=/opt/apache-maven-3.8.4
+      # - PATH=$MAVEN_HOME:$PATH
+      - MAVEN_OPTS='-Xms256m -Xmx512m'
+      - APP_DIR="/home/vscode/Lendit_Book_Kiosk_App"
+      - GIT_REPO="https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git"
+      - PATH='/opt/apache-maven-3.8.4/bin:/usr/local/share/nvm/current/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/openjdk-11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sdkman/candidates/gradle/current/bin'
+    volumes: 
+      # Forwards the local Docker socket to the container.
+      # - /var/run/docker.sock:/var/run/docker-host.sock
+      # Update this to wherever you want VS Code to mount the folder of your project
+      - ../:/home/vscode/Lendit_Book_Kiosk_App
+    # Overrides default command so things don't shut down after the process ends.
+    # entrypoint: /usr/local/share/docker-init.sh
+    # command: sleep infinity
+    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
+    # cap_add:
+    #  - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+    # Setup web app dependencies
+    depends_on:
+      - db
+    # links:
+    #   - db
+    # # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+    #restart: "no"
+    #restart: always
+    # restart: on-failure
+    restart: unless-stopped
+    expose:
+      - 8081
+      - 8082
+    ports:
+    - 8081:8081
+    - 8082:8082
+    # # network_mode: service:db
+    # networks:
+    #   lamp-network:
+    #     ipv4_address: 172.16.238.20     # default gateway  172.16.238.1
+    #     ipv6_address: 2001:3984:3989::10
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+#####################################################################
+  db:
+    image: mysql:8.0.27
+    # init: true
+    container_name: Lendit_Book_Kiosk-db
+    environment:
+      # MySQL allow empty password variable
+      # MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      # Name of the database
+      MYSQL_DATABASE: Lendit_Book_Kiosk
+      # ##### MySQL Host variable:
+      # # So you don't have to use root, but you can if you like
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: /run/secrets/mysql_passwd
+      # # You can use whatever password you like
+      # Password for root access
+      # MYSQL_ROOT_PASSWORD: 'developer'
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_passwd
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./.logs/mysql_log:/var/log/
+      # define privileged mysql directory
+      - ./my_conf:/etc/mysql/conf.d
+      # map sql directory to privileged mysql directory
+      - ../SQL:/mysql_files # map sql directory to privileged mysql directory
+    #restart: "no"
+    #restart: always
+    # restart: on-failure
+    restart: unless-stopped
+    expose:
+      - 3306 
+      - 33060
+    ports:
+      - 3306:3306
+      - 33060:33060
+    # networks:
+    #   lamp-network:
+    #     ipv4_address: 172.16.238.18    # default gateway  172.16.238.1
+        #ipv6_address: 2001:3984:3989::9   
+    # command:
+    # - "mv /var/log/mysqld.log /var/log/mysqld.log.old"
+    # - "&&"
+    # - "install -omysql -gmysql -m0644 /dev/null /var/log/mysqld.log"    
+    # command: ["--default-authentication-plugin=mysql_native_password"]
+    #command: ["mysqld --verbose --help"]
+    secrets:
+      - mysql_passwd
+      # - mysql_secret_key
+      # - mysql_secret_pub
+#####################################################################
+  adminer:
+    image: adminer:latest
+    container_name: Lendit_Book_Kiosk-adminer
+    restart: unless-stopped
+    expose:
+    - 8080
+    ports:
+    - 8080:8080
+    # entrypoint: 
+    # - "entrypoint.sh"
+    # - "docker-php-entrypoint"
+    # depends_on:
+    # - db
+################################# volumes ###########################
+# since we are using direct access to host directories, we do not need to 
+# declare any virtual volume mounts
+#####################################################################
+# NETWORKS
+# networks:
+#   lamp-network:
+#     driver: bridge
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 172.16.238.16/28
+          #gateway: 172.16.238.1
+        # - subnet: 2001:3984:3989::/64
+          #gateway: 2001:3984:3989::1
+#####################################################################
+# SECRETS can be passed into any container after defined her in secrets definition.
+secrets:
+  mysql_passwd:
+    file: ./.secrets/mysql_passwd
+
+volumes: 
+  mysql-data: null
