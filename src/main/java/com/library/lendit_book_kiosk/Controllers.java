@@ -37,7 +37,7 @@ class GreetingsController {
      * @param name the name to greet
      * @return greeting text
      */
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/v1/{name}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<String> greeting(@PathVariable String name) {
         log.info("Hello " + name + "!");
