@@ -86,7 +86,6 @@ jobs:
           whereis java
           which java   
           mvn -v
-          systemctl start mysql
       - name: step 3 - Verify MySQL connection from container
         env:
           MYSQL_HOST: ${{ env.MYSQL_HOST }}
