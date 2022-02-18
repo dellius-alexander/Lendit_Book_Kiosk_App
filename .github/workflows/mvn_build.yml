@@ -39,6 +39,7 @@ jobs:
           MYSQL_USER: ${{ env.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+          MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
         options: >-
           --name=mysql-master
           --health-cmd="mysqladmin ping" 
@@ -50,13 +51,13 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mysql-client
-          wget -o  /tmp/apache-maven-${{ MAVEN_VERSION }}-bin.tar.gz  \
+          wget -o  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
           https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
-          tar xzvf /tmp/apache-maven-${{ MAVEN_VERSION }}-bin.tar.gz  -C  /opt/
+          tar xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  -C  /opt/
           ENV_EXPORTS="""\n\
-          export M2_HOME=/opt/apache-maven-${{ MAVEN_VERSION }} \n\
-          export M2=/opt/apache-maven-${{ MAVEN_VERSION }}/bin \n\
-          export PATH=/opt/apache-maven-${{ MAVEN_VERSION }}/bin:$PATH \n\
+          export M2_HOME=/opt/apache-maven-${MAVEN_VERSION} \n\
+          export M2=/opt/apache-maven-${MAVEN_VERSION}/bin \n\
+          export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH \n\
           export MAVEN_OPTS='-Xms256m -Xmx512m' \n\
           """
           groupadd mvn
