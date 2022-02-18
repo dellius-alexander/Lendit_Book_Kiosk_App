@@ -87,29 +87,31 @@ jobs:
           which java   
           mvn -v
           systemctl start mysql
-      # - name: step 3 - Verify MySQL connection from container
-      #   env:
-      #     MYSQL_HOST: ${{ env.MYSQL_HOST }}
-      #     MYSQL_PORT: ${{ env.MYSQL_PORT }}
-      #     MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
-      #     MYSQL_USER: ${{ env.MYSQL_USER }}
-      #     MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-      #     MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-      #   run: |
-      #     echo "MySQL USER: ${MYSQL_USER}"
-      #     mysql --help
-      #     man mysql
-      #     # Let us consider the following typical mysql backup script:
-      #     mysqldump --routines --no-data -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
-      #     # It succeeds but stderr will get:
-      #     # Warning: Using a password on the command line interface can be insecure.
-      #     # You can fix this with the below hack:
-      #     credentialsFile=/mysql-credentials.cnf
-      #     echo "[client]" > ${credentialsFile}
-      #     echo "user=${MYSQL_USER}" >> ${credentialsFile}
-      #     echo "password=${MYSQL_ROOT_PASSWORD}" >> ${credentialsFile}
-      #     echo "host=${MYSQL_HOST}" >> ${credentialsFile}
-      #     mysqldump --defaults-extra-file=${credentialsFile} --routines --no-data ${MYSQL_DATABASE}
+      - name: step 3 - Verify MySQL connection from container
+        env:
+          MYSQL_HOST: ${{ env.MYSQL_HOST }}
+          MYSQL_PORT: ${{ env.MYSQL_PORT }}
+          MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ env.MYSQL_USER }}
+          # MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_PASSWORD: ""
+          # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ""
+        run: |
+          echo "MySQL USER: ${MYSQL_USER}"
+          mysql --help
+          man mysql
+          # Let us consider the following typical mysql backup script:
+          mysqldump --routines --no-data -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
+          # It succeeds but stderr will get:
+          # Warning: Using a password on the command line interface can be insecure.
+          # You can fix this with the below hack:
+          credentialsFile=/mysql-credentials.cnf
+          echo "[client]" > ${credentialsFile}
+          echo "user=${MYSQL_USER}" >> ${credentialsFile}
+          echo "password=${MYSQL_ROOT_PASSWORD}" >> ${credentialsFile}
+          echo "host=${MYSQL_HOST}" >> ${credentialsFile}
+          mysqldump --defaults-extra-file=${credentialsFile} --routines --no-data ${MYSQL_DATABASE}
       - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
