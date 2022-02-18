@@ -44,7 +44,6 @@ jobs:
     steps:
       - name: Verify MySQL connection from container 
         run: |
-          apt-get update -y
           mycli--host mysql-master -u root -p developer -e "SHOW DATABASES;"
           mycli --host mysql-master -u root -p developer -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - uses: actions/checkout@v2
