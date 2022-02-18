@@ -106,9 +106,9 @@ services:
       - mysql-data:/var/lib/mysql
       - ./.logs/mysql_log:/var/log/
       # define privileged mysql directory
-      - ./my_conf:/etc/mysql/conf.d
+      - ../sql_config:/etc/mysql/conf.d
       # map sql directory to privileged mysql directory
-      - ../SQL:/mysql_files # map sql directory to privileged mysql directory
+      - ../sql_files:/mysql_files # map sql directory to privileged mysql directory
     #restart: "no"
     #restart: always
     # restart: on-failure

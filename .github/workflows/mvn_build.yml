@@ -6,7 +6,7 @@
 name: Testing Project Environment
 env:
   MYSQL_DATABASE: 'Lendit_Book_Kiosk'
-  MYSQL_USER: 'root'
+  MYSQL_USER: 'admin'
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: '3.8.4'
@@ -92,7 +92,8 @@ jobs:
           MYSQL_HOST: ${{ env.MYSQL_HOST }}
           MYSQL_PORT: ${{ env.MYSQL_PORT }}
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ env.MYSQL_USER }}
+          # MYSQL_USER: ${{ env.MYSQL_USER }}
+          MYSQL_USER: root
           # MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
           MYSQL_PASSWORD: ""
           # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
