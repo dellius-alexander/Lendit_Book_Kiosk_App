@@ -50,8 +50,8 @@ jobs:
       - name: step 0 - Verify MySQL connection from container
         run: |
           apt-get update
-          apt-get install -y mysql-client
-          wget -o  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
+          apt-get install -y mysql-client curl 
+          curl -fsSLo  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
           https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
           tar xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  -C  /opt/
           ENV_EXPORTS="""\n\
