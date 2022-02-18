@@ -90,6 +90,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         run: |
           echo "MySQL USER: ${MYSQL_USER}"
+          mysql --help
+          man mysql
           # Let us consider the following typical mysql backup script:
           mysqldump --routines --no-data -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
           # It succeeds but stderr will get:
