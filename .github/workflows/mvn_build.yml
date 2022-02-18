@@ -96,11 +96,11 @@ jobs:
           # Warning: Using a password on the command line interface can be insecure.
           # You can fix this with the below hack:
           credentialsFile=/mysql-credentials.cnf
-          echo "[client]" > $credentialsFile
-          echo "user=${MYSQL_USER}" >> $credentialsFile
-          echo "password=${MYSQL_ROOT_PASSWORD}" >> $credentialsFile
-          echo "host=${MYSQL_HOST}" >> $credentialsFile
-          mysqldump --defaults-extra-file=$credentialsFile --routines --no-data ${MYSQL_DATABASE}
+          echo "[client]" > ${credentialsFile}
+          echo "user=${MYSQL_USER}" >> ${credentialsFile}
+          echo "password=${MYSQL_ROOT_PASSWORD}" >> ${credentialsFile}
+          echo "host=${MYSQL_HOST}" >> ${credentialsFile}
+          mysqldump --defaults-extra-file=${credentialsFile} --routines --no-data ${MYSQL_DATABASE}
       - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
