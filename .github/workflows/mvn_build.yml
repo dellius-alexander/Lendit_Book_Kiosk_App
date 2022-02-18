@@ -12,6 +12,7 @@ env:
   MAVEN_VERSION: '3.8.4'
   MYSQL_HOST: '127.0.0.1'
   MYSQL_PORT: '8888'
+  JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64/bin/java'
 on:
   push:
     branches: 
@@ -61,6 +62,7 @@ jobs:
       - name: step 2 - Setup Build Environment
         env:
           MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
         run: |
           apt-get update
           apt-get install -y mysql-client curl 
@@ -74,8 +76,9 @@ jobs:
           export MAVEN_OPTS='-Xms256m -Xmx512m' 
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
           java -version
-          whereis java     
-        
+          whereis java
+          which java   
+          mvn -v
       - name: step 3 - Verify MySQL connection from container
         env:
           MYSQL_HOST: ${{ env.MYSQL_HOST }}
@@ -97,8 +100,6 @@ jobs:
           echo "password=${MYSQL_ROOT_PASSWORD}" >> $credentialsFile
           echo "host=${MYSQL_HOST}" >> $credentialsFile
           mysqldump --defaults-extra-file=$credentialsFile --routines --no-data ${MYSQL_DATABASE}
-          # mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
-          # mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
