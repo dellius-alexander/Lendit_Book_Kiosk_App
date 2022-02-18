@@ -45,6 +45,7 @@ class GreetingsController {
      */
     @JsonSerialize(using=JsonSerializer.class)
     @RequestMapping(value = "/api/v1/student/{name}", method = RequestMethod.GET)
+
     @ResponseStatus(HttpStatus.OK)
     public List<Student> getStudent(@PathVariable String name) {
         Student temp = new Student (
