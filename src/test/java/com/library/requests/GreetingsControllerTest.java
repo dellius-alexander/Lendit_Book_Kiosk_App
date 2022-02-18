@@ -52,55 +52,48 @@ public class GreetingsControllerTest {
     }
 
     /**
-     *
+     * It tests response to be "Hello Spring!"
      * @throws Exception
-     *
-     * It tests response to be "Hello Java!"
      */
     @Test
     @Order(1)
-    public void greetJava() throws Exception {
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/Java"))
+    public void greetSpring() throws Exception {
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
-        Assert.assertEquals(response,  "[\"Hello\",\"Java\"]");
-    }
 
+        Assert.assertEquals(response, "<h1 style='margin:auto; width:80%; padding:15px;' >Welcome to the LendIT Book Kiosk Application! </h1></br><p style='font-size:1.5rem; margin:auto; width:80%; padding:15px;' >You have successfully setup your development environment...</p>");
+    }
     /**
-     *
+     * It tests response to be "Hello Java!"
      * @throws Exception
-     *
-     * It tests response to be "Hello Spring!"
      */
     @Test
     @Order(2)
-    public void greetSpring() throws Exception {
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/Spring"))
+    public void greetJava() throws Exception {
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Jane Doe"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
-
-        Assert.assertEquals(response, "[\"Hello\",\"Spring\"]");
+        Assert.assertEquals(response,  "[{\"id\":1,\"name\":\"Jane Doe\",\"email\":\"JaneDoe@gmail.com\",\"dob\":\"1989-01-06\",\"age\":35,\"major\":\"CIS\"}]");
     }
 
     /**
-     *
-     * @throws Exception
-     *
      * It tests response to be "Hello RodJohnson!"
+     * @throws Exception
      */
     @Test
     @Order(3)
     public void greetRodJohnson() throws Exception {
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/RodJohnson"))
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Rod Johnson"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-        Assert.assertEquals(response, "[\"Hello\",\"RodJohnson\"]");
+        Assert.assertEquals(response, "[{\"id\":1,\"name\":\"Rod Johnson\",\"email\":\"RodJohnson@gmail.com\",\"dob\":\"1989-01-06\",\"age\":35,\"major\":\"CIS\"}]");
     }
 }

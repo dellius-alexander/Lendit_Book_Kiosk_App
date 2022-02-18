@@ -595,3 +595,46 @@ Retrieved from "<a href="https://www.jrebel.com/blog/spring-annotations-cheat-sh
  
 ---
 ---
+
+<h2 ><a name="Maven_CLI_Options_Reference" href="https://maven.apache.org/ref/3.2.3/maven-embedder/cli.html">Maven CLI Options Reference</a></h2>
+
+```bash
+usage: mvn [options] [<goal(s)>] [<phase(s)>]
+```
+<table border="1" class="zebra-striped"><tbody><tr class="a"><th><b>Options</b></th><th><b>Description</b></th></tr><tr class="b"><td><code>-<a name="am">am</a>,--<a name="also-make">also-make</a></code></td><td>If project list is specified, also build projects required by the list</td></tr>
+<tr class="a"><td><code>-<a name="amd">amd</a>,--<a name="also-make-dependents">also-make-dependents</a></code></td><td>If project list is specified, also build projects that depend on projects on the list</td></tr>
+<tr class="b"><td><code>-<a name="B">B</a>,--<a name="batch-mode">batch-mode</a></code></td><td>Run in non-interactive (batch) mode</td></tr>
+<tr class="a"><td><code>-<a name="b">b</a>,--<a name="builder">builder</a> &lt;arg&gt;</code></td><td>The id of the build strategy to use.</td></tr>
+<tr class="b"><td><code>-<a name="C">C</a>,--<a name="strict-checksums">strict-checksums</a></code></td><td>Fail the build if checksums don't match</td></tr>
+<tr class="a"><td><code>-<a name="c">c</a>,--<a name="lax-checksums">lax-checksums</a></code></td><td>Warn if checksums don't match</td></tr>
+<tr class="b"><td><code>-<a name="cpu">cpu</a>,--<a name="check-plugin-updates">check-plugin-updates</a></code></td><td>Ineffective, only kept for backward compatibility</td></tr>
+<tr class="a"><td><code>-<a name="D">D</a>,--<a name="define">define</a> &lt;arg&gt;</code></td><td>Define a system property</td></tr>
+<tr class="b"><td><code>-<a name="e">e</a>,--<a name="errors">errors</a></code></td><td>Produce execution error messages</td></tr>
+<tr class="a"><td><code>-<a name="emp">emp</a>,--<a name="encrypt-master-password">encrypt-master-password</a> &lt;arg&gt;</code></td><td>Encrypt master security password</td></tr>
+<tr class="b"><td><code>-<a name="ep">ep</a>,--<a name="encrypt-password">encrypt-password</a> &lt;arg&gt;</code></td><td>Encrypt server password</td></tr>
+<tr class="a"><td><code>-<a name="f">f</a>,--<a name="file">file</a> &lt;arg&gt;</code></td><td>Force the use of an alternate POM file (or directory with pom.xml).</td></tr>
+<tr class="b"><td><code>-<a name="fae">fae</a>,--<a name="fail-at-end">fail-at-end</a></code></td><td>Only fail the build afterwards; allow all non-impacted builds to continue</td></tr>
+<tr class="a"><td><code>-<a name="ff">ff</a>,--<a name="fail-fast">fail-fast</a></code></td><td>Stop at first failure in reactorized builds</td></tr>
+<tr class="b"><td><code>-<a name="fn">fn</a>,--<a name="fail-never">fail-never</a></code></td><td>NEVER fail the build, regardless of project result</td></tr>
+<tr class="a"><td><code>-<a name="gs">gs</a>,--<a name="global-settings">global-settings</a> &lt;arg&gt;</code></td><td>Alternate path for the global settings file</td></tr>
+<tr class="b"><td><code>-<a name="h">h</a>,--<a name="help">help</a></code></td><td>Display help information</td></tr>
+<tr class="a"><td><code>-<a name="l">l</a>,--<a name="log-file">log-file</a> &lt;arg&gt;</code></td><td>Log file to where all build output will go.</td></tr>
+<tr class="b"><td><code>-<a name="llr">llr</a>,--<a name="legacy-local-repository">legacy-local-repository</a></code></td><td>Use Maven 2 Legacy Local Repository behaviour, ie no use of _remote.repositories. Can also be activated by using -Dmaven.legacyLocalRepo=true</td></tr>
+<tr class="a"><td><code>-<a name="N">N</a>,--<a name="non-recursive">non-recursive</a></code></td><td>Do not recurse into sub-projects</td></tr>
+<tr class="b"><td><code>-<a name="npr">npr</a>,--<a name="no-plugin-registry">no-plugin-registry</a></code></td><td>Ineffective, only kept for backward compatibility</td></tr>
+<tr class="a"><td><code>-<a name="npu">npu</a>,--<a name="no-plugin-updates">no-plugin-updates</a></code></td><td>Ineffective, only kept for backward compatibility</td></tr>
+<tr class="b"><td><code>-<a name="nsu">nsu</a>,--<a name="no-snapshot-updates">no-snapshot-updates</a></code></td><td>Suppress SNAPSHOT updates</td></tr>
+<tr class="a"><td><code>-<a name="o">o</a>,--<a name="offline">offline</a></code></td><td>Work offline</td></tr>
+<tr class="b"><td><code>-<a name="P">P</a>,--<a name="activate-profiles">activate-profiles</a> &lt;arg&gt;</code></td><td>Comma-delimited list of profiles to activate</td></tr>
+<tr class="a"><td><code>-<a name="pl">pl</a>,--<a name="projects">projects</a> &lt;arg&gt;</code></td><td>Comma-delimited list of specified reactor projects to build instead of all projects. A project can be specified by [groupId]:artifactId or by its relative path.</td></tr>
+<tr class="b"><td><code>-<a name="q">q</a>,--<a name="quiet">quiet</a></code></td><td>Quiet output - only show errors</td></tr>
+<tr class="a"><td><code>-<a name="rf">rf</a>,--<a name="resume-from">resume-from</a> &lt;arg&gt;</code></td><td>Resume reactor from specified project</td></tr>
+<tr class="b"><td><code>-<a name="s">s</a>,--<a name="settings">settings</a> &lt;arg&gt;</code></td><td>Alternate path for the user settings file</td></tr>
+<tr class="a"><td><code>-<a name="T">T</a>,--<a name="threads">threads</a> &lt;arg&gt;</code></td><td>Thread count, for instance 2.0C where C is core multiplied</td></tr>
+<tr class="b"><td><code>-<a name="t">t</a>,--<a name="toolchains">toolchains</a> &lt;arg&gt;</code></td><td>Alternate path for the user toolchains file</td></tr>
+<tr class="a"><td><code>-<a name="U">U</a>,--<a name="update-snapshots">update-snapshots</a></code></td><td>Forces a check for missing releases and updated snapshots on remote repositories</td></tr>
+<tr class="b"><td><code>-<a name="up">up</a>,--<a name="update-plugins">update-plugins</a></code></td><td>Ineffective, only kept for backward compatibility</td></tr>
+<tr class="a"><td><code>-<a name="V">V</a>,--<a name="show-version">show-version</a></code></td><td>Display version information WITHOUT stopping build</td></tr>
+<tr class="b"><td><code>-<a name="v">v</a>,--<a name="version">version</a></code></td><td>Display version information</td></tr>
+<tr class="a"><td><code>-<a name="X">X</a>,--<a name="debug">debug</a></code></td><td>Produce execution debug output</td></tr>
+</tbody></table>

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
 #####################################################################
   app:
@@ -33,6 +33,10 @@ services:
         ADDITIONAL_PACKAGES: ""
     container_name: Lendit_Book_Kiosk-app
     environment:
+      - MYSQL_HOST="Lendit_Book_Kiosk-db"
+      - MYSQL_PASSWORD=/run/secrets/mysql_passwd
+      - GIT_USER="${GIT_USER}"
+      - GIT_EMAIL="${GIT_EMAIL}"
       - M2=/opt/apache-maven-3.8.4/bin
       - JAVA_HOME=/usr/local/openjdk-11
       - M2_HOME=/opt/apache-maven-3.8.4
@@ -46,6 +50,10 @@ services:
       # - /var/run/docker.sock:/var/run/docker-host.sock
       # Update this to wherever you want VS Code to mount the folder of your project
       - ../:/home/vscode/Lendit_Book_Kiosk_App
+      - vscode-std-extensions:/home/vscode/.vscode-server/extensions
+      # And/or for VS Code Insiders
+      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
+      # - ../.git:/home/vscode/Lendit_Book_Kiosk_App
     # Overrides default command so things don't shut down after the process ends.
     # entrypoint: /usr/local/share/docker-init.sh
     # command: sleep infinity
@@ -78,14 +86,17 @@ services:
     #     ipv6_address: 2001:3984:3989::10
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+    secrets:
+      - mysql_passwd
+      # - mysql_secret_key
+      # - mysql_secret_pub
 #####################################################################
   db:
     image: mysql:8.0.27
     # init: true
     container_name: Lendit_Book_Kiosk-db
     environment:
-      # MySQL allow empty password variable
-      # MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
       # Name of the database
       MYSQL_DATABASE: Lendit_Book_Kiosk
       # ##### MySQL Host variable:
@@ -94,15 +105,14 @@ services:
       MYSQL_PASSWORD: /run/secrets/mysql_passwd
       # # You can use whatever password you like
       # Password for root access
-      # MYSQL_ROOT_PASSWORD: 'developer'
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_passwd
     volumes:
       - mysql-data:/var/lib/mysql
       - ./.logs/mysql_log:/var/log/
       # define privileged mysql directory
-      - ./my_conf:/etc/mysql/conf.d
+      - ../sql_config:/etc/mysql/conf.d
       # map sql directory to privileged mysql directory
-      - ../SQL:/mysql_files # map sql directory to privileged mysql directory
+      - ../sql_files:/mysql_files # map sql directory to privileged mysql directory
     #restart: "no"
     #restart: always
     # restart: on-failure
@@ -164,3 +174,5 @@ secrets:
 
 volumes: 
   mysql-data: null
+  vscode-std-extensions: null
+  vscode-extensions-insiders: null
