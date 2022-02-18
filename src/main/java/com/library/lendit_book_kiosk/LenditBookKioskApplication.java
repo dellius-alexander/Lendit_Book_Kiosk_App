@@ -4,16 +4,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-// import java.io.IOException;
-
-import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@JsonSerializableSchema
 public class LenditBookKioskApplication implements CommandLineRunner
 {
 	// Define a logger instance and log what you want.

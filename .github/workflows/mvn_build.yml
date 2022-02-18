@@ -9,7 +9,7 @@ env:
   MYSQL_USER: 'admin'
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
-  MAVEN_VERSION: '3.8.4'
+  MAVEN_VERSION: 3.8.4
   MYSQL_HOST: Lendit_Book_Kiosk-db
   MYSQL_PORT: 3306
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64'
@@ -38,13 +38,10 @@ jobs:
         ports:
           - 3306:3306/tcp
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
           MYSQL_USER: ${{ env.MYSQL_USER }}
-          # MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-          MYSQL_PASSWORD: ""
-          # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         options: >-
           --name=Lendit_Book_Kiosk-db
           --health-cmd="mysqladmin ping" 
@@ -92,12 +89,9 @@ jobs:
           MYSQL_HOST: ${{ env.MYSQL_HOST }}
           MYSQL_PORT: ${{ env.MYSQL_PORT }}
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
-          # MYSQL_USER: ${{ env.MYSQL_USER }}
-          MYSQL_USER: root
-          # MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-          MYSQL_PASSWORD: ""
-          # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_USER: ${{ env.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         run: |
           echo "MySQL USER: ${MYSQL_USER}"          
           # Let us consider the following typical mysql backup script:
@@ -107,7 +101,7 @@ jobs:
           # You can fix this with the below hack:
           credentialsFile=/mysql-credentials.cnf
           echo "[client]" > ${credentialsFile}
-          echo "user=${MYSQL_USER}" >> ${credentialsFile}
+          echo "user=root" >> ${credentialsFile}
           echo "password=${MYSQL_ROOT_PASSWORD}" >> ${credentialsFile}
           echo "host=${MYSQL_HOST}" >> ${credentialsFile}
           mysqldump --defaults-extra-file=${credentialsFile} --routines --no-data ${MYSQL_DATABASE}

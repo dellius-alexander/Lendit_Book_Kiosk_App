@@ -45,13 +45,13 @@ class GreetingsController {
      */
     @JsonSerialize(using=JsonSerializer.class)
     @RequestMapping(value = "/api/v1/student/{name}", method = RequestMethod.GET)
-
     @ResponseStatus(HttpStatus.OK)
     public List<Student> getStudent(@PathVariable String name) {
+        String email = name.replaceAll("\\s+","");
         Student temp = new Student (
                             1L,
                             name,
-                            "janedoe@gmail.com",
+                            email+"@gmail.com",
                             LocalDate.of(1989, Month.JANUARY, 6),
                             35,
                             "CIS");
