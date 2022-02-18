@@ -10,7 +10,7 @@ env:
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: '3.8.4'
-  MYSQL_HOST: 'mysql-master'
+  MYSQL_HOST: 'mysql_db'
 on:
   push:
     branches: 
@@ -31,7 +31,7 @@ jobs:
     container:
       image: ubuntu:latest
     services:
-      mysql-master:
+      mysql_db:
         image: mysql:8.0.27
         ports:
           - 8888:3306/tcp
@@ -42,19 +42,24 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
           MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
         options: >-
-          --name=mysql-master
+          --name=mysql_db
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=3
     steps:
+      - uses: actions/checkout@v2
       - name: step 0 - Listing Project Directory Structure
         run: |
           ls -R
-      - name: step 1 - Setup Build Environment
+      - name: step 1 - Set up Java JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: step 2 - Setup Build Environment
         env:
           MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
-          
         run: |
           apt-get update
           apt-get install -y mysql-client curl 
@@ -67,11 +72,12 @@ jobs:
           export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH 
           export MAVEN_OPTS='-Xms256m -Xmx512m' 
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
-          whereis java
+          java -version
+          whereis java     
         
-      - name: step 2 - Verify MySQL connection from container
+      - name: step 3 - Verify MySQL connection from container
         env:
-          MYSQL_HOST: mysql-master
+          MYSQL_HOST: mysql_db
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
           MYSQL_USER: ${{ env.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
@@ -80,12 +86,6 @@ jobs:
           echo "MySQL USER: ${MYSQL_USER}"
           mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
           mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
-      - uses: actions/checkout@v2
-      - name: step 3 - Set up Java JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
       - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
