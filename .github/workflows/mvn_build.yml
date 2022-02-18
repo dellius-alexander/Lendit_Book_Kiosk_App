@@ -65,7 +65,6 @@ jobs:
           export MAVEN_OPTS='-Xms256m -Xmx512m' 
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
       - name: step 2 - Verify MySQL connection from container
-      - uses: actions/checkout@v1
         run: |
           echo "MySQL USER: ${MYSQL_USER}"
           mysql --host mysql-master --port 8888 -u root -p ${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"

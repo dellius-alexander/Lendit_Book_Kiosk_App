@@ -596,7 +596,7 @@ Retrieved from "<a href="https://www.jrebel.com/blog/spring-annotations-cheat-sh
 ---
 ---
 
-<h2>Maven CLI Options Reference<a name="Maven_CLI_Options_Reference"></a></h2>
+<h2 ><a name="Maven_CLI_Options_Reference" href="https://maven.apache.org/ref/3.2.3/maven-embedder/cli.html">Maven CLI Options Reference</a></h2>
 
 ```bash
 usage: mvn [options] [<goal(s)>] [<phase(s)>]
