@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
 #####################################################################
   app:
@@ -33,6 +33,8 @@ services:
         ADDITIONAL_PACKAGES: ""
     container_name: Lendit_Book_Kiosk-app
     environment:
+      - GIT_USER="${GIT_USER}"
+      - GIT_EMAIL="${GIT_EMAIL}"
       - M2=/opt/apache-maven-3.8.4/bin
       - JAVA_HOME=/usr/local/openjdk-11
       - M2_HOME=/opt/apache-maven-3.8.4
@@ -46,6 +48,10 @@ services:
       # - /var/run/docker.sock:/var/run/docker-host.sock
       # Update this to wherever you want VS Code to mount the folder of your project
       - ../:/home/vscode/Lendit_Book_Kiosk_App
+      - vscode-std-extensions:/home/vscode/.vscode-server/extensions
+      # And/or for VS Code Insiders
+      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
+      # - ../.git:/home/vscode/Lendit_Book_Kiosk_App
     # Overrides default command so things don't shut down after the process ends.
     # entrypoint: /usr/local/share/docker-init.sh
     # command: sleep infinity
@@ -164,3 +170,5 @@ secrets:
 
 volumes: 
   mysql-data: null
+  vscode-std-extensions: null
+  vscode-extensions-insiders: null

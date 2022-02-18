@@ -27,7 +27,7 @@
 		// }]
 
 	},
-	
+	"hostRequirements": {"memory": "4gb"},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		// "tomoki1207.pdf",
@@ -39,9 +39,10 @@
 		// "dotjoshjohnson.xml",
 		"vscjava.vscode-maven",
 		"redhat.fabric8-analytics",
-		// // "vscjava.vscode-gradle",
+		// "vscjava.vscode-gradle",
 		"cweijan.vscode-mysql-client2",
-		"pivotal.vscode-boot-dev-pack"
+		"pivotal.vscode-boot-dev-pack",
+		"sohibe.java-generate-setters-getters"
 	],
 
 	// // Use 'forwardPorts' to make a list of ports inside the container available locally.

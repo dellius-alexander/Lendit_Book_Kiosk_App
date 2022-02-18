@@ -93,6 +93,12 @@ RUN cd "/home/${USERNAME}" && git clone "${GIT_REPO}" "$(basename -s .git ${GIT_
 RUN apt-get autoremove -y && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*  /tmp/library-scripts/
 #
+RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
+        /home/$USERNAME/.vscode-server-insiders/extensions \
+    && chown -R $USERNAME \
+        /home/$USERNAME/.vscode-server \
+        /home/$USERNAME/.vscode-server-insiders
+        
 ## [Optional] Uncomment this section to install additional OS packages.
 #RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #    && apt-get -y install --no-install-recommends < ADD PACKAGES HERE >
