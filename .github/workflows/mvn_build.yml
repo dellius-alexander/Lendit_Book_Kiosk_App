@@ -67,8 +67,8 @@ jobs:
       - name: step 2 - Verify MySQL connection from container
         run: |
           echo "MySQL USER: ${MYSQL_USER}"
-          mysql --host mysql-master --port 8888 -u root -p ${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
-          mysql --host mysql-master --port 8888 -u root -p ${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
+          mysql --host 127.0.0.1 --port 8888 -u root -p ${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
+          mysql --host 127.0.0.1 --port 8888 -u root -p ${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - uses: actions/checkout@v2
       - name: step 3 - Set up Java JDK 11
         uses: actions/setup-java@v2
