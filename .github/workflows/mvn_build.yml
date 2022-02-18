@@ -10,7 +10,7 @@ env:
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: '3.8.4'
-  MYSQL_HOST: '127.0.0.1'
+  MYSQL_HOST: mysql_db
   MYSQL_PORT: '8888'
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64/bin/java'
 on:
@@ -79,6 +79,7 @@ jobs:
           whereis java
           which java   
           mvn -v
+          sudo /etc/init.d/mysql start
       - name: step 3 - Verify MySQL connection from container
         env:
           MYSQL_HOST: ${{ env.MYSQL_HOST }}
