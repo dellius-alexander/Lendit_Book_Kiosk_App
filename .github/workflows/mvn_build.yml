@@ -47,7 +47,10 @@ jobs:
           --health-timeout=5s 
           --health-retries=3
     steps:
-      - name: step 0 - Verify MySQL connection from container
+      - name: step 0 - Listing Project Directory Structure
+        run: |
+          ls -R
+      - name: step 1 - Setup Build Environment
         run: |
           apt-get update
           apt-get install -y mysql-client curl 
@@ -61,6 +64,8 @@ jobs:
           export MAVEN_OPTS='-Xms256m -Xmx512m' \n\
           """
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
+      - name: step 2 - Verify MySQL connection from container
+        run: |
           mysql --host mysqldb -u root -p developer -e "SHOW DATABASES;"
           mysql --host mysqldb -u root -p developer -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - uses: actions/checkout@v2
@@ -69,9 +74,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: step 1 - Listing Project Directory Structure
-        run: |
-          ls -R
       - name: step 2 - Installing Mysql-Client
         run: |
           apt-get update && export DEBIAN_FRONTEND=noninteractive \
