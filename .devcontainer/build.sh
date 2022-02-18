@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-docker build -t dalexander2israel/lendit_book_kiosk:base_v1 \
+docker build
        --build-arg UPGRADE_PACKAGES=true \
        --build-arg JAVA_VERSION=11 \
        --build-arg SDKMAN_DIR=/root/.sdkman/bin/sdkman-init.sh \
@@ -21,6 +21,7 @@ docker build -t dalexander2israel/lendit_book_kiosk:base_v1 \
        --build-arg USERCRED="" \
        --build-arg ADDITIONAL_PACKAGES="" \
        --no-cache --rm=true \
-       --file ./Dockerfile .
+       -t dalexander2israel/lendit_book_kiosk:base_v1 \
+       --file ./base.Dockerfile .
 
 docker push dalexander2israel/lendit_book_kiosk:base_v1
