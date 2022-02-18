@@ -60,7 +60,6 @@ jobs:
           export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH \n\
           export MAVEN_OPTS='-Xms256m -Xmx512m' \n\
           """
-          printf "${ENV_EXPORTS}" >> "~/.zshrc"
           printf "${ENV_EXPORTS}" >> "~/.bashrc"
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
           mysql --host mysqldb -u root -p developer -e "SHOW DATABASES;"
