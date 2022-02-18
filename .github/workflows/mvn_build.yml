@@ -6,10 +6,10 @@
 name: Testing Project Environment
 env:
   MYSQL_DATABASE: Lendit_Book_Kiosk
-  MYSQL_USER: root
+  MYSQL_USER: admin
   MYSQL_PASSWORD: developer
   MYSQL_ROOT_PASSWORD: developer
-  MAVEN_VERSION: 3.8.4
+  MAVEN_VERSION: '3.8.4'
   MYSQL_HOST: mysql-master
 on:
   push:
