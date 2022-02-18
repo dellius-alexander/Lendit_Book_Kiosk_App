@@ -10,7 +10,7 @@ env:
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: '3.8.4'
-  MYSQL_HOST: mysql_db
+  MYSQL_HOST: Lendit_Book_Kiosk-app
   MYSQL_PORT: 3306
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64/bin/java'
 on:
@@ -33,7 +33,7 @@ jobs:
     container:
       image: ubuntu:latest
     services:
-      mysql_db:
+      Lendit_Book_Kiosk-app:
         image: mysql:8.0.27
         ports:
           - 3306:3306/tcp
@@ -47,7 +47,7 @@ jobs:
           # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ""
         options: >-
-          --name=mysql_db
+          --name=Lendit_Book_Kiosk-app
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
