@@ -90,9 +90,7 @@ services:
     # init: true
     container_name: Lendit_Book_Kiosk-db
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
-      # MySQL allow empty password variable
-      # MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
       # Name of the database
       MYSQL_DATABASE: Lendit_Book_Kiosk
       # ##### MySQL Host variable:
