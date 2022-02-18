@@ -57,15 +57,15 @@ jobs:
           curl -fsSLo  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
           https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
           tar xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  -C  /opt/
-          ENV_EXPORTS="""\n\
-          export M2_HOME=/opt/apache-maven-${MAVEN_VERSION} \n\
-          export M2=/opt/apache-maven-${MAVEN_VERSION}/bin \n\
-          export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH \n\
-          export MAVEN_OPTS='-Xms256m -Xmx512m' \n\
-          """
+          echo "Maven Version: ${MAVEN_VERSION}"
+          export M2_HOME=/opt/apache-maven-${MAVEN_VERSION} 
+          export M2=/opt/apache-maven-${MAVEN_VERSION}/bin 
+          export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH 
+          export MAVEN_OPTS='-Xms256m -Xmx512m' 
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
       - name: step 2 - Verify MySQL connection from container
         run: |
+          echo "MySQL USER: ${ MYSQL_USER }"
           mysql --host mysqldb -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "SHOW DATABASES;"
           mysql --host mysqldb -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - uses: actions/checkout@v2
