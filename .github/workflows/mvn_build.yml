@@ -10,6 +10,7 @@ env:
   MYSQL_PASSWORD: developer
   MYSQL_ROOT_PASSWORD: developer
   MAVEN_VERSION: 3.8.4
+  MYSQL_HOST: mysql-master
 on:
   push:
     branches: 
@@ -28,9 +29,9 @@ jobs:
       matrix:
         os: [ubuntu-latest]
     container:
-      image: ubuntu:18.04
+      image: ubuntu:latest
     services:
-      mysqldb:
+      mysql-master:
         image: mysql:5.7
         ports:
           - 3306/tcp
@@ -41,7 +42,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
           MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
         options: >-
-          --name=mysqldb
+          --name=mysql-master
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
@@ -66,8 +67,8 @@ jobs:
       - name: step 2 - Verify MySQL connection from container
         run: |
           echo "MySQL USER: ${ MYSQL_USER }"
-          mysql --host mysqldb -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "SHOW DATABASES;"
-          mysql --host mysqldb -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
+          mysql --host mysql-master -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "SHOW DATABASES;"
+          mysql --host mysql-master -u ${ MYSQL_USER } -p ${ MYSQL_PASSWORD } -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
