@@ -75,17 +75,17 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: step 3 - Building our Maven Project
+      - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
           mkdir staging && cp target/*.jar staging
-      - name: step 4 - Setup a cache for Maven
+      - name: step 5- Setup a cache for Maven
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-key: ${{ runner.os }}-m2
-      - name: step 5 - Persist workflow data as artifacts
+      - name: step 6 - Persist workflow data as artifacts
         uses: actions/upload-artifact@v2
         with:
           name: github-actions-artifact
