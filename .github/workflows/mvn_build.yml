@@ -11,7 +11,7 @@ env:
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: '3.8.4'
   MYSQL_HOST: mysql_db
-  MYSQL_PORT: '8888'
+  MYSQL_PORT: 3306
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64/bin/java'
 on:
   push:
@@ -25,7 +25,7 @@ on:
     - 'release*'
     - '*'
 jobs:
-  ci:
+  CICD:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,24 +36,31 @@ jobs:
       mysql_db:
         image: mysql:8.0.27
         ports:
-          - 8888:3306/tcp
+          - 3306:3306/tcp
         env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
           MYSQL_USER: ${{ env.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-          MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
+          # MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_PASSWORD: ""
+          # MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ""
         options: >-
           --name=mysql_db
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=3
+        volumes:
+          - data:/var/lib/mysql
+          - .devcontainer/my_conf:/etc/mysql/conf.d
+          - SQL:/mysql_files
+        
     steps:
       - uses: actions/checkout@v2
       - name: step 0 - Listing Project Directory Structure
         run: |
-          ls -R
+          ls -liaR
       - name: step 1 - Set up Java JDK 11
         uses: actions/setup-java@v2
         with:
@@ -79,7 +86,7 @@ jobs:
           whereis java
           which java   
           mvn -v
-          sudo /etc/init.d/mysql start
+          systemctl start mysql
       # - name: step 3 - Verify MySQL connection from container
       #   env:
       #     MYSQL_HOST: ${{ env.MYSQL_HOST }}
