@@ -78,14 +78,26 @@ jobs:
       - name: step 3 - Verify MySQL connection from container
         env:
           MYSQL_HOST: mysql_db
+          MYSQL_PORT: 8888
           MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
           MYSQL_USER: ${{ env.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         run: |
           echo "MySQL USER: ${MYSQL_USER}"
-          mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
-          mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
+          # Let us consider the following typical mysql backup script:
+          mysqldump --routines --no-data -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
+          # It succeeds but stderr will get:
+          # Warning: Using a password on the command line interface can be insecure.
+          # You can fix this with the below hack:
+          credentialsFile=/mysql-credentials.cnf
+          echo "[client]" > $credentialsFile
+          echo "user=${MYSQL_USER}" >> $credentialsFile
+          echo "password=${MYSQL_ROOT_PASSWORD}" >> $credentialsFile
+          echo "host=${MYSQL_HOST}" >> $credentialsFile
+          mysqldump --defaults-extra-file=$credentialsFile --routines --no-data ${MYSQL_DATABASE}
+          # mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
+          # mysql --host ${MYSQL_HOST} --port 8888 -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Lendit_Book_Kiosk;"
       - name: step 4 - Building our Maven Project
         run:  |
           mvn -B package --file pom.xml
