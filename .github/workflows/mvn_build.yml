@@ -53,8 +53,8 @@ jobs:
           --health-retries=3
         volumes:
           - data:/var/lib/mysql
-          - .devcontainer/my_conf:/etc/mysql/conf.d
-          - SQL:/mysql_files
+          - sql_config:/etc/mysql/conf.d
+          - sql_files:/mysql_files
         
     steps:
       - uses: actions/checkout@v2
