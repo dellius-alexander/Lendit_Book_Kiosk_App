@@ -52,6 +52,9 @@ jobs:
         run: |
           ls -R
       - name: step 1 - Setup Build Environment
+        env:
+          MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
+          
         run: |
           apt-get update
           apt-get install -y mysql-client curl 
@@ -64,9 +67,8 @@ jobs:
           export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH 
           export MAVEN_OPTS='-Xms256m -Xmx512m' 
           ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
-          mvn -v
-        env:
-          MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
+          whereis java
+        
       - name: step 2 - Verify MySQL connection from container
         env:
           MYSQL_HOST: mysql-master
