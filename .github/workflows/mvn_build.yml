@@ -115,7 +115,7 @@ jobs:
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-key: ${{ runner.os }}-m2
+          restore-keys: ${{ runner.os }}-m2
       - name: step 6 - Persist workflow data as artifacts
         uses: actions/upload-artifact@v2
         with:
