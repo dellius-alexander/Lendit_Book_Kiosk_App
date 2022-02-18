@@ -41,7 +41,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
           MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
         options: >-
-          --name=mysql-master
+          --name=mysqldb
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
