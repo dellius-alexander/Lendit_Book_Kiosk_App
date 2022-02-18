@@ -9,6 +9,7 @@ env:
   MYSQL_USER: admin
   MYSQL_PASSWORD: developer
   MYSQL_ROOT_PASSWORD: developer
+  MAVEN_VERSION: 3.8.4
 on:
   push:
     branches: 
@@ -49,13 +50,13 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mysql-client
-          curl -fsSLo  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
+          wget -o  /tmp/apache-maven-${{ MAVEN_VERSION }}-bin.tar.gz  \
           https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
-          tar xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  -C  /opt/
+          tar xzvf /tmp/apache-maven-${{ MAVEN_VERSION }}-bin.tar.gz  -C  /opt/
           ENV_EXPORTS="""\n\
-          export M2_HOME=/opt/apache-maven-${MAVEN_VERSION} \n\
-          export M2=/opt/apache-maven-${MAVEN_VERSION}/bin \n\
-          export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH \n\
+          export M2_HOME=/opt/apache-maven-${{ MAVEN_VERSION }} \n\
+          export M2=/opt/apache-maven-${{ MAVEN_VERSION }}/bin \n\
+          export PATH=/opt/apache-maven-${{ MAVEN_VERSION }}/bin:$PATH \n\
           export MAVEN_OPTS='-Xms256m -Xmx512m' \n\
           """
           groupadd mvn
