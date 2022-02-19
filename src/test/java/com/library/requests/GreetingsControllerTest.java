@@ -1,5 +1,5 @@
 package com.library.requests;
-
+/////////////////////////////////////////////////////////////////////
 
 import com.hackerrank.test.utility.Order;
 import com.hackerrank.test.utility.OrderedTestRunner;
@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
+/////////////////////////////////////////////////////////////////////
 @RunWith(OrderedTestRunner.class)
 @SpringBootTest(classes = LenditBookKioskApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 // @SpringBootTest(classes = LenditBookKioskApplication.class)
@@ -73,7 +73,7 @@ public class GreetingsControllerTest {
     @Test
     @Order(2)
     public void greetJava() throws Exception {
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Jane Doe"))
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("api/v1/student/Jane Doe"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -88,7 +88,7 @@ public class GreetingsControllerTest {
     @Test
     @Order(3)
     public void greetRodJohnson() throws Exception {
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Rod Johnson"))
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("api/v1/student/Rod Johnson"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
