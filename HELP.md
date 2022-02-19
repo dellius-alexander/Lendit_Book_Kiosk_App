@@ -638,3 +638,512 @@ usage: mvn [options] [<goal(s)>] [<phase(s)>]
 <tr class="b"><td><code>-<a name="v">v</a>,--<a name="version">version</a></code></td><td>Display version information</td></tr>
 <tr class="a"><td><code>-<a name="X">X</a>,--<a name="debug">debug</a></code></td><td>Produce execution debug output</td></tr>
 </tbody></table>
+
+
+---
+---
+
+
+<strong>HTML5 Tags</strong><span class="rounded toggle">Order by Category</span>
+
+
+<p>The following section contains a complete list of standard tags belonging to the latest HTML5 and XHTML 1.1 specifications. All the tags are listed alphabetically.</p>
+<div class="shadow">
+<table class="data">
+<thead>
+<tr>
+    <th style="width: 130px;">Tag</th>
+    <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><a href="html-a-tag.php" target="_blank"><code>&lt;a&gt;</code></a></td>
+    <td>Defines a hyperlink.</td>
+</tr>
+<tr>
+    <td><a href="html-abbr-tag.php" target="_blank"><code>&lt;abbr&gt;</code></a></td>
+    <td>Defines an abbreviated form of a longer word or phrase.</td>
+</tr>
+<tr>
+    <td><a href="html-acronym-tag.php" target="_blank" class="obsolete-tag"><code>&lt;acronym&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines an acronym. Use <a href="html-abbr-tag.php" target="_blank"><code>&lt;abbr&gt;</code></a> instead.</td>
+</tr>
+<tr>
+    <td><a href="html-address-tag.php" target="_blank"><code>&lt;address&gt;</code></a></td>
+    <td>Specifies the author's contact information.</td>
+</tr>
+<tr>
+    <td><a href="html-applet-tag.php" target="_blank" class="obsolete-tag"><code>&lt;applet&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Embeds a Java applet (mini Java applications) on the page. Use <a href="html-object-tag.php" target="_blank"><code>&lt;object&gt;</code></a> instead.</td>
+</tr>
+<tr>
+    <td><a href="html-area-tag.php" target="_blank"><code>&lt;area&gt;</code></a></td>
+    <td>Defines a specific area within an image map.</td>
+</tr>
+<tr>
+    <td><a href="html5-article-tag.php" target="_blank"><code>&lt;article&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines an article.</td>
+</tr>
+<tr>
+    <td><a href="html5-aside-tag.php" target="_blank"><code>&lt;aside&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines some content loosely related to the page content.</td>
+</tr>
+<tr>
+    <td><a href="html5-audio-tag.php" target="_blank"><code>&lt;audio&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Embeds a sound, or an audio stream in an HTML document.</td>
+</tr>
+<tr>
+    <td><a href="html-b-tag.php" target="_blank"><code>&lt;b&gt;</code></a></td>
+    <td>Displays text in a bold style.</td>
+</tr>
+<tr>
+    <td><a href="html-base-tag.php" target="_blank"><code>&lt;base&gt;</code></a></td>
+    <td>Defines the base URL for all relative URLs in a document.</td>
+</tr>
+<tr>
+    <td><a href="html-basefont-tag.php" target="_blank" class="obsolete-tag"><code>&lt;basefont&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Specifies the base font for a page. Use CSS instead.</td>
+</tr>
+<tr>
+    <td><a href="html5-bdi-tag.php" target="_blank"><code>&lt;bdi&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents text that is isolated from its surrounding for the purposes of bidirectional text formatting.</td>
+</tr>
+<tr>
+    <td><a href="html-bdo-tag.php" target="_blank"><code>&lt;bdo&gt;</code></a></td>
+    <td>Overrides the current text direction.</td>
+</tr>
+<tr>
+    <td><a href="html-big-tag.php" target="_blank" class="obsolete-tag"><code>&lt;big&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Displays text in a large size. Use CSS instead.</td>
+</tr>
+<tr>
+    <td><a href="html-blockquote-tag.php" target="_blank"><code>&lt;blockquote&gt;</code></a></td>
+    <td>Represents a section that is quoted from another source.</td>
+</tr>								
+<tr>
+    <td><a href="html-body-tag.php" target="_blank"><code>&lt;body&gt;</code></a></td>
+    <td>Defines the document's body.</td>
+</tr>
+<tr>
+    <td><a href="html-br-tag.php" target="_blank"><code>&lt;br&gt;</code></a></td>
+    <td>Produces a single line break.</td>
+</tr>
+<tr>
+    <td><a href="html-button-tag.php" target="_blank"><code>&lt;button&gt;</code></a></td>
+    <td>Creates a clickable button.</td>
+</tr>
+<tr>
+    <td><a href="html5-canvas-tag.php" target="_blank"><code>&lt;canvas&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a region in the document, which can be used to draw graphics on the fly via scripting (usually JavaScript).</td>
+</tr>
+<tr>
+    <td><a href="html-caption-tag.php" target="_blank"><code>&lt;caption&gt;</code></a></td>
+    <td>Defines the caption or title of the table.</td>
+</tr>
+<tr>
+    <td><a href="html-center-tag.php" target="_blank" class="obsolete-tag"><code>&lt;center&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a>  Align contents in the center. Use CSS instead.</td>
+</tr>
+<tr>
+    <td><a href="html-cite-tag.php" target="_blank"><code>&lt;cite&gt;</code></a></td>
+    <td>Indicates a citation or reference to another source.</td>
+</tr>
+<tr>
+    <td><a href="html-code-tag.php" target="_blank"><code>&lt;code&gt;</code></a></td>
+    <td>Specifies text as computer code.</td>
+</tr>
+<tr>
+    <td><a href="html-col-tag.php" target="_blank"><code>&lt;col&gt;</code></a></td>
+    <td>Defines attribute values for one or more columns in a table.</td>
+</tr>
+<tr>
+    <td><a href="html-colgroup-tag.php" target="_blank"><code>&lt;colgroup&gt;</code></a></td>
+    <td>Specifies attributes for multiple columns in a table.</td>
+</tr>
+<tr>
+    <td><a href="html5-data-tag.php" target="_blank"><code>&lt;data&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Links a piece of content with a machine-readable translation.</td>
+</tr>
+<tr>
+    <td><a href="html5-datalist-tag.php" target="_blank"><code>&lt;datalist&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a set of pre-defined options for an <a href="html-input-tag.php" target="_blank"><code>&lt;input&gt;</code></a> element.</td>
+</tr>
+<tr>
+    <td><a href="html-dd-tag.php" target="_blank"><code>&lt;dd&gt;</code></a></td>
+    <td>Specifies a description, or value for the term (<a href="html-dt-tag.php" target="_blank"><code>&lt;dt&gt;</code></a>) in a description list (<a href="html-dl-tag.php" target="_blank"><code>&lt;dl&gt;</code></a>).</td>
+</tr>
+<tr>
+    <td><a href="html-del-tag.php" target="_blank"><code>&lt;del&gt;</code></a></td>
+    <td>Represents text that has been deleted from the document.</td>
+</tr>
+<tr>
+    <td><a href="html5-details-tag.php" target="_blank"><code>&lt;details&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a widget from which the user can obtain additional information or controls on-demand.</td>
+</tr>
+<tr>
+    <td><a href="html-dfn-tag.php" target="_blank"><code>&lt;dfn&gt;</code></a></td>
+    <td>Specifies a definition.</td>
+</tr>
+<tr>
+    <td><a href="html5-dialog-tag.php" target="_blank"><code>&lt;dialog&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a dialog box or subwindow.</td>
+</tr>
+<tr>
+    <td><a href="html-dir-tag.php" target="_blank" class="obsolete-tag"><code>&lt;dir&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines a directory list. Use <a href="html-ul-tag.php" target="_blank"><code>&lt;ul&gt;</code></a> instead.</td>
+</tr>
+<tr>
+    <td><a href="html-div-tag.php" target="_blank"><code>&lt;div&gt;</code></a></td>
+    <td>Specifies a division or a section in a document.</td>
+</tr>
+<tr>
+    <td><a href="html-dl-tag.php" target="_blank"><code>&lt;dl&gt;</code></a></td>
+    <td>Defines a description list.</td>
+</tr>
+<tr>
+    <td><a href="html-dt-tag.php" target="_blank"><code>&lt;dt&gt;</code></a></td>
+    <td>Defines a term (an item) in a description list.</td>
+</tr>
+<tr>
+    <td><a href="html-em-tag.php" target="_blank"><code>&lt;em&gt;</code></a></td>
+    <td>Defines emphasized text.</td>
+</tr>
+<tr>
+    <td><a href="html5-embed-tag.php" target="_blank"><code>&lt;embed&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Embeds external application, typically multimedia content like audio or video into an HTML document.</td>
+</tr>
+<tr>
+    <td><a href="html-fieldset-tag.php" target="_blank"><code>&lt;fieldset&gt;</code></a></td>
+    <td>Specifies a set of related form fields.</td>
+</tr>
+<tr>
+    <td><a href="html5-figcaption-tag.php" target="_blank"><code>&lt;figcaption&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a caption or legend for a figure.</td>
+</tr>
+<tr>
+    <td><a href="html5-figure-tag.php" target="_blank"><code>&lt;figure&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a figure illustrated as part of the document.</td>
+</tr>
+<tr>
+    <td><a href="html-font-tag.php" target="_blank" class="obsolete-tag"><code>&lt;font&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines font, color, and size for text. Use CSS instead.</td>
+</tr>
+<tr>
+    <td><a href="html5-footer-tag.php" target="_blank"><code>&lt;footer&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents the footer of a document or a section.</td>
+</tr>
+<tr>
+    <td><a href="html-form-tag.php" target="_blank"><code>&lt;form&gt;</code></a></td>
+    <td>Defines an HTML form for user input.</td>
+</tr>
+<tr>
+    <td><a href="html-frame-tag.php" target="_blank" class="obsolete-tag"><code>&lt;frame&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines a single frame within a frameset.</td>
+</tr>
+<tr>
+    <td><a href="html-frameset-tag.php" target="_blank" class="obsolete-tag"><code>&lt;frameset&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines a collection of frames or other frameset.</td>
+</tr>
+<tr>
+    <td><a href="html-head-tag.php" target="_blank"><code>&lt;head&gt;</code></a></td>
+    <td>Defines the head portion of the document that contains information about the document such as title.</td>
+</tr>
+<tr>
+    <td><a href="html5-header-tag.php" target="_blank"><code>&lt;header&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents the header of a document or a section.</td>
+</tr>
+<tr>
+    <td><a href="html5-hgroup-tag.php" target="_blank"><code>&lt;hgroup&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a group of headings.</td>
+</tr>
+<tr>
+    <td><a href="html-headings-tag.php" target="_blank"><code>&lt;h1&gt; to &lt;h6&gt;</code></a></td>
+    <td>Defines HTML headings.</td>
+</tr>
+<tr>
+    <td><a href="html-hr-tag.php" target="_blank"><code>&lt;hr&gt;</code></a></td>
+    <td>Produce a horizontal line.</td>
+</tr>
+<tr>
+    <td><a href="html-html-tag.php" target="_blank"><code>&lt;html&gt;</code></a></td>
+    <td>Defines the root of an HTML document.</td>
+</tr>
+<tr>
+    <td><a href="html-i-tag.php" target="_blank"><code>&lt;i&gt;</code></a></td>
+    <td>Displays text in an italic style.</td>
+</tr>
+<tr>
+    <td><a href="html-iframe-tag.php" target="_blank"><code>&lt;iframe&gt;</code></a></td>
+    <td>Displays a URL in an inline frame.</td>
+</tr>
+<tr>
+    <td><a href="html-img-tag.php" target="_blank"><code>&lt;img&gt;</code></a></td>
+    <td>Represents an image.</td>
+</tr>
+<tr>
+    <td><a href="html-input-tag.php" target="_blank"><code>&lt;input&gt;</code></a></td>
+    <td>Defines an input control.</td>
+</tr>
+<tr>
+    <td><a href="html-ins-tag.php" target="_blank"><code>&lt;ins&gt;</code></a></td>
+    <td>Defines a block of text that has been inserted into a document.</td>
+</tr>
+<tr>
+    <td><a href="html-kbd-tag.php" target="_blank"><code>&lt;kbd&gt;</code></a></td>
+    <td>Specifies text as keyboard input.</td>
+</tr>
+<tr>
+    <td><a href="html5-keygen-tag.php" target="_blank"><code>&lt;keygen&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a control for generating a public-private key pair.</td>
+</tr>
+<tr>
+    <td><a href="html-label-tag.php" target="_blank"><code>&lt;label&gt;</code></a></td>
+    <td>Defines a label for an <code>&lt;input&gt;</code> control.</td>
+</tr>
+<tr>
+    <td><a href="html-legend-tag.php" target="_blank"><code>&lt;legend&gt;</code></a></td>
+    <td>Defines a caption for a <code>&lt;fieldset&gt;</code> element.</td>
+</tr>
+<tr>
+    <td><a href="html-li-tag.php" target="_blank"><code>&lt;li&gt;</code></a></td>
+    <td>Defines a list item.</td>
+</tr>
+<tr>
+    <td><a href="html-link-tag.php" target="_blank"><code>&lt;link&gt;</code></a></td>
+    <td>Defines the relationship between the current document and an external resource.</td>
+</tr>
+<tr>
+    <td><a href="html5-main-tag.php" target="_blank"><code>&lt;main&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents the main or dominant content of the document.</td>
+</tr>
+<tr>
+    <td><a href="html-map-tag.php" target="_blank"><code>&lt;map&gt;</code></a></td>
+    <td>Defines a client-side image-map.</td>
+</tr>
+<tr>
+    <td><a href="html5-mark-tag.php" target="_blank"><code>&lt;mark&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents text highlighted for reference purposes.</td>
+</tr>
+<tr>
+    <td><a href="html-menu-tag.php" target="_blank"><code>&lt;menu&gt;</code></a></td>
+    <td>Represents a list of commands.</td>
+</tr>
+<tr>
+    <td><a href="html5-menuitem-tag.php" target="_blank"><code>&lt;menuitem&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a list (or menuitem) of commands that a user can perform.</td>
+</tr>								
+<tr>
+    <td><a href="html-meta-tag.php" target="_blank"><code>&lt;meta&gt;</code></a></td>
+    <td>Provides structured metadata about the document content.</td>
+</tr>
+<tr>
+    <td><a href="html5-meter-tag.php" target="_blank"><code>&lt;meter&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a scalar measurement within a known range.</td>
+</tr>
+<tr>
+    <td><a href="html5-nav-tag.php" target="_blank"><code>&lt;nav&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a section of navigation links.</td>
+</tr>
+<tr>
+    <td><a href="html-noframes-tag.php" target="_blank" class="obsolete-tag"><code>&lt;noframes&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Defines an alternate content that displays in browsers that do not support frames.</td>
+</tr>
+<tr>
+    <td><a href="html-noscript-tag.php" target="_blank"><code>&lt;noscript&gt;</code></a></td>
+    <td>Defines alternative content to display when the browser doesn't support scripting.</td>
+</tr>
+<tr>
+    <td><a href="html-object-tag.php" target="_blank"><code>&lt;object&gt;</code></a></td>
+    <td>Defines an embedded object.</td>
+</tr>
+<tr>
+    <td><a href="html-ol-tag.php" target="_blank"><code>&lt;ol&gt;</code></a></td>
+    <td>Defines an ordered list.</td>
+</tr>
+<tr>
+    <td><a href="html-optgroup-tag.php" target="_blank"><code>&lt;optgroup&gt;</code></a></td>
+    <td>Defines a group of related options in a selection list.</td>
+</tr>
+<tr>
+    <td><a href="html-option-tag.php" target="_blank"><code>&lt;option&gt;</code></a></td>
+    <td>Defines an option in a selection list.</td>
+</tr>
+<tr>
+    <td><a href="html5-output-tag.php" target="_blank"><code>&lt;output&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents the result of a calculation.</td>
+</tr>
+<tr>
+    <td><a href="html-p-tag.php" target="_blank"><code>&lt;p&gt;</code></a></td>
+    <td>Defines a paragraph.</td>
+</tr>
+<tr>
+    <td><a href="html-param-tag.php" target="_blank"><code>&lt;param&gt;</code></a></td>
+    <td>Defines a parameter for an object or applet element.</td>
+</tr>
+<tr>
+    <td><a href="html5-picture-tag.php" target="_blank"><code>&lt;picture&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a container for multiple image sources.</td>
+</tr>
+<tr>
+    <td><a href="html-pre-tag.php" target="_blank"><code>&lt;pre&gt;</code></a></td>
+    <td>Defines a block of preformatted text.</td>
+</tr>
+<tr>
+    <td><a href="html5-progress-tag.php" target="_blank"><code>&lt;progress&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents the completion progress of a task.</td>
+</tr>
+<tr>
+    <td><a href="html-q-tag.php" target="_blank"><code>&lt;q&gt;</code></a></td>
+    <td>Defines a short inline quotation.</td>
+</tr>
+<tr>
+    <td><a href="html5-rp-tag.php" target="_blank"><code>&lt;rp&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Provides fall-back parenthesis for browsers that that don't support ruby annotations.</td>
+</tr>
+<tr>
+    <td><a href="html5-rt-tag.php" target="_blank"><code>&lt;rt&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines the pronunciation of character presented in a ruby annotations.</td>
+</tr>
+<tr>
+    <td><a href="html5-ruby-tag.php" target="_blank"><code>&lt;ruby&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a ruby annotation.</td>
+</tr>
+<tr>
+    <td><a href="html-s-tag.php" target="_blank"><code>&lt;s&gt;</code></a></td>
+    <td>Represents contents that are no longer accurate or no longer relevant.</td>
+</tr>
+<tr>
+    <td><a href="html-samp-tag.php" target="_blank"><code>&lt;samp&gt;</code></a></td>
+    <td>Specifies text as sample output from a computer program.</td>
+</tr>
+<tr>
+    <td><a href="html-script-tag.php" target="_blank"><code>&lt;script&gt;</code></a></td>
+    <td>Places script in the document for client-side processing.</td>
+</tr>
+<tr>
+    <td><a href="html5-section-tag.php" target="_blank"><code>&lt;section&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a section of a document, such as header, footer etc.</td>
+</tr>
+<tr>
+    <td><a href="html-select-tag.php" target="_blank"><code>&lt;select&gt;</code></a></td>
+    <td>Defines a selection list within a form.</td>
+</tr>
+<tr>
+    <td><a href="html-small-tag.php" target="_blank"><code>&lt;small&gt;</code></a></td>
+    <td>Displays text in a smaller size.</td>
+</tr>
+<tr>
+    <td><a href="html5-source-tag.php" target="_blank"><code>&lt;source&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines alternative media resources for the media elements like <a href="html5-audio-tag.php" target="_blank"><code>&lt;audio&gt;</code></a> or <a href="html5-video-tag.php" target="_blank"><code>&lt;video&gt;</code></a>.</td>
+</tr>
+<tr>
+    <td><a href="html-span-tag.php" target="_blank"><code>&lt;span&gt;</code></a></td>
+    <td>Defines an inline styleless section in a document.</td>
+</tr>
+<tr>
+    <td><a href="html-strike-tag.php" target="_blank" class="obsolete-tag"><code>&lt;strike&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Displays text in strikethrough style.</td>
+</tr>
+<tr>
+    <td><a href="html-strong-tag.php" target="_blank"><code>&lt;strong&gt;</code></a></td>
+    <td>Indicate strongly emphasized text.</td>
+</tr>
+<tr>
+    <td><a href="html-style-tag.php" target="_blank"><code>&lt;style&gt;</code></a></td>
+    <td>Inserts style information (commonly CSS) into the head of a document.</td>
+</tr>
+<tr>
+    <td><a href="html-sub-tag.php" target="_blank"><code>&lt;sub&gt;</code></a></td>
+    <td>Defines subscripted text.</td>
+</tr>
+<tr>
+    <td><a href="html5-summary-tag.php" target="_blank"><code>&lt;summary&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines a summary for the <a href="html5-details-tag.php" target="_blank"><code>&lt;details&gt;</code></a> element.</td>
+</tr>
+<tr>
+    <td><a href="html-sup-tag.php" target="_blank"><code>&lt;sup&gt;</code></a></td>
+    <td>Defines superscripted text.</td>
+</tr>
+<tr>
+    <td><a href="html5-svg-tag.php" target="_blank"><code>&lt;svg&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Embed SVG (Scalable Vector Graphics) content in an HTML document.</td>
+</tr>
+<tr>
+    <td><a href="html-table-tag.php" target="_blank"><code>&lt;table&gt;</code></a></td>
+    <td>Defines a data table.</td>
+</tr>
+<tr>
+    <td><a href="html-tbody-tag.php" target="_blank"><code>&lt;tbody&gt;</code></a></td>
+    <td>Groups a set of rows defining the main body of the table data.</td>
+</tr>
+<tr>
+    <td><a href="html-td-tag.php" target="_blank"><code>&lt;td&gt;</code></a></td>
+    <td>Defines a cell in a table.</td>
+</tr>
+<tr>
+    <td><a href="html5-template-tag.php" target="_blank"><code>&lt;template&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines the fragments of HTML that should be hidden when the page is loaded, but can be cloned and inserted in the document by JavaScript.</td>
+</tr>
+<tr>
+    <td><a href="html-textarea-tag.php" target="_blank"><code>&lt;textarea&gt;</code></a></td>
+    <td>Defines a multi-line text input control (text area).</td>
+</tr>
+<tr>
+    <td><a href="html-tfoot-tag.php" target="_blank"><code>&lt;tfoot&gt;</code></a></td>
+    <td>Groups a set of rows summarizing the columns of the table.</td>
+</tr>
+<tr>
+    <td><a href="html-th-tag.php" target="_blank"><code>&lt;th&gt;</code></a></td>
+    <td>Defines a header cell in a table.</td>
+</tr>
+<tr>
+    <td><a href="html-thead-tag.php" target="_blank"><code>&lt;thead&gt;</code></a></td>
+    <td>Groups a set of rows that describes the column labels of a table.</td>
+</tr>
+<tr>
+    <td><a href="html5-time-tag.php" target="_blank"><code>&lt;time&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a time and/or date.</td>
+</tr>
+<tr>
+    <td><a href="html-title-tag.php" target="_blank"><code>&lt;title&gt;</code></a></td>
+    <td>Defines a title for the document.</td>
+</tr>
+<tr>
+    <td><a href="html-tr-tag.php" target="_blank"><code>&lt;tr&gt;</code></a></td>
+    <td>Defines a row of cells in a table.</td>
+</tr>
+<tr>
+    <td><a href="html5-track-tag.php" target="_blank"><code>&lt;track&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Defines text tracks for the media elements like <a href="html5-audio-tag.php" target="_blank"><code>&lt;audio&gt;</code></a> or <a href="html5-video-tag.php" target="_blank"><code>&lt;video&gt;</code></a>.</td>
+</tr>
+<tr>
+    <td><a href="html-tt-tag.php" target="_blank" class="obsolete-tag"><code>&lt;tt&gt;</code></a></td>
+    <td><a href="../definitions.php#obsolete" class="obsolete" title="Not supported in HTML5">Obsolete</a> Displays text in a teletype style.</td>
+</tr>
+<tr>
+    <td><a href="html-u-tag.php" target="_blank"><code>&lt;u&gt;</code></a></td>
+    <td>Displays text with an underline.</td>
+</tr>
+<tr>
+    <td><a href="html-ul-tag.php" target="_blank"><code>&lt;ul&gt;</code></a></td>
+    <td>Defines an unordered list.</td>
+</tr>
+<tr>
+    <td><a href="html-var-tag.php" target="_blank"><code>&lt;var&gt;</code></a></td>
+    <td>Defines a variable.</td>
+</tr>
+<tr>
+    <td><a href="html5-video-tag.php" target="_blank"><code>&lt;video&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Embeds video content in an HTML document.</td>
+</tr>
+<tr>
+    <td><a href="html5-wbr-tag.php" target="_blank"><code>&lt;wbr&gt;</code></a> <span class="html5-badge" title="New in HTML5"></span></td>
+    <td>Represents a line break opportunity.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<a  href="https://www.tutorialrepublic.com/html-reference/html5-tags.php">Referenced by from tutorialrepublic.com</a>

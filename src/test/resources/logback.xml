@@ -27,7 +27,7 @@ ERROR 	YES 	  YES 	  YES 	YES 	YES 	  NO
   <appender name="ROLLINGTRANSPORTLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOG_DIR}/qa_lendit_book_kiosk_${dateTimeFormat}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/lendit_book_kiosk_${dateTimeFormat}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/qa_lendit_book_kiosk_${dateTimeFormat}.%i.log</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>4</maxIndex>
           </rollingPolicy>

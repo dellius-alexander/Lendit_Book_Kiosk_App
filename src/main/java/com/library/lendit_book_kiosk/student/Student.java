@@ -2,12 +2,33 @@ package com.library.lendit_book_kiosk.student;
 /////////////////////////////////////////////////////////////////////
 import java.time.LocalDate;
 import java.util.Objects;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 /////////////////////////////////////////////////////////////////////
 /**
  * This class is a model of the Student Table
  */
-public class Student {
+@Entity // This tells Hibernate to make a table out of this class
+@Table  // This tells Hibernate to make a table out of this class
+public class Student implements Serializable {
+
+
     // Table outline/fields
+    @Id
+    @SequenceGenerator(
+        name = "student_sequence",
+        sequenceName = "student_sequence",
+        allocationSize = 1
+    )
+    @GeneratedValue(
+        strategy = GenerationType.AUTO,
+        generator = "student_sequence"
+        )
     private Long id;
     private String name;
     private String email;
