@@ -27,7 +27,7 @@
 		// }]
 
 	},
-	"hostRequirements": {"memory": "4gb"},
+	"hostRequirements": {"memory": "8gb"},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		// "tomoki1207.pdf",

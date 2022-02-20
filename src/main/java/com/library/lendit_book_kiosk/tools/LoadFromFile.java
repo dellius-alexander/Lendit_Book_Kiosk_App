@@ -20,9 +20,9 @@ public class LoadFromFile implements Serializable {
      */
     public String loadFromFile(String filePath) throws IOException {
         log.info("File Retrieved: [ {} ]",filePath.toString());
-        return 
-            new String(
-                Files.readAllBytes(Paths.get(filePath))
+        return new String(
+                Files.readAllBytes(Paths.get(filePath)
+                )
         );
     }
 }

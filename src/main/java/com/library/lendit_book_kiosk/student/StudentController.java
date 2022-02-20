@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+// import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +18,9 @@ import java.util.List;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 /////////////////////////////////////////////////////////////////////
 @RestController
-@RequestMapping(path = "api/v1/student/{name}", method = RequestMethod.GET)
+@RequestMapping(path = "/api/v1/student/", method = RequestMethod.GET)
 public class StudentController {
 
     // Define a logger instance and log what you want.
@@ -45,9 +44,10 @@ public class StudentController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Student> getStudents(@PathVariable String name) {
-        log.info("RequestedMethod GET: Student => {}", name);
-        return studentService.getStudents(name);
+    public List<Student> getStudents() {
+        List<Student> list_students = studentService.getStudents();
+        log.info("RequestedMethod GET: Student => {}", list_students);
+        return list_students;
     }   
 
 }

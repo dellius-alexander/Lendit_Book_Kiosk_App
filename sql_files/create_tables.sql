@@ -200,7 +200,7 @@ end;
 drop table if exists Lendit_Book_Kiosk.User cascade;
 create table if not exists Lendit_Book_Kiosk.User
 (
-    User_ID               varchar(255)                          not null,
+    User_ID               LONG                          not null,
     User_Name             varchar(255)                           not null comment 'dataType: Email Address',
     FirstName             varchar(255)                           not null,
     LastName              varchar(255)                           not null,

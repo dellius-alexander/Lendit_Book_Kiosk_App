@@ -1,14 +1,11 @@
 package com.library.lendit_book_kiosk.student;
 /////////////////////////////////////////////////////////////////////
+// Import Dependencies
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 /////////////////////////////////////////////////////////////////////
 /**
  * This class is a model of the Student Table
@@ -33,6 +30,7 @@ public class Student implements Serializable {
     private String name;
     private String email;
     private LocalDate dob;
+    @Transient  // age will be calculated from dob
     private Integer age;
     private String major;
     /**
@@ -45,7 +43,6 @@ public class Student implements Serializable {
      * @param name
      * @param email
      * @param dob
-     * @param age
      * @param major
      */
     public Student(
@@ -53,14 +50,12 @@ public class Student implements Serializable {
                     String name, 
                     String email, 
                     LocalDate dob, 
-                    Integer age, 
                     String major
                     ) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
         this.major = major;
     }
     /**
@@ -68,20 +63,17 @@ public class Student implements Serializable {
      * @param name
      * @param email
      * @param dob
-     * @param age
      * @param major
      */
     public Student(
                     String name, 
                     String email, 
                     LocalDate dob, 
-                    Integer age, 
                     String major
                     ) {
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
         this.major = major;
     }
 
@@ -118,7 +110,7 @@ public class Student implements Serializable {
     }
 
     public Integer getAge() {
-        return this.age;
+        return Period.between(getDob(), LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -181,15 +173,16 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return "Student{\n" +
-            " id='" + getId() + "',\n" +
-            " name='" + getName() + "',\n" +
-            " email='" + getEmail() + "',\n" +
-            " dob='" + getDob() + "',\n" +
-            " age='" + getAge() + "',\n" +
-            " major='" + getMajor() + "',\n" +
+        return "{" +
+            "\"id\":" + getId() + "," +
+            "\"name\":\"" + getName() + "\"," +
+            "\"email\":\"" + getEmail() + "\"," +
+            "\"dob\":\"" + getDob() + "\"," +
+            "\"age\":" + getAge() + "," +
+            "\"major\":\"" + getMajor() + "\"" +
             "}";
     }
+    
 
 
 

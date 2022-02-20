@@ -21,31 +21,31 @@ services:
         GIT_BRANCH: "main"
         MAVEN_VERSION: "3.8.4"
         # Add Github USER.NAME
-        GIT_USER: "${GIT_USER}"
+        GIT_USER: /run/secrets/GIT_USER
         # Add Github USER.EMAIL
-        GIT_EMAIL: "${GIT_EMAIL}"
+        GIT_EMAIL: /run/secrets/GIT_EMAIL
         INSTALL_ZSH: "true"
         USE_MOBY: "true"
         # User Info
         USERNAME: "vscode"
-        USERCRED: /run/secrets/mysql_passwd
+        USERCRED: /run/secrets/MYSQL_PASSWD
         # Add packages whitespaced apart in quotation => "pkg1 pkg2 pkg3"
         ADDITIONAL_PACKAGES: ""
     container_name: Lendit_Book_Kiosk-app
     environment:
-      - MYSQL_HOST="Lendit_Book_Kiosk-db"
+      - MYSQL_HOST=/run/secrets/MYSQL_HOST
       - MYSQL_PORT=3306
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=/run/secrets/mysql_passwd
-      - GIT_USER="${GIT_USER}"
-      - GIT_EMAIL="${GIT_EMAIL}"
+      - MYSQL_USER=/run/secrets/MYSQL_USER
+      - MYSQL_PASSWORD=/run/secrets/MYSQL_PASSWD
+      - GIT_USER=/run/secrets/GIT_USER
+      - GIT_EMAIL=/run/secrets/GIT_EMAIL
       - M2=/opt/apache-maven-3.8.4/bin
       - JAVA_HOME=/usr/local/openjdk-11
       - M2_HOME=/opt/apache-maven-3.8.4
       # - PATH=$MAVEN_HOME:$PATH
       - MAVEN_OPTS='-Xms256m -Xmx512m'
       - APP_DIR="/home/vscode/Lendit_Book_Kiosk_App"
-      - GIT_REPO="https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git"
+      - GIT_REPO='https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git'
       - PATH='/opt/apache-maven-3.8.4/bin:/usr/local/share/nvm/current/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/openjdk-11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sdkman/candidates/gradle/current/bin'
     volumes: 
       # Forwards the local Docker socket to the container.
@@ -56,6 +56,8 @@ services:
       # And/or for VS Code Insiders
       - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
       # - ../.git:/home/vscode/Lendit_Book_Kiosk_App
+      # Maven persisted volume
+      - maven-m2-repository:/home/vscode/.m2
     # Overrides default command so things don't shut down after the process ends.
     # entrypoint: /usr/local/share/docker-init.sh
     # command: sleep infinity
@@ -89,7 +91,11 @@ services:
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
     secrets:
-      - mysql_passwd
+      - MYSQL_USER
+      - MYSQL_PASSWD
+      - GIT_USER
+      - GIT_EMAIL
+      - MYSQL_HOST
       # - mysql_secret_key
       # - mysql_secret_pub
 #####################################################################
@@ -98,16 +104,16 @@ services:
     # init: true
     container_name: Lendit_Book_Kiosk-db
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      # MYSQL_ALLOW_EMPTY_PASSWORD: 1
       # Name of the database
       MYSQL_DATABASE: Lendit_Book_Kiosk
       # ##### MySQL Host variable:
       # # So you don't have to use root, but you can if you like
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: /run/secrets/mysql_passwd
+      MYSQL_USER: /run/secrets/MYSQL_USER
+      MYSQL_PASSWORD: /run/secrets/MYSQL_PASSWD
       # # You can use whatever password you like
       # Password for root access
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_passwd
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/MYSQL_PASSWD
     volumes:
       - mysql-data:/var/lib/mysql
       - ./.logs/mysql_log:/var/log/
@@ -136,7 +142,8 @@ services:
     # command: ["--default-authentication-plugin=mysql_native_password"]
     #command: ["mysqld --verbose --help"]
     secrets:
-      - mysql_passwd
+      - MYSQL_USER
+      - MYSQL_PASSWD
       # - mysql_secret_key
       # - mysql_secret_pub
 #####################################################################
@@ -171,10 +178,19 @@ services:
 #####################################################################
 # SECRETS can be passed into any container after defined her in secrets definition.
 secrets:
-  mysql_passwd:
-    file: ./.secrets/mysql_passwd
+  GIT_EMAIL:
+    file: ./.secrets/GIT_EMAIL
+  GIT_USER:
+    file: ./.secrets/GIT_USER
+  MYSQL_HOST:
+    file: ./.secrets/MYSQL_HOST
+  MYSQL_USER:
+    file: ./.secrets/MYSQL_USER
+  MYSQL_PASSWD:
+    file: ./.secrets/MYSQL_PASSWD
 
 volumes: 
   mysql-data: null
   vscode-std-extensions: null
   vscode-extensions-insiders: null
+  maven-m2-repository: null
