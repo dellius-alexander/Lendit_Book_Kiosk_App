@@ -1,16 +1,36 @@
 package com.library.lendit_book_kiosk.student;
-
+/////////////////////////////////////////////////////////////////////
+// Import Dependencies
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
+import java.io.Serializable;
+import javax.persistence.*;
+/////////////////////////////////////////////////////////////////////
 /**
  * This class is a model of the Student Table
  */
-public class Student {
+@Entity // This tells Hibernate to make a table out of this class
+@Table  // This tells Hibernate to make a table out of this class
+public class Student implements Serializable {
+
+
     // Table outline/fields
+    @Id
+    @SequenceGenerator(
+        name = "student_sequence",
+        sequenceName = "student_sequence",
+        allocationSize = 1
+    )
+    @GeneratedValue(
+        strategy = GenerationType.AUTO,
+        generator = "student_sequence"
+        )
     private Long id;
     private String name;
     private String email;
     private LocalDate dob;
+    @Transient  // age will be calculated from dob
     private Integer age;
     private String major;
     /**
@@ -23,7 +43,6 @@ public class Student {
      * @param name
      * @param email
      * @param dob
-     * @param age
      * @param major
      */
     public Student(
@@ -31,14 +50,12 @@ public class Student {
                     String name, 
                     String email, 
                     LocalDate dob, 
-                    Integer age, 
                     String major
                     ) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
         this.major = major;
     }
     /**
@@ -46,20 +63,17 @@ public class Student {
      * @param name
      * @param email
      * @param dob
-     * @param age
      * @param major
      */
     public Student(
                     String name, 
                     String email, 
                     LocalDate dob, 
-                    Integer age, 
                     String major
                     ) {
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
         this.major = major;
     }
 
@@ -96,7 +110,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return this.age;
+        return Period.between(getDob(), LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -159,15 +173,16 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{\n" +
-            " id='" + getId() + "',\n" +
-            " name='" + getName() + "',\n" +
-            " email='" + getEmail() + "',\n" +
-            " dob='" + getDob() + "',\n" +
-            " age='" + getAge() + "',\n" +
-            " major='" + getMajor() + "',\n" +
+        return "{" +
+            "\"id\":" + getId() + "," +
+            "\"name\":\"" + getName() + "\"," +
+            "\"email\":\"" + getEmail() + "\"," +
+            "\"dob\":\"" + getDob() + "\"," +
+            "\"age\":" + getAge() + "," +
+            "\"major\":\"" + getMajor() + "\"" +
             "}";
     }
+    
 
 
 
