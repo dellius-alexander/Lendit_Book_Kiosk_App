@@ -10,11 +10,11 @@
 		"GIT_USER": "${localEnv:GIT_USER}" ,
 		"GIT_EMAIL": "${localEnv:GIT_EMAIL}" },
 	"overrideCommand": false,
-	
+	// java.jdt.ls.java.home
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"maven.executable.path": "/opt/apache-maven-3.8.4/bin/mvn",
-		"java.home": "/usr/local/openjdk-11"
+		"java.jdt.ls.java.home": "/usr/lib/jvm/java-11-openjdk-amd64"
 		// "sqltools.connections": [{
 		// 	"name": "Container database",
 		// 	"driver": "MySQL",
@@ -42,7 +42,8 @@
 		// "vscjava.vscode-gradle",
 		"cweijan.vscode-mysql-client2",
 		"pivotal.vscode-boot-dev-pack",
-		"sohibe.java-generate-setters-getters"
+		"sohibe.java-generate-setters-getters",
+		"developersoapbox.vscode-springboot-developer-pack"
 	],
 
 	// // Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -86,7 +87,6 @@
 	// "postCreateCommand": "docker --version && printf \n && docker info && printf \n && java -version && printf \n && javac -version && printf \n && mvn -v && sleep 3 && printf \n && ls -lia ${APP_DIR} && /usr/bin/zsh",
 
 	// Workspace folder in container
-	"workspaceFolder": "/home/vscode/Lendit_Book_Kiosk_App/",
-
-	
+	"workspaceFolder": "/home/vscode/Lendit_Book_Kiosk_App"
+		
 }

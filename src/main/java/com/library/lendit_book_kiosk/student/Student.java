@@ -23,7 +23,7 @@ public class Student implements Serializable {
         allocationSize = 1
     )
     @GeneratedValue(
-        strategy = GenerationType.AUTO,
+        strategy = GenerationType.SEQUENCE,
         generator = "student_sequence"
         )
     private Long id;
@@ -110,7 +110,7 @@ public class Student implements Serializable {
     }
 
     public Integer getAge() {
-        return Period.between(getDob(), LocalDate.now()).getYears();
+        return Period.between(this.getDob(), LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -145,10 +145,10 @@ public class Student implements Serializable {
         return this;
     }
 
-    public Student age(Integer age) {
-        setAge(age);
-        return this;
-    }
+    // public Student age(Integer age) {
+    //     setAge(age);
+    //     return this;
+    // }
 
     public Student major(String major) {
         setMajor(major);
@@ -163,24 +163,28 @@ public class Student implements Serializable {
             return false;
         }
         Student student = (Student) o;
-        return Objects.equals(id, student.id) && Objects.equals(name, student.name) && Objects.equals(email, student.email) && Objects.equals(dob, student.dob) && Objects.equals(age, student.age) && Objects.equals(major, student.major);
+        return (Objects.equals(id, student.id) 
+            && Objects.equals(name, student.name) 
+            && Objects.equals(email, student.email) 
+            && Objects.equals(dob, student.dob) 
+            && Objects.equals(major, student.major));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, dob, age, major);
+        return Objects.hash(id, name, email, dob, major);
     }
 
     @Override
     public String toString() {
-        return "{" +
-            "\"id\":" + getId() + "," +
-            "\"name\":\"" + getName() + "\"," +
-            "\"email\":\"" + getEmail() + "\"," +
-            "\"dob\":\"" + getDob() + "\"," +
-            "\"age\":" + getAge() + "," +
+        return "{\n" +
+            "\"id\":" + getId() + ",\n" +
+            "\"name\":\"" + getName() + "\",\n" +
+            "\"email\":\"" + getEmail() + "\",\n" +
+            "\"dob\":\"" + getDob() + "\",\n" +
+            "\"age\":" + getAge() + ",\n" +
             "\"major\":\"" + getMajor() + "\"" +
-            "}";
+            "\n}";
     }
     
 

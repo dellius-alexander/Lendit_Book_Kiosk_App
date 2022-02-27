@@ -11,10 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackerrank.test.utility.Order;
 import com.hackerrank.test.utility.OrderedTestRunner;
 import com.hackerrank.test.utility.TestWatchman;
-// Import your application 
-import com.library.lendit_book_kiosk.LenditBookKioskApplication;
-import com.library.lendit_book_kiosk.student.Student;
-import com.library.lendit_book_kiosk.tools.LoadFromFile;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -34,10 +30,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+// Import com.library.lendit_book_kiosk.* 
+import com.library.lendit_book_kiosk.LenditBookKioskApplication;
+import com.library.lendit_book_kiosk.student.Student;
+import com.library.lendit_book_kiosk.tools.LoadFromFile;
 /////////////////////////////////////////////////////////////////////
 @RunWith(OrderedTestRunner.class)
 @SpringBootTest(classes = LenditBookKioskApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-
 @AutoConfigureMockMvc
 public class GreetingsControllerTest {
     // Define a logger instance and log what you want.
@@ -72,15 +71,14 @@ public class GreetingsControllerTest {
     @Test
     @Order(1)
     public void greetSpring() throws Exception {
-        LoadFromFile loadFile = new LoadFromFile();
-        String response = mockMvc.perform(MockMvcRequestBuilders.get("/"))
+        String expected = mockMvc.perform(MockMvcRequestBuilders.get("/"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
-        String index = loadFile.loadFromFile("src/main/resources/static/html/index.html");
-
-        Assert.assertEquals(response, index);
+        LoadFromFile  actual = new LoadFromFile("src/frontend/public/index.html");
+        log.info("\nExpected => [{}]\n Actual => [{}]\n", expected,actual);
+        Assert.assertEquals(expected, actual.toString());
     }
     /**
      * Test retrieving a list of students from the database.
@@ -120,40 +118,8 @@ public class GreetingsControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode expected = mapper.readTree(response);
         JsonNode actual = mapper.readTree(students);
-        // students = students.replaceAll("[\\s+|\\u00A0]+","");
         log.info("Expected => [{}]\n Actual => [{}]", expected,actual);
         Assert.assertEquals(expected,actual);
     }
-    // /**
-    //  * It tests response to be "Hello Java!"
-    //  * @throws Exception
-    //  */
-    // @Test
-    // @Order(3)
-    // public void greetJava() throws Exception {
-    //     String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Jane Doe"))
-    //         .andExpect(MockMvcResultMatchers.status().isOk())
-    //         .andReturn()
-    //         .getResponse()
-    //         .getContentAsString();
-    //     Assert.assertEquals(response,  "[{\"id\":1,\"name\":\"Jane Doe\",\"email\":\"JaneDoe@gmail.com\",\"dob\":\"1989-01-06\",\"age\":35,\"major\":\"CIS\"}]");
-    // }
-
-    // /**
-    //  * It tests response to be "Hello RodJohnson!"
-    //  * @throws Exception
-    //  */
-    // @Test
-    // @Order(4)
-    // public void greetRodJohnson() throws Exception {
-    //     String response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/student/Rod Johnson"))
-    //         .andExpect(MockMvcResultMatchers.status().isOk())
-    //         .andReturn()
-    //         .getResponse()
-    //         .getContentAsString();
-
-    //     Assert.assertEquals(response, "[{\"id\":1,\"name\":\"Rod Johnson\",\"email\":\"RodJohnson@gmail.com\",\"dob\":\"1989-01-06\",\"age\":35,\"major\":\"CIS\"}]");
-    // }
-
 
 }

@@ -2,6 +2,7 @@ package com.library.lendit_book_kiosk.tools;
 
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ import java.io.FileNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WriteToFile {
+public class WriteToFile implements Serializable {
 
     // Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.getLogger(WriteToFile.class);

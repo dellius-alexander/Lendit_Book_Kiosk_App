@@ -2,11 +2,13 @@ package com.library.lendit_book_kiosk.tools;
 
 import java.io.File;  // Import the File class
 import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.Serializable;
+
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CreateFile {
+public class CreateFile implements Serializable {
     private String[] args= {""};
     private String status="";
     private static final Logger log = LoggerFactory.getLogger(CreateFile.class);
@@ -26,17 +28,17 @@ public class CreateFile {
 
         for (String file : args) {
             try {
-                File myObj = new File("./data/api/createFile/"+file);
-                if (myObj.createNewFile()) {
-                    status = "File created: " + myObj.getName();
-                    log.info("File created: " + myObj.getName());
+                File newFile = new File("./data/api/createFile/"+file);
+                if (newFile.createNewFile()) {
+                    status = String.format("File created => \n{}", newFile.getName());
                 } else {
-                    status = "File already exists.";
-                    log.error("File already exists.");
+                    status = String.format("File already exists => {}.",newFile.getName());
                 }
             } catch (IOException e) {
-                status = "An error occurred. \n" + e.getMessage();
-                log.error("An error occurred. {}", e.getMessage());               
+                status = String.format("An error occurred. \n{}", e.getMessage());
+                log.error("{}", status);               
+            } finally {
+                log.info(status);
             }
         }
         return status;
