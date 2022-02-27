@@ -6,6 +6,8 @@ target/
 **.log
 data/**
 core
+scratch.*
+.git_old
 ### STS ###
 .apt_generated
 .classpath

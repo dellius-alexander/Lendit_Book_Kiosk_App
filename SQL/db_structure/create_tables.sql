@@ -1,6 +1,9 @@
 ##########################################################################
 drop database if exists Lendit_Book_Kiosk;
-create database Lendit_Book_Kiosk;
+CREATE DATABASE Lendit_Book_Kiosk;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON admin.* TO 'admin'@'localhost' WITH GRANT OPTION;
+
 use Lendit_Book_Kiosk;
 #-- ----------------------------------------------------------------------
 # SETTINGS
@@ -195,30 +198,25 @@ end;
 ##########################################################################
 # Create Tables
 ##########################################################################
+SET foreign_key_checks = 0;
 #-- ----------------------------------------------------------------------
 
 drop table if exists Lendit_Book_Kiosk.User cascade;
 create table if not exists Lendit_Book_Kiosk.User
 (
-    User_ID               varchar(255)                          not null,
+    User_ID               integer                         not null,
     User_Name             varchar(255)                           not null comment 'dataType: Email Address',
-    FirstName             varchar(255)                           not null,
-    LastName              varchar(255)                           not null,
-    Preferred_Name        varchar(255)                           null,
-    MailingList           char(1)      default '0'               null comment 'value: [1=yes, 0=no]',
+    Name             varchar(255)                           not null,
     DOB                   date                                   not null comment 'Date format: YYYY-mm-dd',
-    Company_Name          varchar(255) default 'NONE'            null,
-    Business_Name         varchar(255) default 'NONE'            null,
-    Age                   char(3)                                null,
+    Majors                text                  null comment 'AKA Organization Name, Group Name',
+    Age                   char(3)                             null comment 'char: ###',
+    Department            varchar(255) default 'Student'    null comment 'only applies if USER is a faculty member',
     Last_Update_TimeStamp timestamp    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     constraint user_pk
         primary key (User_ID),
-    constraint user_uindex
-        unique (User_Name,FirstName,LastName,DOB),
     constraint user_username_uindex
-        unique (User_ID,User_Name),
-    constraint user_preferredname_uindex
-        unique (User_ID,Preferred_Name)
+        unique (User_ID,User_Name)
+
 );
 
 
@@ -233,7 +231,6 @@ begin
     set @temp_user_id = ifnull(new.User_ID,null);
     set @timestamp = current_timestamp();
     set @age = Lendit_Book_Kiosk.get_age(new.DOB);
-    set @preferred_name = concat(new.FirstName, ' ', new.LastName);
     -- create hash
     create_hash:
         begin
@@ -243,7 +240,6 @@ begin
     set new.User_ID = @temp_user_id;
     set new.Last_Update_TimeStamp = @timestamp;
     set new.Age = @age;
-    set new.Preferred_Name = @preferred_name;
 end insert_user;
 
 
@@ -277,40 +273,40 @@ begin
 end update_user;
 
 
-INSERT INTO Lendit_Book_Kiosk.User(User_Name, FirstName, LastName, MailingList, DOB)
-     VALUES ('janedoe@gmail.com', 'Jane', 'Doe', '1',
-             '1979-01-03');
+# INSERT INTO Lendit_Book_Kiosk.User(User_Name, FirstName, LastName, MailingList, DOB)
+#      VALUES ('janedoe@gmail.com', 'Jane', 'Doe', '1',
+#              '1979-01-03');
 #-- ----------------------------------------------------------------------
-drop table if exists Lendit_Book_Kiosk.Type cascade;
-create table if not exists Lendit_Book_Kiosk.Type
-(
-    Type_Name   varchar(128) not null,
-    Description varchar(255) null,
-    constraint type_pk
-        primary key (Type_Name),
-    constraint type_uindex
-        unique index (Type_Name)
-
-) comment 'Used for Phone and Email; e.g. Home, Work';
-
-drop trigger if exists Lendit_Book_Kiosk.insert_type;
-create trigger Lendit_Book_Kiosk.insert_type
-    before insert
-    on Lendit_Book_Kiosk.Type
-    for each row
-insert_type:
-begin
-    declare temp_type varchar(128);
-    set new.Type_Name = ucase(trim(new.Type_Name));
-    set new.Description = ucase(trim(new.Description));
-    select Type_Name
-    from Lendit_Book_Kiosk.Type
-    where Lendit_Book_Kiosk.Type.Type_Name like new.Type_Name
-    into temp_type;
-    if (ifnull(temp_type, null) is not null) then
-        leave insert_type;
-    end if;
-end insert_type;
+# drop table if exists Lendit_Book_Kiosk.Type cascade;
+# create table if not exists Lendit_Book_Kiosk.Type
+# (
+#     Type_Name   varchar(128) not null,
+#     Description varchar(255) null,
+#     constraint type_pk
+#         primary key (Type_Name),
+#     constraint type_uindex
+#         unique index (Type_Name)
+#
+# ) comment 'Used for Phone and Email; e.g. Home, Work';
+#
+# drop trigger if exists Lendit_Book_Kiosk.insert_type;
+# create trigger Lendit_Book_Kiosk.insert_type
+#     before insert
+#     on Lendit_Book_Kiosk.Type
+#     for each row
+# insert_type:
+# begin
+#     declare temp_type varchar(128);
+#     set new.Type_Name = ucase(trim(new.Type_Name));
+#     set new.Description = ucase(trim(new.Description));
+#     select Type_Name
+#     from Lendit_Book_Kiosk.Type
+#     where Lendit_Book_Kiosk.Type.Type_Name like new.Type_Name
+#     into temp_type;
+#     if (ifnull(temp_type, null) is not null) then
+#         leave insert_type;
+#     end if;
+# end insert_type;
 
 #-- ----------------------------------------------------------------------
 drop table if exists Lendit_Book_Kiosk.Email cascade;
@@ -335,125 +331,125 @@ begin
     set new.Email = trim(new.Email);
 end insert_email;
 #-- ----------------------------------------------------------------------
-drop table if exists Lendit_Book_Kiosk.Zipcode;
-create table if not exists Lendit_Book_Kiosk.Zipcode
-(
-    Zipcode            char(10)     not null,
-    Latitude           double       null,
-    Longitude          double       null,
-    City               varchar(128) not null,
-    State_ID           char(2)      not null,
-    State_Name         varchar(64)  not null,
-    County_Fips        char(5)      not null,
-    County_Name        varchar(64)  not null,
-    All_County_Weights varchar(255) null,
-    Timezone           varchar(45)  not null,
-    constraint zipcode_pk
-    primary key (Zipcode),
-    constraint zipcode_uindex
-        unique (Zipcode, City, State_ID, State_Name, Timezone, County_Name)
-);
+# drop table if exists Lendit_Book_Kiosk.Zipcode;
+# create table if not exists Lendit_Book_Kiosk.Zipcode
+# (
+#     Zipcode            char(10)     not null,
+#     Latitude           double       null,
+#     Longitude          double       null,
+#     City               varchar(128) not null,
+#     State_ID           char(2)      not null,
+#     State_Name         varchar(64)  not null,
+#     County_Fips        char(5)      not null,
+#     County_Name        varchar(64)  not null,
+#     All_County_Weights varchar(255) null,
+#     Timezone           varchar(45)  not null,
+#     constraint zipcode_pk
+#     primary key (Zipcode),
+#     constraint zipcode_uindex
+#         unique (Zipcode, City, State_ID, State_Name, Timezone, County_Name)
+# );
 
 #-- ----------------------------------------------------------------------
-drop table if exists Lendit_Book_Kiosk.Addresses;
-create table if not exists Lendit_Book_Kiosk.Addresses
-(
-    Address_ID varchar(255)                        not null,
-    Type       char(16)  default 'HOME'            not null,
-    Line_1     varchar(255)                        not null,
-    Line_2     varchar(255)                        null,
-    Zipcode    char(10)                            not null,
-    City       varchar(64)                         null,
-    State_ID   char(2)                             null,
-    State_Name varchar(64)                         null,
-    Timezone   varchar(45)                         null,
-    TimeStamp  timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
-    constraint addresses_pk
-        primary key (Address_ID),
-    constraint addresses_uindex_address
-        unique (Type, Line_1, Line_2, Zipcode),
-    constraint addresses_zipcode_fk
-        foreign key (Zipcode, City, State_ID, State_Name, Timezone)
-            references Lendit_Book_Kiosk.Zipcode (Zipcode, City, State_Id, State_Name, Timezone)
-            on update no action on delete no action,
-    constraint addresses_type_fk
-        foreign key (Type)
-            references Lendit_Book_Kiosk.Type (Type_Name)
-            on update no action on delete no action
-);
-
-
-drop trigger if exists Lendit_Book_Kiosk.insert_addresses_address_id;
-create trigger Lendit_Book_Kiosk.insert_addresses_address_id
-    before insert
-    on Lendit_Book_Kiosk.Addresses
-    for each row
-insert_addresses_address_id:
-begin
-    set @temp_city = ifnull(new.City, '0');
-    set @temp_state_id = ifnull(new.State_ID, '0');
-    set @temp_state_name = ifnull(new.State_Name, '0');
-    set @temp_timezone = ifnull(new.Timezone, '0');
-    set @temp_address_id = ifnull(new.Address_ID, null);
-    set new.Type = ucase(trim(new.Type));
-    get_zipcode_info: -- check zipcode and get city, state, and timezone
-    begin
-        select City, State_ID, State_Name, Timezone
-        from Lendit_Book_Kiosk.Zipcode
-        where Lendit_Book_Kiosk.Zipcode.Zipcode like new.Zipcode
-        into @temp_city, @temp_state_id, @temp_state_name, @temp_timezone;
-    end get_zipcode_info;
-    -- In case line_2 is null assign N/A
-    if (new.Line_2 is null) then
-        set new.Line_2 = 'N/A';
-    end if;
-    set new.City = @temp_city;
-    set new.State_ID = @temp_state_id;
-    set new.State_Name = @temp_state_name;
-    set new.Timezone = @temp_timezone;
-    set new.TimeStamp = current_timestamp();
-    -- Create hash
-    select Lendit_Book_Kiosk.Encrypt_Vals(concat(new.Type,';', new.Line_1,';', new.Line_2,';', new.Zipcode,';', new.Timezone),
-                   @private_key) into @temp_address_id;
-    set new.Address_ID = @temp_address_id;
-    insert_type: -- check and add new type if needed
-    begin
-        set @temp_type = (select Type_Name
-                          from Lendit_Book_Kiosk.Type
-                          where Lendit_Book_Kiosk.Type.Type_Name like new.Type);
-        if (ifnull(@temp_type, null) is null) then
-            insert into Lendit_Book_Kiosk.Type(Type_Name, Description)
-            values (new.Type, new.Type);
-        end if;
-    end insert_type;
-end insert_addresses_address_id;
-
+# drop table if exists Lendit_Book_Kiosk.Addresses;
+# create table if not exists Lendit_Book_Kiosk.Addresses
+# (
+#     Address_ID varchar(255)                        not null,
+#     Type       char(16)  default 'HOME'            not null,
+#     Line_1     varchar(255)                        not null,
+#     Line_2     varchar(255)                        null,
+#     Zipcode    char(10)                            not null,
+#     City       varchar(64)                         null,
+#     State_ID   char(2)                             null,
+#     State_Name varchar(64)                         null,
+#     Timezone   varchar(45)                         null,
+#     TimeStamp  timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+#     constraint addresses_pk
+#         primary key (Address_ID),
+#     constraint addresses_uindex_address
+#         unique (Type, Line_1, Line_2, Zipcode),
+#     constraint addresses_zipcode_fk
+#         foreign key (Zipcode, City, State_ID, State_Name, Timezone)
+#             references Lendit_Book_Kiosk.Zipcode (Zipcode, City, State_Id, State_Name, Timezone)
+#             on update no action on delete no action
+# #     constraint addresses_type_fk
+# #         foreign key (Type)
+# #             references Lendit_Book_Kiosk.Type (Type_Name)
+# #             on update no action on delete no action
+# );
 #
-# drop trigger if exists Lendit_Book_Kiosk.insert_addresses_address_id_hash;
-# create
-#     trigger Lendit_Book_Kiosk.insert_addresses_address_id_hash
-#     after insert
+#
+# drop trigger if exists Lendit_Book_Kiosk.insert_addresses_address_id;
+# create trigger Lendit_Book_Kiosk.insert_addresses_address_id
+#     before insert
 #     on Lendit_Book_Kiosk.Addresses
 #     for each row
-# insert_addresses_address_id_hash:
+# insert_addresses_address_id:
 # begin
-#     set @temp_address_id = ifnull(Lendit_Book_Kiosk.Addresses.Address_ID, null);
-#     if (@temp_address_id is null) then
-#         set @temp_address_id = Lendit_Book_Kiosk.Encrypt_Vals(concat(Lendit_Book_Kiosk.Addresses.Type, '-',
-#             Lendit_Book_Kiosk.Addresses.Line_1, '-', Lendit_Book_Kiosk.Addresses.Line_2, '-',
-#             Lendit_Book_Kiosk.Addresses.Zipcode, '-', Lendit_Book_Kiosk.Addresses.Timezone, '-', Lendit_Book_Kiosk.Addresses.TimeStamp), @private_key);
-# #         set @temp_address_id = Lendit_Book_Kiosk.Encrypt_Vals(concat(Type, '-',
-# #             Line_1, '-', Line_2, '-',
-# #             Zipcode, '-', Timezone, '-', TimeStamp), @private_key);
-#         update Lendit_Book_Kiosk.Addresses
-#             set Lendit_Book_Kiosk.Addresses.Address_ID = @temp_address_id
-#             where Lendit_Book_Kiosk.Addresses.ID = new.ID;
+#     set @temp_city = ifnull(new.City, '0');
+#     set @temp_state_id = ifnull(new.State_ID, '0');
+#     set @temp_state_name = ifnull(new.State_Name, '0');
+#     set @temp_timezone = ifnull(new.Timezone, '0');
+#     set @temp_address_id = ifnull(new.Address_ID, null);
+#     set new.Type = ucase(trim(new.Type));
+#     get_zipcode_info: -- check zipcode and get city, state, and timezone
+#     begin
+#         select City, State_ID, State_Name, Timezone
+#         from Lendit_Book_Kiosk.Zipcode
+#         where Lendit_Book_Kiosk.Zipcode.Zipcode like new.Zipcode
+#         into @temp_city, @temp_state_id, @temp_state_name, @temp_timezone;
+#     end get_zipcode_info;
+#     -- In case line_2 is null assign N/A
+#     if (new.Line_2 is null) then
+#         set new.Line_2 = 'N/A';
 #     end if;
-# end insert_addresses_address_id_hash;
-# set @hash_val = (select Lendit_Book_Kiosk.Encrypt_Vals(concat('Home '), @private_key));
-# select @hash_val;
-# INSERT INTO Lendit_Book_Kiosk.Addresses(Address_ID,Type, Line_1, Line_2, Zipcode, City, State_ID, State_Name)
-#     VALUES (null,'Home', '2650 Johns Creek Rd', null, 30094, null, null, null);
+#     set new.City = @temp_city;
+#     set new.State_ID = @temp_state_id;
+#     set new.State_Name = @temp_state_name;
+#     set new.Timezone = @temp_timezone;
+#     set new.TimeStamp = current_timestamp();
+#     -- Create hash
+#     select Lendit_Book_Kiosk.Encrypt_Vals(concat(new.Type,';', new.Line_1,';', new.Line_2,';', new.Zipcode,';', new.Timezone),
+#                    @private_key) into @temp_address_id;
+#     set new.Address_ID = @temp_address_id;
+#     insert_type: -- check and add new type if needed
+#     begin
+#         set @temp_type = (select Type_Name
+#                           from Lendit_Book_Kiosk.Type
+#                           where Lendit_Book_Kiosk.Type.Type_Name like new.Type);
+#         if (ifnull(@temp_type, null) is null) then
+#             insert into Lendit_Book_Kiosk.Type(Type_Name, Description)
+#             values (new.Type, new.Type);
+#         end if;
+#     end insert_type;
+# end insert_addresses_address_id;
+#
+# #
+# # drop trigger if exists Lendit_Book_Kiosk.insert_addresses_address_id_hash;
+# # create
+# #     trigger Lendit_Book_Kiosk.insert_addresses_address_id_hash
+# #     after insert
+# #     on Lendit_Book_Kiosk.Addresses
+# #     for each row
+# # insert_addresses_address_id_hash:
+# # begin
+# #     set @temp_address_id = ifnull(Lendit_Book_Kiosk.Addresses.Address_ID, null);
+# #     if (@temp_address_id is null) then
+# #         set @temp_address_id = Lendit_Book_Kiosk.Encrypt_Vals(concat(Lendit_Book_Kiosk.Addresses.Type, '-',
+# #             Lendit_Book_Kiosk.Addresses.Line_1, '-', Lendit_Book_Kiosk.Addresses.Line_2, '-',
+# #             Lendit_Book_Kiosk.Addresses.Zipcode, '-', Lendit_Book_Kiosk.Addresses.Timezone, '-', Lendit_Book_Kiosk.Addresses.TimeStamp), @private_key);
+# # #         set @temp_address_id = Lendit_Book_Kiosk.Encrypt_Vals(concat(Type, '-',
+# # #             Line_1, '-', Line_2, '-',
+# # #             Zipcode, '-', Timezone, '-', TimeStamp), @private_key);
+# #         update Lendit_Book_Kiosk.Addresses
+# #             set Lendit_Book_Kiosk.Addresses.Address_ID = @temp_address_id
+# #             where Lendit_Book_Kiosk.Addresses.ID = new.ID;
+# #     end if;
+# # end insert_addresses_address_id_hash;
+# # set @hash_val = (select Lendit_Book_Kiosk.Encrypt_Vals(concat('Home '), @private_key));
+# # select @hash_val;
+# # INSERT INTO Lendit_Book_Kiosk.Addresses(Address_ID,Type, Line_1, Line_2, Zipcode, City, State_ID, State_Name)
+# #     VALUES (null,'Home', '2650 Johns Creek Rd', null, 30094, null, null, null);
 
 #-- ----------------------------------------------------------------------
 
@@ -463,8 +459,7 @@ create table if not exists Lendit_Book_Kiosk.User_Email
 (
     User_ID varchar(255)                not null,
     Email   varchar(255)                not null,
-    Type    varchar(128) default 'Home' null,
-    primary key (User_ID, Email),
+#     primary key (User_ID, Email),
     constraint User_Email_uindex
         unique (User_ID, Email),
     constraint email_user_email_fk
@@ -529,17 +524,6 @@ begin
     where Lendit_Book_Kiosk.User.User_ID like new.User_ID
     into temp_user_id;
     if (ifnull(temp_user_id, null) is null) then
-        insert_type:
-        begin
-            select Type_Name
-            from Lendit_Book_Kiosk.Type
-            where Lendit_Book_Kiosk.Type.Type_Name like new.Type
-            into temp_type;
-            if (ifnull(temp_type, null) is null) then
-                insert into Lendit_Book_Kiosk.Type(Type_Name, Description) values (new.Type, new.Type);
-            end if;
-            #         leave insert_type;
-        end insert_type;
         insert_phone:
         begin
             select PhoneNumber
@@ -597,9 +581,8 @@ create table if not exists Lendit_Book_Kiosk.Services
 drop table if exists Lendit_Book_Kiosk.Time cascade;
 create table if not exists Lendit_Book_Kiosk.Time
 (
-    Time      int                                 not null,
-    TimeStamp timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
-    TimeZone  char(32)                            not null,
+    Time time default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    TimeZone  char(32)                            null,
     primary key (Time)
 );
 
@@ -607,9 +590,8 @@ create table if not exists Lendit_Book_Kiosk.Time
 drop table if exists Lendit_Book_Kiosk.Year;
 create table if not exists Lendit_Book_Kiosk.Year
 (
-    Year_Id   int     not null,
-    Leap_Year char(5) not null,
-    primary key (Year_Id)
+    Year int not null,
+    primary key (Year)
 );
 #-- ----------------------------------------------------------------------
 drop table if exists Lendit_Book_Kiosk.Calendar;
@@ -618,16 +600,16 @@ create table if not exists Lendit_Book_Kiosk.Calendar
     Year  int          not null,
     Month int          not null,
     Day   varchar(255) not null,
-    Time  int          not null,
+    Time  time          not null,
     primary key (Year, Month, Day, Time),
     constraint Day_Calendar_FK
         foreign key (Day) references Lendit_Book_Kiosk.Day (Date),
     constraint Month_Calendar_FK
         foreign key (Month) references Lendit_Book_Kiosk.Month (Month),
     constraint Time_Calendar_FK
-        foreign key (Time) references Lendit_Book_Kiosk.Time (Time),
+        foreign key (Time) references Lendit_Book_Kiosk.Time (Time) ,
     constraint Year_Calendar_FK
-        foreign key (Year) references Lendit_Book_Kiosk.Year (Year_Id)
+        foreign key (Year) references Lendit_Book_Kiosk.Year (Year)
 );
 
 #-- ----------------------------------------------------------------------
@@ -638,9 +620,7 @@ create table if not exists Lendit_Book_Kiosk.Phone
     Type        varchar(128) default 'HOME' null,
     primary key (PhoneNumber),
     constraint PhoneNumber
-        unique (PhoneNumber, Type),
-    constraint Phone_Type_FK
-        foreign key (Type) references Lendit_Book_Kiosk.Type (Type_Name)
+        unique (PhoneNumber)
 )
     comment ' {<country_code>####}-{<area_code>###}-{<local phone number>###-####}'
 ;
@@ -658,17 +638,7 @@ begin
     declare temp_type varchar(128);
     set new.PhoneNumber = Lendit_Book_Kiosk.format_phone(new.PhoneNumber);
     set new.Type = ucase(trim(new.Type));
-    insert_type:
-    begin
-        select Type_Name
-        from Lendit_Book_Kiosk.Type
-        where Lendit_Book_Kiosk.Type.Type_Name like new.Type
-        into temp_type;
-        if (ifnull(temp_type, null) is null) then
-            insert into Lendit_Book_Kiosk.Type(Type_Name, Description) values (new.Type, new.Type);
-        end if;
-#         leave insert_type;
-    end insert_type;
+    #
     insert_phone:
     begin
         select PhoneNumber
@@ -679,7 +649,7 @@ begin
             leave insert_phonenumber;
         end if;
     end insert_phone;
-
+    #
 end insert_phonenumber;
 
 #-- ----------------------------------------------------------------------
