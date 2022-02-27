@@ -48,23 +48,26 @@ public class StudentService {
      * @return a list of students matching the regex <code>name</code>
      */
     public List<Student> getStudents(String name) {
-        List<Student> student_list = studentRepository.findAll();
-        List<Student> found_students = new ArrayList<Student>();
+        List<Student> students_list = studentRepository.findAll();
+        List<Student> students_found = new ArrayList<Student>();
         boolean found = false;
-        for (Student stud : student_list) 
+        for (Student student : students_list) 
         {
-            Pattern.compile(Pattern.quote(name), Pattern.CASE_INSENSITIVE).matcher(stud.getName()).find();
-            if (Pattern.compile(Pattern.quote(name), Pattern.CASE_INSENSITIVE).matcher(stud.getName()).find()){
-                log.info(stud.toString());
-                found_students.add(stud);
+            if  (
+                Pattern.compile(Pattern.quote(name), 
+                Pattern.CASE_INSENSITIVE).matcher(student.getName()).find()
+                )
+            {
+                log.info(student.toString());
+                students_found.add(student);
                 found = true;
             }
         }
         if (found == false) {
             throw new IllegalStateException("Student: " + name + " does not exist.");
         }
-        log.info("RequestedMethod GET: Students => [ {} ]",found_students);
-        return found_students;
+        log.info("RequestedMethod GET: Students => [ {} ]",students_found);
+        return students_found;
     }
     /**
      * Add a student to Student Table

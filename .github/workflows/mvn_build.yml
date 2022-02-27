@@ -1,0 +1,125 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time+
+name: 'BUILD => TEST => PACKAGE => UPLOAD_ARTIFACT'
+env:
+  MYSQL_DATABASE: 'Lendit_Book_Kiosk'
+  MYSQL_USER: 'admin'
+  MYSQL_PASSWORD: 'developer'
+  MYSQL_ROOT_PASSWORD: 'developer'
+  MAVEN_VERSION: 3.8.4
+  MYSQL_HOST: Lendit_Book_Kiosk-db
+  MYSQL_PORT: 3306
+  JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64'
+  APP_MYSQL_USER: root
+on:
+  push:
+    branches: 
+    - 'main'
+    - 'release*'
+    - '*'
+  pull_request:
+    branches: 
+    - 'main'
+    - 'release*'
+    - '*'
+jobs:
+  CICD:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    container:
+      image: ubuntu:latest
+    services:
+      Lendit_Book_Kiosk-db:
+        image: mysql:8.0.27
+        ports:
+          - 3306:3306/tcp
+        env:
+          MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ env.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+        options: >-
+          --name=Lendit_Book_Kiosk-db
+          --health-cmd="mysqladmin ping" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3
+        volumes:
+          - data:/var/lib/mysql
+          - sql_config:/etc/mysql/conf.d
+          - sql_files:/mysql_files
+        
+    steps:
+      - uses: actions/checkout@v2
+      - name: step 0 - Listing Project Directory Structure
+        run: |
+          ls -liaR
+      - name: step 1 - Set up Java JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: step 2 - Setup Build Environment
+        env:
+          MAVEN_VERSION: ${{ env.MAVEN_VERSION }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+        run: |
+          apt-get update
+          apt-get install -y mysql-client curl 
+          curl -fsSLo  /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  \
+          https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
+          tar xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz  -C  /opt/
+          echo "Maven Version: ${MAVEN_VERSION}"
+          export M2_HOME=/opt/apache-maven-${MAVEN_VERSION} 
+          export M2=/opt/apache-maven-${MAVEN_VERSION}/bin 
+          export PATH=/opt/apache-maven-${MAVEN_VERSION}/bin:$PATH 
+          export MAVEN_OPTS='-Xms256m -Xmx512m' 
+          ln -sf  "/opt/apache-maven-${MAVEN_VERSION}/bin/mvn" /usr/local/bin
+          mysql --help
+          java -version
+          whereis java
+          which java   
+          mvn -v
+      - name: step 3 - Verify MySQL connection from container
+        env:
+          MYSQL_HOST: ${{ env.MYSQL_HOST }}
+          MYSQL_PORT: ${{ env.MYSQL_PORT }}
+          MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ env.APP_MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+        run: |
+          echo "MySQL USER: ${MYSQL_USER}"          
+          # Let us consider the following typical mysql backup script:
+          # mysqldump --routines --no-data -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
+          # It succeeds but stderr will get:
+          # Warning: Using a password on the command line interface can be insecure.
+          # You can fix this with the below hack:
+          credentialsFile=/mysql-credentials.cnf
+          echo "[client]" > ${credentialsFile}
+          echo "user=${MYSQL_USER}" >> ${credentialsFile}
+          echo "password=${MYSQL_ROOT_PASSWORD}" >> ${credentialsFile}
+          echo "host=${MYSQL_HOST}" >> ${credentialsFile}
+          mysqldump --defaults-extra-file=${credentialsFile} --routines --no-data ${MYSQL_DATABASE}
+      - name: step 4 - Building our Maven Project
+        run:  |
+          mvn -B package --file pom.xml
+          mkdir staging && cp target/*.jar staging
+      - name: step 5- Setup a cache for Maven
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: step 6 - Persist workflow data as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-actions-artifact
+          path: staging
+      
+
