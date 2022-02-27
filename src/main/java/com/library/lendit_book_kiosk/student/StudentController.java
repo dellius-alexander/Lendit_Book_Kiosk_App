@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.Serializable;
 import java.util.List;
 
-
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
