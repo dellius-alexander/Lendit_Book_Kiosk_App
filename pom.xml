@@ -36,9 +36,22 @@
 		<springframework.version>5.3.16</springframework.version>
 		<springsecurity.version>5.6.2</springsecurity.version>
 		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
+		<hsqldb.version>1.8.0.10</hsqldb.version>
+		<hibernate.version>5.2.11.Final</hibernate.version>
+		<hibernate.validator>5.4.1.Final</hibernate.validator>
     </properties>
 
 	<dependencies>
+
+
+		<!-- HSQL Dependency -->
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>${hsqldb.version}</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>

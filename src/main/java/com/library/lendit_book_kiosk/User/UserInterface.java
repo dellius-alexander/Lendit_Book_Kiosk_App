@@ -2,8 +2,6 @@ package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
 
-import java.util.Set;
-
 public interface UserInterface {
 
     /**
@@ -99,11 +97,6 @@ public interface UserInterface {
      */
     java.util.Set<Role> getRoles();
 
-    /**
-     * Get the students in this container
-     * @return the students in the this container
-     */
-    java.util.Set<com.library.lendit_book_kiosk.Student.Student> getStudents();
 
     /**
      * Set user id
@@ -153,9 +146,5 @@ public interface UserInterface {
      */
     void setRoles(java.util.Set<Role> roles);
 
-    /**
-     * Add students into container
-     * @param students
-     */
-    void setStudents(java.util.Set<com.library.lendit_book_kiosk.Student.Student> students);
+
 }

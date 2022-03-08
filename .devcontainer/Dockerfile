@@ -73,7 +73,7 @@ RUN /bin/bash /tmp/library-scripts/docker-in-docker-debian.sh \
 # RUN cd "/home/${USERNAME}" && git clone "${GIT_REPO}" "$(basename -s .git ${GIT_REPO})" \
 #     && cd "$(basename -s .git ${GIT_REPO})" \
 #     && git config --global user.email "${GIT_EMAIL}" \
-#     && git config --global user.name "${GIT_USER}"  
+#     && git config --global user.name "${GIT_USER}"
 # install oh-my-zsh
 RUN rm -rf ~/.oh-my-zsh \
     && sh -c "$(curl -fsSL \

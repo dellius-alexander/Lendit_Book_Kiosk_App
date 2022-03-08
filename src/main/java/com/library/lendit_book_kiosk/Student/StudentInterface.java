@@ -1,8 +1,9 @@
 package com.library.lendit_book_kiosk.Student;
 
+import com.library.lendit_book_kiosk.User.User;
+
 public interface StudentInterface {
 
-    String getName();
 
     boolean canEqual(Object other);
 
@@ -10,18 +11,22 @@ public interface StudentInterface {
 
     java.util.Set<Major> getMajors();
 
-    java.util.Set<com.library.lendit_book_kiosk.User.User> getUser();
+//    User getUser();
 
     void setId(Long id);
 
 
     void setMajors(java.util.Set<Major> majors);
 
-    void setUser(java.util.Set<com.library.lendit_book_kiosk.User.User> user);
+//    void setUser(User user);
 
     boolean equals(Object o);
 
     int hashCode();
 
     String toString();
+
+    int compareTo(Student s);
+
+    int compareTo(Object s);
 }

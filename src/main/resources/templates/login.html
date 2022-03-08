@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+              integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+              crossorigin="anonymous">
+<!--        <link rel="icon" th:href="@{images/kiosk.png}" alt="Lendit Book Kiosk Icon" />-->
+
+<!--    Favicon Options     -->
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" th:href="@{images/favicon/apple-touch-icon-57x57.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{images/favicon/apple-touch-icon-144x144.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{images/favicon/apple-touch-icon-60x60.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" th:href="@{images/favicon/apple-touch-icon-120x120.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" th:href="@{images/favicon/apple-touch-icon-76x76.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" th:href="@{images/favicon/apple-touch-icon-152x152.png}"  />
+        <link rel="icon" type="image/png" th:href="@{images/favicon/favicon-196x196.png}" sizes="196x196"  />
+        <link rel="icon" type="image/png" th:href="@{images/favicon/favicon-96x96.png}" sizes="96x96"  />
+        <link rel="icon" type="image/png" th:href="@{images/favicon/favicon-32x32.png}" sizes="32x32"  />
+        <link rel="icon" type="image/png" th:href="@{images/favicon/favicon-16x16.png}" sizes="16x16"  />
+        <link rel="icon" type="image/png" th:href="@{images/favicon/favicon-128.png}" sizes="128x128"  />
+        <meta name="application-name" content="&nbsp;"/>
+        <meta name="msapplication-TileColor" content="#FFFFFF" />
+<!--        <meta name="msapplication-TileImage" th:content="@{images/favicon/mstile-144x144.png}" />-->
+<!--        <meta name="msapplication-square70x70logo" th:content="@{images/favicon/mstile-70x70.png}" />-->
+<!--        <meta name="msapplication-square150x150logo" th:content="@{images/favicon/mstile-150x150.png}" />-->
+<!--        <meta name="msapplication-wide310x150logo" th:content="@{images/favicon/mstile-310x150.png}" />-->
+<!--        <meta name="msapplication-square310x310logo" th:content="@{images/favicon/mstile-310x310.png}" />-->
+<!--    End Favicon     -->
+        <title>Lendit Book Kiosk</title>
+<!--        <link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"/>-->
+<!--        <script type="text/javascript" th:src="@{/js/login.js}"></script>-->
+        <style>
+            .container-fluid {
+                margin: 0 auto;
+                max-width: 50%;
+                align-content: center;
+                padding: 25px;
+                background-color: aquamarine;
+                border-radius: 20px;
+            }
+            .logo-img {
+                max-height: 80%;
+                max-width: 80%;
+                border-radius: 20px;
+            }
+            .submit {
+                color: #fff;
+                font-weight: bolder;
+                background-color: navy;
+            }
+            .form-control {
+                border-radius: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <!-- show notification on error -->
+            <div class="alert-danger" th:if="${param.error}" >
+                Invalid username or password.
+            </div>
+
+            <!-- show notification of logout -->
+            <div class="alert-success"  th:if="${param.logout}">
+                You have been logged out.
+            </div>
+
+            <!-- login form -->
+            <div class="container-fluid text-center ">
+                <div>
+                    <img class="logo-img" src="#" th:src="@{images/favicon/mstile-310x310.png}" alt="Lendit Book Kiosk Icon" />
+                </div>
+
+                <form
+                        id="userLoginDetails"
+                        name="userLoginDetails"
+                        method="post"
+                        th:action="@{/verify}"
+                        th:object="${userLoginDetails}"
+                >
+                    <h2 >Please sign in</h2>
+                    <div class="form-group">
+                        <label for="username" >User Name</label>
+                        <input
+                                class="form-control"
+                                id="username"
+                                type="text"
+                                name="username"
+                                placeholder="something@example.com"
+                                th:required="required"
+                                th:autofocus="autofocus"
+                                th:field="*{username}" />
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                               class="form-control"
+                               id="password"
+                               type="password"
+                               name="password"
+                               placeholder="password"
+                               th:required="required"
+                               th:autofocus="autofocus"
+                               th:field="*{password}" />
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <input
+                                class="btn btn-primary form-control submit"
+                                type="submit"
+                                value="Sign In"
+                        />
+                    </div>
+                </form>
+
+    <!--            <div sec:authorize="isAuthenticated()">-->
+    <!--                This content is only shown to authenticated users.-->
+    <!--            </div>-->
+    <!--            <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+    <!--                This content is only shown to administrators.-->
+    <!--            </div>-->
+    <!--            <div sec:authorize="hasRole('ROLE_USER')">-->
+    <!--                This content is only shown to users.-->
+    <!--            </div>-->
+
+            </div>
+        </main>
+        <footer></footer>
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    </body>
+</html>

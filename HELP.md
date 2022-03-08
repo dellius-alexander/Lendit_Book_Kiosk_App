@@ -177,9 +177,9 @@ Create a json configuration file in your project. The smart-doc-maven-plugin plu
        "required":true,
        "ignore":false
   }],
-  "apiObjectReplacements": [{ // Supports replacing specified objects with custom objects to complete document rendering
+  "apiObjectReplacements": [{ // Supports replacing specified objects with Custom objects to complete document rendering
        "className": "org.springframework.data.domain.Pageable",
-       "replacementClassName": "com.power.doc.model.PageRequestDto" //Use custom PageRequestDto instead of JPA Pageable for document rendering.
+       "replacementClassName": "com.power.doc.model.PageRequestDto" //Use Custom PageRequestDto instead of JPA Pageable for document rendering.
   }],
   "rpcApiDependencies":[{ // Your Apache Dubbo api interface module dependency description.
        "artifactId":"SpringBoot2-Dubbo-Api",

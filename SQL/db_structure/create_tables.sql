@@ -234,7 +234,7 @@ create table if not exists Lendit_Book_Kiosk.User
 
 );
 
-
+verify
 drop trigger if exists Lendit_Book_Kiosk.insert_user;
 create trigger Lendit_Book_Kiosk.insert_user
     before insert

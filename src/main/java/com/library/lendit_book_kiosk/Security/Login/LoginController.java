@@ -1,12 +1,11 @@
 package com.library.lendit_book_kiosk.Security.Login;
 
-import com.library.lendit_book_kiosk.Security.custom.CustomAuthenticationProvider;
+import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.UserService;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,14 +60,13 @@ public class LoginController implements Serializable{
             @Valid
             @ModelAttribute("userLoginDetails") UserLoginDetails userLoginDetails,
             BindingResult result,
-            Model model,
-            Authentication authentication
+            Model model
     ) {
         // Custom Authentication Token
         User user = userService.getByEmail(userLoginDetails.getUsername());
         log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
         log.info("\n\nUserLoginDetails: {}\n\nMODEL: {} \n\nRESULTS: {}\n\nUSERS: {}\n\n",
-                userLoginDetails.toString(),
+                userLoginDetails,
                 model.toString(),
                 result.toString());
         if(result.hasErrors()){
@@ -81,6 +79,7 @@ public class LoginController implements Serializable{
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath().path("/login").toUriString());
+        model.addAttribute("user", user);
         log.info(
                 "\n\nRequestedMethod POST: UserLoginDetails form => {}\n\n" +
                         "Results: {}\n\nModel: {}\n\n",

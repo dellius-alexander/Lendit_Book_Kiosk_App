@@ -1,11 +1,11 @@
 package com.library.lendit_book_kiosk.Student;
 
-import com.library.lendit_book_kiosk.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
@@ -47,4 +47,8 @@ public class Major {
         this.major = major;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.major, this.students);
+    }
 }
