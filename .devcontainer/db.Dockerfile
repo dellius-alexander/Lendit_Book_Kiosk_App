@@ -31,9 +31,11 @@ RUN microdnf update && echo "[main]" > /etc/dnf/dnf.conf \
   && mkdir /docker-entrypoint-initdb.d
 
 COPY library-scripts/prepare-image.sh* /prepare-image.sh
-RUN /bin/bash /prepare-image.sh && rm -f /prepare-image.sh
-
+RUN /bin/bash /prepare-image.sh \
+  && rm -f /prepare-image.sh
+# set mysql unix daemon socket
 ENV MYSQL_UNIX_PORT /var/lib/mysql/mysql.sock
+# copy Files
 COPY .secret/my.cnf* /etc/mysql/conf.d/
 COPY library-scripts/docker-entrypoint.sh* /entrypoint.sh
 COPY library-scripts/healthcheck.sh* /healthcheck.sh

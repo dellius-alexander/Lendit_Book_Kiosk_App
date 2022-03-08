@@ -2,14 +2,14 @@ package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.library.lendit_book_kiosk.student.StudentController;
+import com.library.lendit_book_kiosk.Student.StudentController;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 /////////////////////////////////////////////////////////////////////
 @SpringBootTest
-class LenditBookKioskApplicationTests {
+class LendITBookKioskApplicationTests {
 
 	@Autowired
 	private StudentController studentController;

@@ -27,14 +27,14 @@
 		// }]
 
 	},
-	"hostRequirements": {"memory": "8gb"},
+	"hostRequirements": {"memory": "16gb"},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		// "tomoki1207.pdf",
 		"vscjava.vscode-java-pack",
 		"redhat.java",
 		"redhat.vscode-commons",
-		// "ms-azuretools.vscode-docker",
+		"ms-azuretools.vscode-docker",
 		"davidanson.vscode-markdownlint",
 		// "dotjoshjohnson.xml",
 		"vscjava.vscode-maven",

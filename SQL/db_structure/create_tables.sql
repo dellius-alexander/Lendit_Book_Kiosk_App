@@ -1,8 +1,11 @@
 ##########################################################################
 drop database if exists Lendit_Book_Kiosk;
 CREATE DATABASE Lendit_Book_Kiosk;
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON admin.* TO 'admin'@'localhost' WITH GRANT OPTION;
+# Syntax:
+# CREATE USER
+#  user_name IDENTIFIED BY [ PASSWORD ] 'password_value';
+# CREATE USER 'admin'@'localhost' IDENTIFIED BY 'developer';
+# GRANT ALL PRIVILEGES ON admin.* TO 'admin'@'localhost' WITH GRANT OPTION;
 
 use Lendit_Book_Kiosk;
 #-- ----------------------------------------------------------------------
@@ -45,7 +48,7 @@ select @private_key as 'Private Key';
 # SPECIAL VARIABLES LISTED HERE
 SHOW VARIABLES LIKE 'secure_file_priv'; -- Directory of imported files
 #-- ----------------------------------------------------------------------
--- set @special_char_regex = '[\-\+\(\)\\[\\]\_\=\*\%\^\#\!\&\/\~\'\"\?\>\<\.\,\:\;\@\`]+';
+set @special_char_regex = '[\-\+\(\)\\[\\]\_\=\*\%\^\#\!\&\/\~\'\"\?\>\<\.\,\:\;\@\`]+';
 #-- ----------------------------------------------------------------------
 #-- ----------------------------------------------------------------------
 ##########################################################################
@@ -53,9 +56,21 @@ SHOW VARIABLES LIKE 'secure_file_priv'; -- Directory of imported files
 ##########################################################################
 #-- ----------------------------------------------------------------------
 drop
+    function if exists Lendit_Book_Kiosk.Gen_Uniq_Int;
+create
+    function Lendit_Book_Kiosk.Gen_Uniq_Int(__text varchar(64))
+    returns bigint
+    comment '@param: __text => text to be converted'
+    deterministic
+BEGIN
+    return conv(substring(cast(sha2(__text) as char), 1, 16), 16, 10);
+END;
+
+
+#------------------------------------------------------------------------
+drop
     function if exists Lendit_Book_Kiosk.Encrypt_Vals;
 create
-
     function Lendit_Book_Kiosk.Encrypt_Vals(object varchar(512), pub_key varchar(255))
     returns text
     comment '@param: object longtext => object must be of string format;'
@@ -204,18 +219,18 @@ SET foreign_key_checks = 0;
 drop table if exists Lendit_Book_Kiosk.User cascade;
 create table if not exists Lendit_Book_Kiosk.User
 (
-    User_ID               integer                         not null,
-    User_Name             varchar(255)                           not null comment 'dataType: Email Address',
-    Name             varchar(255)                           not null,
+    Id               bigint                         not null,
+    User_Name         varchar(255)                           not null comment 'dataType: Email Address',
+    Name                varchar(255)                           not null,
     DOB                   date                                   not null comment 'Date format: YYYY-mm-dd',
     Majors                text                  null comment 'AKA Organization Name, Group Name',
     Age                   char(3)                             null comment 'char: ###',
     Department            varchar(255) default 'Student'    null comment 'only applies if USER is a faculty member',
     Last_Update_TimeStamp timestamp    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     constraint user_pk
-        primary key (User_ID),
+        primary key (Id),
     constraint user_username_uindex
-        unique (User_ID,User_Name)
+        unique (Id,User_Name)
 
 );
 
@@ -228,7 +243,7 @@ create trigger Lendit_Book_Kiosk.insert_user
 insert_user:
 begin
 #     set foreign_key_checks = 1;
-    set @temp_user_id = ifnull(new.User_ID,null);
+    set @temp_user_id = ifnull(new.Id,null);
     set @timestamp = current_timestamp();
     set @age = Lendit_Book_Kiosk.get_age(new.DOB);
     -- create hash
@@ -237,7 +252,7 @@ begin
         select Lendit_Book_Kiosk.Encrypt_Vals(concat(new.User_Name,'-',new.DOB), @private_key)
                         into @temp_user_id;
     end create_hash;
-    set new.User_ID = @temp_user_id;
+    set new.Id = @temp_user_id;
     set new.Last_Update_TimeStamp = @timestamp;
     set new.Age = @age;
 end insert_user;
@@ -457,7 +472,7 @@ end insert_email;
 drop table if exists Lendit_Book_Kiosk.User_Email cascade;
 create table if not exists Lendit_Book_Kiosk.User_Email
 (
-    User_ID varchar(255)                not null,
+    User_ID long                not null,
     Email   varchar(255)                not null,
 #     primary key (User_ID, Email),
     constraint User_Email_uindex
@@ -482,7 +497,7 @@ begin
     select Email from Lendit_Book_Kiosk.Email where Lendit_Book_Kiosk.Email.Email like new.Email into temp_email;
 
     if (ifnull(temp_email, null) is null) then
-        insert into Lendit_Book_Kiosk.Email(Email) VALUES (new.Email, new.Type);
+        insert into Lendit_Book_Kiosk.Email(Email) VALUES (new.Email);
     end if;
 end insert_user_email;
 
@@ -490,7 +505,7 @@ end insert_user_email;
 drop table if exists Lendit_Book_Kiosk.User_Phone cascade;
 create table if not exists Lendit_Book_Kiosk.User_Phone
 (
-    User_ID     varchar(255) default '00'   not null,
+    User_ID     long  not null,
     PhoneNumber char(17)                    not null comment '{<country_code>####}-{<area_code>###}-{<local phone number>###-####}',
     Type        varchar(128) default 'Home' not null,
     primary key (User_ID, PhoneNumber),
