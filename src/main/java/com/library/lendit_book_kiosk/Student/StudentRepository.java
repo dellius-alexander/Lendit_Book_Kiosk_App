@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  * Student Repository access the database to retrieve students.
  * @extends JpaRepository<Student, Long>
  */
-@Repository
+@Repository(value = "com.library.lendit_book_kiosk.Student.StudentRepository")
 public interface StudentRepository extends JpaRepository<Student, Long>    {
 
     UserRepository userRepository = null;

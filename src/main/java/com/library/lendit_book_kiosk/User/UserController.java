@@ -7,6 +7,7 @@ import com.library.lendit_book_kiosk.Role.Role;
 // LOGGING CLASSES
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,20 @@ public class UserController {
         this.userService = userService;
     }
     // TODO: REMEMBER TO KILL THIS METHOD DURING PRODUCTION
-    @GetMapping(path = "/users")
+
+    /**
+     * Get a list of All Users
+     * @return
+     */
+    @RequestMapping(value = {"/findAll", "/findall"}, method = RequestMethod.GET )
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = userService.getUsers();
         log.info("USERS: \n{}\n",users.toString());
         return ResponseEntity.ok().body(users);
     }
 
-    @PostMapping(path = "/save/{user}")
+
+    @RequestMapping(value = {"/save/{user}"}, method = RequestMethod.POST )
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         log.info("USER: \n{}\n", user.toString());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
@@ -78,14 +85,16 @@ public class UserController {
         // return ResponseEntity.ok().build();
         return null;
     }
+
     @GetMapping("/create")
-    @Secured("ROLE_ADMIN")
-    public String createUserForm(Model model) {
-//        model.addAttribute("user", new CreateUserFormData());
-//        model.addAttribute("genders", List.of(Gender.MALE, Gender.FEMALE, Gender.
-//                OTHER));
-//        model.addAttribute("editMode", EditMode.CREATE);
-        return "users/edit";
+    public String createUserForm(@RequestBody User user) {
+        if (user == null){
+            log.info("Request Body User is null: {}", user.toString());
+            throw new NullArgumentException("<p>Request Body User is null: " +
+                    user.toString() + "</p>");
+        }
+        userService.saveUser(user);
+        return "/index";
     }
 
 }

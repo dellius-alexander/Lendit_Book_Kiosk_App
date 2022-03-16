@@ -10,6 +10,7 @@ import com.library.lendit_book_kiosk.Role.RoleRepository;
 
 
 // LOGGING CLASSES
+import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,8 +126,10 @@ public class UserService implements UserDetailsService {
 
     public User getByEmail(String email){
         Optional<User> user = userRepository.findUserByEmail(email);
-        log.info("\n\nUSER FOUND: {}\n\n",user.get().toString());
-        return user.get();
+        log.info("\n\nUSER FOUND: {}\n\n",user.get());
+        return user.orElseThrow(() ->
+                new IllegalStateException("User with email " + email +
+                        " was not found."));
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

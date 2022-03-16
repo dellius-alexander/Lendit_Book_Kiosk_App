@@ -22,24 +22,25 @@ import java.util.Set;
  */
 // Tells Hibernate to make a table out of this class
 ///////////////////////////////////////////////////////
-@Entity  // Tells Hibernate to make a table out of this class
+// Tells Hibernate to make a table out of this class
+@Entity
 @Table(name = "Student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
 public class Student implements StudentInterface {
     private final static Logger log = LoggerFactory.getLogger(Student.class);
     ///////////////////////////////////////////////////////
     // Table outline/fields
-//    @Id
-//    @Column(name = "student_id")
-//    @SequenceGenerator(
-//        name = "student_sequence",
-//        sequenceName = "student_sequence",
-//        allocationSize = 1
-//    )
-//    @GeneratedValue(
-//        // strategy = AUTO
-//        strategy = GenerationType.SEQUENCE,
-//        generator = "student_sequence"
-//    )
+    //    @Id
+    //    @Column(name = "student_id")
+    //    @SequenceGenerator(
+    //        name = "student_sequence",
+    //        sequenceName = "student_sequence",
+    //        allocationSize = 1
+    //    )
+    //    @GeneratedValue(
+    //        // strategy = AUTO
+    //        strategy = GenerationType.SEQUENCE,
+    //        generator = "student_sequence"
+    //    )
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
@@ -49,14 +50,11 @@ public class Student implements StudentInterface {
     private Long id;
     private boolean enrolled;
     // TODO: Expand String to Class Major to Create Set<Major>
-    @ManyToMany(
+    @OneToMany(
             targetEntity = Major.class,
             fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "student_id",
-            referencedColumnName = "id"
-    )
+
     private Set<Major> majors;
     @ManyToMany(
 //            targetEntity = User.class,
