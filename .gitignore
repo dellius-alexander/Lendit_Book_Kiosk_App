@@ -4,10 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 **.log
-data/**
+**/data/**
 core
 scratch.*
 .git_old
+.env
+**/.backup
 ### STS ###
 .apt_generated
 .classpath

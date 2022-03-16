@@ -14,8 +14,9 @@ ARG USERNAME=vscode
 # MySQL USER config file COPIED to .my.cnf dotfile
 COPY .secret/my.cnf* /home/"${USERNAME}"/.my.cnf 
 #
+# RUN mkdir -p /home/"${USERNAME}"/.m2 
 RUN chown ${USERNAME}:${USERNAME} -R /home/${USERNAME}/
-
+#
 # Setting the ENTRYPOINT to docker-init.sh will start up the Docker Engine 
 # inside the container "overrideCommand": false is set in devcontainer.json. 
 # The script will also execute CMD if you need to alter startup behaviors.
