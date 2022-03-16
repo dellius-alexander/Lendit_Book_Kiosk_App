@@ -39,7 +39,6 @@ ERROR 	YES 	  YES 	  YES 	YES 	YES 	  NO
           </encoder>
       <prudent>false</prudent>
   </appender>
-
   <!-- FILE APPENDER -->
   <!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender"> -->
     <!-- use the previously created timestamp to create a uniquely
