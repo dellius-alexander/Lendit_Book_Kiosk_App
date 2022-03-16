@@ -148,9 +148,12 @@ public class Role implements RoleInterface, Serializable {
     }
 
     @Override
-    public boolean equals(Role role1, Role role2){
+    public boolean equals(
+            Role role1,
+            Role role2
+    ){
         return  Pattern.compile(Pattern.quote(role1.getRole().name()),
-                Pattern.CASE_INSENSITIVE).matcher(role2.getRole().name()).find();
+                        Pattern.CASE_INSENSITIVE).matcher(role2.getRole().name()).find();
     }
 
     @Override

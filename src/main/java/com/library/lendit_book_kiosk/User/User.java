@@ -77,9 +77,24 @@ public class User implements UserInterface, Serializable {
             inverseJoinColumns = @JoinColumn(name = "student_id_fk"))
     private Set<Student> student;
     ///////////////////////////////////////////////////////
+
+    /**
+     * Default Constructor.
+     */
     public User(){}
 
-
+    /**
+     * All Args Constructor
+     * @param id
+     * @param name
+     * @param email
+     * @param password
+     * @param gender
+     * @param dob
+     * @param profession
+     * @param roles
+     * @param student
+     */
     public User(
             Long id,
             String name,
@@ -102,6 +117,17 @@ public class User implements UserInterface, Serializable {
         this.student = student;
     }
 
+    /**
+     * All but [id] Args Constructor
+     * @param name
+     * @param email
+     * @param password
+     * @param gender
+     * @param dob
+     * @param profession
+     * @param roles
+     * @param students
+     */
     public User(
             String name,
             String email,
@@ -122,7 +148,16 @@ public class User implements UserInterface, Serializable {
         this.student = students;
     }
 
-
+    /**
+     *
+     * @param name
+     * @param email
+     * @param password
+     * @param gender
+     * @param dob
+     * @param profession
+     * @param roles
+     */
     public User(
             String name,
             String email,
@@ -244,7 +279,6 @@ public class User implements UserInterface, Serializable {
         this.setGender(user.getGender());
         this.setProfession(user.getProfession());
     }
-
 
     /**
      * Set username

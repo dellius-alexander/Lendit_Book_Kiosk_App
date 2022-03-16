@@ -20,7 +20,7 @@ import javax.transaction.Transactional;
  * Service Layer Class that supports our API layer
  */
 @Transactional
-@Service(value = "")
+@Service(value = "StudentService")
 public class StudentService {
     private static final Logger log = LoggerFactory.getLogger(StudentService.class);
     /**
@@ -32,8 +32,8 @@ public class StudentService {
     /**
      * Service access layer connects to Data access layer to retrieve students.
      * This represents the connection between the two layers.
-     * @param studentRepository
-     * @param userRepository
+     * @param studentRepository access to student repository
+     * @param userRepository access to user repository
      */
     @Autowired // needed to automatically connect to StudentRepository and UserRepository
     public StudentService(StudentRepository studentRepository, UserRepository userRepository) {
@@ -58,8 +58,12 @@ public class StudentService {
      * @param name the name of the student
      * @return a list of students matching the regex <code>name</code>
      */
-    public List<Student> getStudent(String name) {
+    public List<Student> getStudentByName(String name) {
         Optional<User> user = userRepository.findUserByName(name);
+        if (!user.isPresent()){
+            log.info("User [ {} ] not found.", name);
+            throw new IllegalStateException("Request for User: [ "+  name  + " ], returned not found.");
+        }
         Optional<Student> students = studentRepository.findStudentById(user.get().getId());
         if (students.isEmpty()) {
             throw new IllegalStateException("Student: " + name + " does not exist.");
@@ -148,8 +152,13 @@ public class StudentService {
 //        return List.of(String.format("UPDATE Successful"));
 //    }
 
-	public List<Student> findStudentById(Long studentId) {
-        Optional<Student> student = studentRepository.findStudentById(studentId);
+    /**
+     * Find student by id.
+     * @param studentId the student id
+     * @return List<Student>
+     */
+	public List<Student> findStudentById(Long studentId) throws IllegalArgumentException {
+        Optional<Student> student = studentRepository.findById(studentId);
 		return List.of(
                 student.orElseThrow(() ->
                                 new IllegalStateException("Student with studentId: "+ studentId + ", not found.")));

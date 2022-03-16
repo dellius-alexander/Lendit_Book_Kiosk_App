@@ -3,7 +3,6 @@ package com.library.lendit_book_kiosk.Student;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
 @Entity  // Tells Hibernate to make a table out of this class
@@ -34,18 +33,13 @@ public class Major implements Serializable {
             columnDefinition = "varchar(224)"
 //            unique = true
     )
-//    @ManyToOne(
-////            targetEntity = Student.class,
-////            fetch = FetchType.EAGER,
-////            cascade = CascadeType.ALL
-//    )
     private String major;
-    @ManyToMany(
+    @ManyToOne(
             targetEntity = Student.class,
-            mappedBy = "majors",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    private Set<Student> students;
+    @JoinColumn(name = "student_id")
+    private Student student;
     ///////////////////////////////////////////////////////
     public Major(Long id, String major){
         this.id = id;

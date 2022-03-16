@@ -83,7 +83,7 @@ public class LoginController implements Serializable {
                 request.getServletPath(),
                 request.getPathInfo(),
                 request.getQueryString());
-        log.info("USERLOGINDETAILS Retrieved: {}", userLoginDetails.toString());
+        log.info("USERLOGINDETAILS Retrieved: {}", userLoginDetails);
         // Custom Authentication Token
         User user = userService.getByEmail(userLoginDetails.getUsername());
         log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
