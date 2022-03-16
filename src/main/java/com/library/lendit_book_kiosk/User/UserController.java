@@ -57,7 +57,7 @@ public class UserController {
     @PostMapping(path = "/{user}/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
         // TODO: Change visibility to protected
-        log.info("ROLE: \n{}\n", role.toString());
+        log.info("UserRole: \n{}\n", role.toString());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/getRoleByRolename/save").toUriString());
         log.info("URI: \n{}\n",uri);
         return ResponseEntity.created(uri).body(userService.saveRole(role));

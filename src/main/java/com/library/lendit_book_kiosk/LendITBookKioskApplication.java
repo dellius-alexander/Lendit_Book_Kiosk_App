@@ -1,13 +1,7 @@
 package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
 
-import com.library.lendit_book_kiosk.Role.ROLE;
-import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Student.Major;
-import com.library.lendit_book_kiosk.Student.Student;
 import com.library.lendit_book_kiosk.Student.StudentRepository;
-import com.library.lendit_book_kiosk.User.GENDER;
-import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.List;
-import java.util.Set;
 
 /////////////////////////////////////////////////////////////////////
 @SpringBootApplication
@@ -85,7 +75,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //                    GENDER.FEMALE,
 //                    LocalDate.of(1989, Month.JANUARY, 6),
 //                    "Student:Senior",
-//                    Set.of(new Role(ROLE.ADMIN),new Role(ROLE.SUPERUSER)),
+//                    Set.of(new Role(UserRole.ADMIN),new Role(UserRole.SUPERUSER)),
 //                    Set.of(janeDoe)
 //            );
 //
@@ -96,7 +86,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //                    GENDER.MALE,
 //                    LocalDate.of(1989, Month.JANUARY, 5),
 //                    "Faculty:Professor",
-//                    Set.of(new Role(ROLE.ADMIN),new Role(ROLE.SUPERUSER)),
+//                    Set.of(new Role(UserRole.ADMIN),new Role(UserRole.SUPERUSER)),
 //                    Set.of(johnDoe)
 //            );
 //
@@ -107,7 +97,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //                    GENDER.MALE,
 //                    LocalDate.of(1979, Month.JANUARY, 12),
 //                    "Student:Junior",
-//                    Set.of(new Role(ROLE.GUEST)),
+//                    Set.of(new Role(UserRole.GUEST)),
 //                    Set.of(bobDoe)
 //            );
 ////           //             save users to the database
