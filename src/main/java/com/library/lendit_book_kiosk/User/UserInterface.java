@@ -1,15 +1,15 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.ROLE;
+import com.library.lendit_book_kiosk.Role.UserRole;
 
 public interface UserInterface {
 
     /**
-     * Assigns the given role
-     * @param role
+     * Assigns the given userRole
+     * @param userRole
      */
-    void setRole(ROLE role);
+    void setRole(UserRole userRole);
 
     /**
      * Assigns the given user

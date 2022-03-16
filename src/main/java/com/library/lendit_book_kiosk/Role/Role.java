@@ -56,24 +56,24 @@ public class Role implements RoleInterface, Serializable {
 //            unique = true,
             columnDefinition = "varchar(224)"
     )
-    private ROLE name;
+    private UserRole name;
     private String description;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    public Role(Long id, ROLE name) {
+    public Role(Long id, UserRole name) {
         this.id = id;
         this.name = name;
-        log.info("ROLE: {}", this.toString());
+        log.info("UserRole: {}", this.toString());
     }
 
-    public Role(ROLE name) {
+    public Role(UserRole name) {
         this.name = name;
     }
 
     public Role(
             Long id,
-            ROLE name,
+            UserRole name,
             String description
 //            Set<User> users
     ) {
@@ -95,12 +95,12 @@ public class Role implements RoleInterface, Serializable {
     public void setId(Long id) { this.id = id; }
 
     @Override
-    public ROLE getRole() {
+    public UserRole getRole() {
         return this.name;
     }
 
     @Override
-    public void setRole(ROLE name) {
+    public void setRole(UserRole name) {
         this.name = name;
     }
 
@@ -117,7 +117,7 @@ public class Role implements RoleInterface, Serializable {
     }
 
     @Override
-    public Role getRoleByName(ROLE name) {
+    public Role getRoleByName(UserRole name) {
         return this;
     }
 
@@ -142,7 +142,7 @@ public class Role implements RoleInterface, Serializable {
 
     
     @Override
-    public boolean equals(ROLE name1, ROLE name2){
+    public boolean equals(UserRole name1, UserRole name2){
         return  Pattern.compile(Pattern.quote(name1.name()),
                 Pattern.CASE_INSENSITIVE).matcher(name2.name()).find();
     }
@@ -165,7 +165,7 @@ public class Role implements RoleInterface, Serializable {
             ",\n\"name\":\"" + getRole() + "\"" +
             ",\n\"description\":\"" + getDescription() + "\"" +
             "\n}");
-        log.info("\nROLE: {}\n",json);
+        log.info("\nUserRole: {}\n",json);
         return json;
     }
 

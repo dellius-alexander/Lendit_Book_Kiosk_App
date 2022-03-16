@@ -31,7 +31,7 @@ create table major
     major    varchar(255) null
 );
 
-create table role
+create table userRole
 (
     role_id     bigint       not null
         primary key,
@@ -87,7 +87,7 @@ create table user_roles
     constraint FKjcqwtqywj0ny5jfwhqt028826
         foreign key (user_id_fk) references user (user_id),
     constraint FKrrs4hf2akix4fah7g6fgx5c3b
-        foreign key (role_id_fk) references role (role_id)
+        foreign key (role_id_fk) references userRole (role_id)
 );
 
 create table user_sequence

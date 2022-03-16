@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
      */
     public void addRoleToUser(String username, String roleName){
         // TODO: REMEMBER TO INCLUDE MORE VALIDATION CODE
-        log.info("Adding ROLE: {} to USER: {}",roleName, username);
+        log.info("Adding UserRole: {} to USER: {}",roleName, username);
         Optional<User> userOptional = userRepository
             .findUserByName(username);
         Optional<Role> roleOptional = roleRepository.findRoleByName(roleName);

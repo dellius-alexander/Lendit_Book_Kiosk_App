@@ -1,6 +1,6 @@
 package com.library.lendit_book_kiosk.User;
 
-import com.library.lendit_book_kiosk.Role.ROLE;
+import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
@@ -203,8 +203,8 @@ public class User implements UserInterface, Serializable {
     }
 
     @Override
-    public void  setRole(ROLE role){
-        this.roles.addAll(Set.of(new Role(role)));
+    public void  setRole(UserRole userRole){
+        this.roles.addAll(Set.of(new Role(userRole)));
 
     }
     @Override
