@@ -52,7 +52,7 @@ public Authentication authenticate(Authentication authentication) throws Authent
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
     com.library.lendit_book_kiosk.User.User user = userService.getByEmail(username);
-    log.info("User received");
+    log.info("User found: {}", user);
     if (user == null) {
         log.info("USER NOT FOUND: {}",
                 new BadCredentialsException("Authentication failed/1000"));
