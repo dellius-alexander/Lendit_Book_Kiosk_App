@@ -17,6 +17,7 @@ SET time_zone = '-05:00';
 select current_timestamp() as 'Current Time';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+# SET log_bin_trust_function_creators = 1;
 #-- ----------------------------------------------------------------------
 ##########################################################################
 ##########################################################################
@@ -173,7 +174,6 @@ end format_phone;
 #-- ----------------------------------------------------------------------
 drop function if exists Lendit_Book_Kiosk.hexToBin;
 create
-
     function Lendit_Book_Kiosk.hexToBin(obj varchar(512))
     returns longblob
     deterministic -- return datatype is constant or fits within the return datatype
@@ -203,6 +203,26 @@ begin
     return hexToBin;
 
 end;
+#-- ----------------------------------------------------------------------
+drop function if exists Lendit_Book_Kiosk.format_date;
+create
+    function Lendit_Book_Kiosk.format_date(obj varchar(10))
+    returns char(10)
+    deterministic -- return datatype is constant or fits within the return datatype
+#non deterministic -- return datatype can change; from, e.g. int to char, etc...
+
+    format_date:
+begin
+    declare month char(2);
+    declare day char(2);
+    declare year char(4);
+    declare tmp_date char(10);
+    set tmp_date = regexp_replace(trim(obj), @special_char_regex, '-');
+    set day = lpad(substring_index(obj,'/',1),2,0);
+    set month = lpad(substring_index(obj,'/',2),2,0);
+    set year = lpad(substring_index(obj,'/',3),4,0);
+    return concat(year,'-',month,'-',day);
+end;
 # #-- ----------------------------------------------------------------------
 # set @object = '8E1F000B331DD75AA926DDB1000CE0F67787E06E75DE19E0F30FD1250286B626041FEA29057BAB85F2FCF2BA437E7AC73AC537FB63D648929B717B33F06FFD1A8F';
 # #-- ----------------------------------------------------------------------
@@ -215,7 +235,36 @@ end;
 ##########################################################################
 SET foreign_key_checks = 0;
 #-- ----------------------------------------------------------------------
+drop table if exists Lendit_Book_Kiosk.Book cascade;
+create table books
+(
+    id                 bigint       not null
+        primary key,
+    authors            varchar(255) null,
+    average_rating     double       null,
+    isbn               varchar(255) null,
+    isbn13             varchar(255) null,
+    language_code      varchar(255) null,
+    number_of_pages    bigint       null,
+    publication_date   date         null,
+    publisher          varchar(255) null,
+    ratings_count      bigint       null,
+    text_reviews_count bigint       null,
+    title              varchar(255) null,
+    constraint books_id_uindex
+        unique (id)
+);
 
+drop trigger if exists Lendit_Book_Kiosk.update_book_date;
+create trigger Lendit_Book_Kiosk.update_book_date
+    before insert
+    on Lendit_Book_Kiosk.books
+    for each row
+    update_date:
+begin
+        set new.publication_date = Lendit_Book_Kiosk.format_date(new.publication_date);
+end;
+#-- ----------------------------------------------------------------------
 drop table if exists Lendit_Book_Kiosk.User cascade;
 create table if not exists Lendit_Book_Kiosk.User
 (
@@ -234,7 +283,7 @@ create table if not exists Lendit_Book_Kiosk.User
 
 );
 
-verify
+
 drop trigger if exists Lendit_Book_Kiosk.insert_user;
 create trigger Lendit_Book_Kiosk.insert_user
     before insert
@@ -282,7 +331,7 @@ begin
         where Lendit_Book_Kiosk.User_Email.Email like new.User_Name
         into temp_email;
         if (ifnull(temp_email, null) is null) then -- the email does not exist in the db
-            insert into Lendit_Book_Kiosk.User_Email(User_ID, Email) values (new.User_ID, new.User_Name);
+            insert into Lendit_Book_Kiosk.User_Email(User_ID, Email) values (new.ID, new.User_Name);
         end if;
     end insert_email_user_name;
 end update_user;
@@ -481,7 +530,7 @@ create table if not exists Lendit_Book_Kiosk.User_Email
         foreign key (Email) references Lendit_Book_Kiosk.Email (Email)
             on update cascade on delete restrict,
     constraint user_user_email_fk
-        foreign key (User_ID, Email) references Lendit_Book_Kiosk.User (User_ID, User_Name)
+        foreign key (User_ID, Email) references Lendit_Book_Kiosk.User (ID, User_Name)
             on update cascade on delete cascade
 );
 
@@ -517,7 +566,7 @@ create table if not exists Lendit_Book_Kiosk.User_Phone
             on update cascade on delete cascade,
     constraint user_user_phone_fk
         foreign key (User_ID)
-            references Lendit_Book_Kiosk.User (User_ID)
+            references Lendit_Book_Kiosk.User (ID)
             on update no action on delete no action
 );
 
@@ -536,7 +585,7 @@ begin
     -- check User_ID constraint: user must exist in order to add user phone number
     select User_ID
     from Lendit_Book_Kiosk.User
-    where Lendit_Book_Kiosk.User.User_ID like new.User_ID
+    where Lendit_Book_Kiosk.User.ID like new.User_ID
     into temp_user_id;
     if (ifnull(temp_user_id, null) is null) then
         insert_phone:
@@ -681,7 +730,7 @@ create table if not exists Lendit_Book_Kiosk.Blog
     constraint Blog_uindex
         unique key (Blog_Id),
     constraint Blog_User_ID_FK
-        foreign key (User_ID) references Lendit_Book_Kiosk.User (User_ID)
+        foreign key (User_ID) references Lendit_Book_Kiosk.User (ID)
 );
 
 drop trigger if exists Lendit_Book_Kiosk.insert_blog_id;
@@ -708,7 +757,7 @@ create table if not exists Lendit_Book_Kiosk.Password
     constraint Passwd_ID
         unique (Passwd_ID),
     constraint User_ID_FK
-        foreign key (User_ID) references Lendit_Book_Kiosk.User (User_ID)
+        foreign key (User_ID) references Lendit_Book_Kiosk.User (ID)
 );
 
 

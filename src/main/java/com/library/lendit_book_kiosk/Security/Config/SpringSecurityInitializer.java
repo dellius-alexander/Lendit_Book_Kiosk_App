@@ -1,7 +1,11 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
+@Configuration
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
 /**
  * Spring security is implemented using DelegatingFilterProxy. To register it, with
  * spring container in Java configuration, you shall use AbstractSecurityWebApplicationInitializer.

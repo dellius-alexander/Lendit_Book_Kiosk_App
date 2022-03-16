@@ -1,6 +1,7 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.Role.ROLE;
 
 public interface UserInterface {
 
@@ -8,7 +9,7 @@ public interface UserInterface {
      * Assigns the given role
      * @param role
      */
-    void setRole(String role);
+    void setRole(ROLE role);
 
     /**
      * Assigns the given user
@@ -65,7 +66,7 @@ public interface UserInterface {
      * Get the user gender
      * @return the user gender
      */
-    String getGender();
+    GENDER getGender();
 
     /**
      * Get the user age
@@ -126,7 +127,7 @@ public interface UserInterface {
      * Set user gender
      * @param gender
      */
-    void setGender(String gender);
+    void setGender(GENDER gender);
 
     /**
      * Set user dob

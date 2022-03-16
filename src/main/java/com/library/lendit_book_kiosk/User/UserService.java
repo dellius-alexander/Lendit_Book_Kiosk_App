@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.RoleRepository;
 
-import org.json.JSONObject;
+
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
  * Service Access Layer
  */
 @Transactional
-@Service
+@Service(value = "UserService")
 public class UserService implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
@@ -44,18 +44,20 @@ public class UserService implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
-
+    /**
+     * Saves a single user
+     * @param user
+     * @return
+     */
     public User saveUser(User user){
         log.info("Saving new user: {}", user);
         return userRepository.save(user);
     }
 
-
     public Role saveRole(Role role){
         log.info("Saving new getRoleByRolename: {}", role);
         return roleRepository.save(role);
     }
-
 
     /**
      * Adds getRoleByRolename to user.
@@ -66,7 +68,7 @@ public class UserService implements UserDetailsService {
         // TODO: REMEMBER TO INCLUDE MORE VALIDATION CODE
         log.info("Adding ROLE: {} to USER: {}",roleName, username);
         Optional<User> userOptional = userRepository
-            .findByUsername(username);
+            .findUserByName(username);
         Optional<Role> roleOptional = roleRepository.findRoleByName(roleName);
         // the user is not present in the User table
         if (userOptional.isEmpty()){
@@ -92,12 +94,11 @@ public class UserService implements UserDetailsService {
         // update the database
         userRepository.save(userOptional.get());
         // userOptional.get().setRole(roleName);
-        JSONObject response = new JSONObject(
-            "\"response\":\"Successfully added Role\",\n" +
-            "\"getRoleByRolename\":\"" + roleName + "\",\n" +
-            "\"username\":\"" + username
-            );
-        log.info(response.toString());
+        String response = "{\n\"response\":\"Successfully added Role\",\n" +
+                "\"getRoleByRolename\":\"" + roleName + "\",\n" +
+                "\"username\":\"" + username +
+                "\n}";
+        log.info(response);
     }
 
     // TODO: REMEMBER TO REMOVE ON PRODUCTION DEPLOY
@@ -108,7 +109,7 @@ public class UserService implements UserDetailsService {
      */
     public User getUser(String username){
         log.info("Fetching USER: {}", username);
-        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<User> userOptional = userRepository.findUserByName(username);
         // return User or else return null
         return userOptional.orElse(null);
     }
@@ -117,16 +118,14 @@ public class UserService implements UserDetailsService {
     /**
      * Gets a user, if user exists
      */
-
     public List<User> getUsers(){
         log.info("Fetching all USERS. FOR TESTING PURPOSES ONLY.......");
         return userRepository.findAll();
     }
 
     public User getByEmail(String email){
-        Optional<User> user = userRepository.findByEmail(email);
-        log.info("\n\nUSER FOUND: {}\n\n",user.toString());
-
+        Optional<User> user = userRepository.findUserByEmail(email);
+        log.info("\n\nUSER FOUND: {}\n\n",user.get().toString());
         return user.get();
     }
 

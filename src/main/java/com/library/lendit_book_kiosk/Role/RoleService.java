@@ -1,30 +1,45 @@
 package com.library.lendit_book_kiosk.Role;
 
+//import com.fasterxml.jackson.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+//import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.json.JSONObject;
 import java.util.regex.*;
 
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Service
+//import javax.persistence.EntityManagerFactory;
+
+@Service(value = "RoleService")
 public class RoleService {
     private static final Logger log = LoggerFactory.getLogger(RoleService.class);
 
     private final RoleRepository roleRepository;
 
+
+    private enum ROLE {
+        GUEST,
+        STUDENT,
+        FACULTY,
+        ADMIN,
+        SUPERUSER
+    }
+
     @Autowired
-    public RoleService(RoleRepository roleRepository){
+    public RoleService(
+            RoleRepository roleRepository){
         this.roleRepository = roleRepository;
     }
     
     public List<Role> getRoles(){
         List<Role> roles = roleRepository.findAll();
-        log.info("ROLES: {}",roles.toString());
+        log.info("ROLES: {}",roles);
         return roles;
     }
 
@@ -49,53 +64,34 @@ public class RoleService {
         boolean exists = false;
         // get all Roles
         List<Role> roles = roleRepository.findAll();
+        List<String> missingRoles = new ArrayList<>();
         // create json response
-        JSONObject results = null;
-        // check if getRoleByRolename exists
-        for (Role item : roles) {
+        String results = null;
+        int roleCnt = roles.size(); // for binary comparison
+        // check if incoming role exists
+        for (Role r : roles) {
             if (
                 // item.getRole().equalsIgnoreCase(getRoleByRolename.trim())
-                Pattern.compile(Pattern.quote(role.getRole().trim()), 
-                Pattern.CASE_INSENSITIVE).matcher(item.getRole().trim()).find()
-                ){
-                exists = true;
-                
+                    Pattern.compile(Pattern.quote(r.getRole().name()),
+                            Pattern.CASE_INSENSITIVE).matcher(role.getRole().name()).find()
+            ) {
+                log.info("\nRole exists: Role => {}\n", role);
+                roleCnt+=1;  // role found: 1
+                break;
             }
+            // role not found: 0
+            roleCnt-=1;
         }
-        // add new getRoleByRolename if it does not exist
-        if (!exists){
-            /**
-             * This system comes with some preconfigured 
-             * options for roles that are activated when
-             * added by admin
-             */ 
-            switch (role.getRole().toUpperCase()) {
-                case "GUEST":
-                    roleRepository.save(role);
-                    results = response(exists);
-                    break;
-                case "STUDENT":
-                    roleRepository.save(role);
-                    results = response(exists);
-                    break;
-                case "FACULTY":
-                    roleRepository.save(role);
-                    results = response(exists);
-                    break;
-                case "ADMIN":
-                    roleRepository.save(role);
-                    results = response(exists);
-                    break;
-                case "SUPERUSER":
-                    roleRepository.save(role);
-                    results = response(exists);
-                    break;
-                default:
-                    results = response(exists);
-                    // do nothing
-                    break;
-            }
+        // only save roles that do not exist, duplicates are not saved
+        if (roleCnt == 0){ // role not found, save role
+                roleRepository.save(role);
+                log.info("\nAdded new role: {}\n", role);
+                results = response(false);
+        } else if (roleCnt == 1){ // duplicate role found in table
+            // do nothing
+            results = response(true);
         }
+
         return List.of(results.toString());
     }
     /**
@@ -107,16 +103,23 @@ public class RoleService {
      * @return json reponse to the existence to getRoleByRolename:
      * {'exists': boolean,'created': boolean}
      */
-    private JSONObject response(boolean exists){
-        JSONObject results = new JSONObject();
+    private String response(boolean exists){
+        String results = null;
         // write response message
+        String created = "{\n" +
+                "\"created\":\"" + Boolean.TRUE +"\",\n" +
+                "\"exists\":\"" + Boolean.FALSE +
+                "\"\n}";
+        String notcreated = "{\n" +
+                "\"created\":\"" + Boolean.FALSE +"\",\n" +
+                "\"exists\":\"" +Boolean.TRUE +
+                "\"\n}";
+
         if (exists){
-            results.put("exists",Boolean.TRUE);
-            results.put("created",Boolean.FALSE);
+            results = notcreated;
             }
         else {
-            results.put("exists",Boolean.FALSE);
-            results.put("created",Boolean.TRUE);
+            results = created;
         }
         return results;
     }

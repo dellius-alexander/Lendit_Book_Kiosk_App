@@ -4,52 +4,47 @@ package com.library.lendit_book_kiosk.Student;
 // import java.util.List;
 // import java.util.ArrayList;
 // import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import javax.persistence.*;
 
-// import com.library.lendit_book_kiosk.Role.Role;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.library.lendit_book_kiosk.User.User;
-
-// import com.library.lendit_book_kiosk.Role.Role;
-// LOGGING CLASSES
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.persistence.*;
+import java.util.Objects;
+import java.util.Set;
+
+// import com.library.lendit_book_kiosk.Role.Role;
+// import com.library.lendit_book_kiosk.Role.Role;
+// LOGGING CLASSES
 /////////////////////////////////////////////////////////////////////
 /**
  * This class is a model of the Student Table
  */
 // Tells Hibernate to make a table out of this class
 ///////////////////////////////////////////////////////
-
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Data
 @Entity  // Tells Hibernate to make a table out of this class
-//@Table(name = "Student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-public class Student implements StudentInterface{
+@Table(name = "Student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
+public class Student implements StudentInterface {
     private final static Logger log = LoggerFactory.getLogger(Student.class);
     ///////////////////////////////////////////////////////
     // Table outline/fields
+//    @Id
+//    @Column(name = "student_id")
+//    @SequenceGenerator(
+//        name = "student_sequence",
+//        sequenceName = "student_sequence",
+//        allocationSize = 1
+//    )
+//    @GeneratedValue(
+//        // strategy = AUTO
+//        strategy = GenerationType.SEQUENCE,
+//        generator = "student_sequence"
+//    )
     @Id
-    @Column(name = "student_id")
-    @SequenceGenerator(
-        name = "student_sequence",
-        sequenceName = "student_sequence",
-        allocationSize = 1
-    )
-    @GeneratedValue(
-        // strategy = AUTO
-        strategy = GenerationType.SEQUENCE,
-        generator = "student_sequence"
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(
+            name = "student_id",
+            unique = true
     )
     private Long id;
     private boolean enrolled;
@@ -57,20 +52,18 @@ public class Student implements StudentInterface{
     @ManyToMany(
             targetEntity = Major.class,
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "student_majors",
-            joinColumns = @JoinColumn (name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "major_id"))
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "student_id",
+            referencedColumnName = "id"
+    )
     private Set<Major> majors;
     @ManyToMany(
-            mappedBy = "students",
 //            targetEntity = User.class,
 //            fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
-//    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
+//            cascade = CascadeType.ALL
+            mappedBy = "student"
+    )
     private Set<User> users;
     ///////////////////////////////////////////////////////
 
@@ -80,41 +73,66 @@ public class Student implements StudentInterface{
         this.majors = majors;
     }
 
-    public Student() {
-
+    public Student(
+            Long id,
+            boolean enrolled,
+            Set<Major> majors
+//            Set<User> users
+    ) {
+        this.id = id;
+        this.enrolled = enrolled;
+        this.majors = majors;
+//        this.users = users;
     }
 
+    public Student() {
+    }
+
+//    @Override
 //    public User getUser(){
 //        return this.users.stream().findFirst().get();
 //    }
+//    @Override
 //    public void setUsers(Set<User> users){
 //        this.users = users;
 //    }
-
+//    @Override
 //    public  void setUser(User user){
 //        this.users = Set.of(user);
 //    }
-
+//    @Override
 //    public Set<User> getUsers(){ return this.users;}
 
     @Override
     public Long getId() {
         return id;
     }
-
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
     @Override
     public Set<Major> getMajors() {
         return this.majors;
     }
 
 //    @Override
-//    public User getUser() {
-//        return this.user;
+//    public Set<User> getUsers() {
+//        return this.users;
+//    }
+//    @Override
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
 //    }
 
     @Override
-    public void setId(Long id) {
-        this.id = id;
+    public void setEnrolled(boolean enrolled){
+        this.enrolled = enrolled;
+    }
+
+    @Override
+    public boolean getEnrolled(){
+        return this.enrolled;
     }
 
     @Override
@@ -129,17 +147,21 @@ public class Student implements StudentInterface{
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Student)) return false;
-        Student student = (Student) o;
-        return getId().equals(student.getId()) && getMajors().equals(student.getMajors());
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof Student)) return false;
+//        Student student = (Student) o;
+//        return getId().equals(student.getId()) && getMajors().equals(student.getMajors());
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id, this.majors, this.users);
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(this.id, this.majors, this.enrolled);
+//    }
+
+    public boolean isEnrolled(){
+        return this.enrolled;
     }
 
     @Override
@@ -151,5 +173,58 @@ public class Student implements StudentInterface{
     public int compareTo(Object s) {
         return this.compareTo(s);
     }
+
+//    public Set<User> getUsers() {
+//        return this.users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Student)) return false;
+        final Student other = (Student) o;
+        if (!other.canEqual((Object) this)) return false;
+        final Object this$id = this.getId();
+        final Object other$id = other.getId();
+        if (!Objects.equals(this$id, other$id)) return false;
+        if (this.isEnrolled() != other.isEnrolled()) return false;
+        final Object this$majors = this.getMajors();
+        final Object other$majors = other.getMajors();
+        if (!Objects.equals(this$majors, other$majors)) return false;
+
+//        final Object this$users = this.getUsers();
+//        final Object other$users = other.getUsers();
+//        if (!Objects.equals(this$users, other$users)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $id = this.getId();
+        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+        result = result * PRIME + (this.isEnrolled() ? 79 : 97);
+        final Object $majors = this.getMajors();
+        result = result * PRIME + ($majors == null ? 43 : $majors.hashCode());
+
+//        final Object $users = this.getUsers();
+//        result = result * PRIME + ($users == null ? 43 : $users.hashCode());
+
+        return result;
+    }
+
+    public String toString() {
+        return "{\n\"id\":" + this.getId() +
+                ",\n\"enrolled\":\"" + this.isEnrolled() +
+                "\",\n\"majors\":\"" + this.getMajors() +
+//                "\",\n\"users\":\"" + this.getUsers() +
+                "\"\n}";
+    }
+
+
 }
 /////////////////////////////////////////////////////////////////////

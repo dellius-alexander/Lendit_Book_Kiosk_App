@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.NullArgumentException;
 // LOGGING CLASSES
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Api Layer <br/>
  * <code style="color:red;font-style:bold;">/api/v1/student</code>
  */
-@RestController
+@RestController(value = "/api/v1/student")
 @RequestMapping(value = "/api/v1/student")
 public class StudentController implements Serializable {
 
@@ -66,7 +67,7 @@ public class StudentController implements Serializable {
 //    @RequestMapping(value = {"/findByName"})
 //    public ResponseEntity<List<Student>> getStudentByQueryName(
 //        @RequestParam String name) {
-//        List<Student> list_students = studentService.getStudents(name.trim());
+//        List<Student> list_students = studentService.getStudent(name.trim());
 //        log.info("RequestedMethod GET: Student => {}", list_students);
 //        return ResponseEntity.ok().body(list_students);
 //    }
@@ -78,7 +79,7 @@ public class StudentController implements Serializable {
 //    @GetMapping(path = "/findByName/{name}")
 //    public ResponseEntity<List<Student>> getStudentByName(
 //        @PathVariable("name") String name) {
-//        List<Student> list_students = studentService.getStudents(name.trim());
+//        List<Student> list_students = studentService.getStudent(name.trim());
 //        log.info("RequestedMethod GET: Student => {}", list_students);
 //        return ResponseEntity.ok().body(list_students);
 //    }
@@ -89,7 +90,7 @@ public class StudentController implements Serializable {
      */    
     @RequestMapping(value = {"/findById"})
     public ResponseEntity<List<Student>> getByQueryId(
-        @RequestParam  Long studentId) {
+        @RequestParam Long studentId) {
         List<Student> student = studentService.findStudentById(studentId);
         log.info("RequestedMethod GET: StudentId => {}", student);
         return ResponseEntity.ok().body(student);

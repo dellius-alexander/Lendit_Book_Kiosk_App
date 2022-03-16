@@ -1,40 +1,70 @@
 package com.library.lendit_book_kiosk.User;
 
+import com.library.lendit_book_kiosk.Role.ROLE;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Student.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
 import java.util.Set;
-// LOGGING CLASSES
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-//@ToString
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Data
+// LOGGING CLASSES
+//import org.hibernate.annotations.GenericGenerator;
+
 @Entity  // Tells Hibernate to make a table out of this class
 @Table(name = "User")
-public class User implements UserInterface {
+public class User implements UserInterface, Serializable {
     private final static Logger log = LoggerFactory.getLogger(User.class);
+    ///////////////////////////////////////////////////////
+//    @Id
+//    @Column(name = "user_id")
+//    @SequenceGenerator(
+//            name = "user_sequence",
+//            sequenceName = "user_sequence",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            // strategy = AUTO
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "user_sequence"
+//    )
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(
+            name = "user_id",
+            unique = true
+    )
     private Long id;
     private String name;
+    @Column(  // customize this field to support unique key
+            name = "email",
+            nullable = false,
+            columnDefinition = "varchar(224)",
+            unique = true)
     private String email;
     private String password;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "gender",
+            columnDefinition = "varchar(8)"
+    )
+    private GENDER gender;
+    @Column(
+            name = "dob",
+            columnDefinition = "date"
+    )
     private LocalDate dob;
     private String profession;
     @ManyToMany(
             targetEntity = Role.class,
             fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL})
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn (name = "user_id_fk"),
             inverseJoinColumns = @JoinColumn(name = "role_id_fk"))
     private Set<Role> roles;
@@ -42,11 +72,11 @@ public class User implements UserInterface {
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL})
-    @JoinTable(name = "user_students",
+    @JoinTable(name = "user_student",
             joinColumns = @JoinColumn (name = "user_id_fk"),
             inverseJoinColumns = @JoinColumn(name = "student_id_fk"))
-    private Set<Student> students;
-
+    private Set<Student> student;
+    ///////////////////////////////////////////////////////
     public User(){}
 
 
@@ -55,11 +85,11 @@ public class User implements UserInterface {
             String name,
             String email,
             String password,
-            String gender,
+            GENDER gender,
             LocalDate dob,
             String profession,
             Set<Role> roles,
-            Set<Student> students
+            Set<Student> student
     ) {
         this.id = id;
         this.name = name;
@@ -69,14 +99,14 @@ public class User implements UserInterface {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.students = students;
+        this.student = student;
     }
 
     public User(
             String name,
             String email,
             String password,
-            String gender,
+            GENDER gender,
             LocalDate dob,
             String profession,
             Set<Role> roles,
@@ -89,7 +119,7 @@ public class User implements UserInterface {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.students = students;
+        this.student = students;
     }
 
 
@@ -97,7 +127,7 @@ public class User implements UserInterface {
             String name,
             String email,
             String password,
-            String gender,
+            GENDER gender,
             LocalDate dob,
             String profession,
             Set<Role> roles
@@ -110,15 +140,13 @@ public class User implements UserInterface {
         this.profession = profession;
         this.roles = roles;
     }
-    public Long getId() {
-        return this.id;
-    }
+
 
     public User(
             String name,
             String email,
             String password,
-            String gender,
+            GENDER gender,
             LocalDate dob,
             String profession) {
         this.name = name;
@@ -127,6 +155,21 @@ public class User implements UserInterface {
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
+    }
+
+
+
+    public Long getId() {
+        return this.id;
+    }
+    /**
+     * Set user id
+     *
+     * @param id
+     */
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -146,7 +189,7 @@ public class User implements UserInterface {
      */
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     /**
@@ -155,17 +198,18 @@ public class User implements UserInterface {
      * @return the user gender
      */
     @Override
-    public String getGender() {
-        return null;
+    public GENDER getGender() {
+        return this.gender;
     }
 
     @Override
-    public void  setRole(String role){
+    public void  setRole(ROLE role){
         this.roles.addAll(Set.of(new Role(role)));
 
     }
     @Override
     public Integer getAge() {
+
         return Period.between(this.getDob(), LocalDate.now()).getYears();
     }
 
@@ -176,7 +220,7 @@ public class User implements UserInterface {
      */
     @Override
     public LocalDate getDob() {
-        return null;
+        return this.dob;
     }
 
     /**
@@ -186,7 +230,7 @@ public class User implements UserInterface {
      */
     @Override
     public String getProfession() {
-        return null;
+        return this.profession;
     }
 
     @Override
@@ -202,6 +246,76 @@ public class User implements UserInterface {
     }
 
 
+    /**
+     * Set username
+     *
+     * @param name
+     */
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Set user email
+     *
+     * @param email
+     */
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Set user password
+     *
+     * @param password
+     */
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * Set user gender
+     *
+     * @param gender
+     */
+    @Override
+    public void setGender(GENDER gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * Set user dob
+     *
+     * @param dob
+     */
+    @Override
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
+
+    /**
+     * Set user profession
+     *
+     * @param profession
+     */
+    @Override
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    /**
+     * Set user roles
+     *
+     * @param roles
+     */
+    @Override
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
     @Override
     public boolean equals(final Object o) {
 
@@ -241,24 +355,22 @@ public class User implements UserInterface {
         final Object other$roles = other.getRoles();
         if (!Objects.equals(this$roles, other$roles))
             return false;
-        final Object this$students = this.getStudents();
-        final Object other$students = other.getStudents();
+        final Object this$students = this.getStudent();
+        final Object other$students = other.getStudent();
         if (!Objects.equals(this$students, other$students))
             return false;
         return true;
     }
 
-    public void setStudents(Set<Student> students){
-        this.students = students;
+    public void setStudent(Set<Student> students){
+        this.student = students;
     }
     public void addStudent(Student student){
-        this.students = Set.of(student);
+        this.student = Set.of(student);
     }
 
-
-
-    public Set<Student> getStudents(){
-        return this.students;
+    public Set<Student> getStudent(){
+        return this.student;
     }
     @Override
     public boolean canEqual(final Object other) {
@@ -286,88 +398,6 @@ public class User implements UserInterface {
         final Object $roles = this.getRoles();
         result = result * PRIME + ($roles == null ? 43 : $roles.hashCode());
         return result;
-    }
-
-
-    /**
-     * Set user id
-     *
-     * @param id
-     */
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * Set username
-     *
-     * @param name
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Set user email
-     *
-     * @param email
-     */
-    @Override
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Set user password
-     *
-     * @param password
-     */
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Set user gender
-     *
-     * @param gender
-     */
-    @Override
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    /**
-     * Set user dob
-     *
-     * @param dob
-     */
-    @Override
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-
-    /**
-     * Set user profession
-     *
-     * @param profession
-     */
-    @Override
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
-    /**
-     * Set user roles
-     *
-     * @param roles
-     */
-    @Override
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     /**

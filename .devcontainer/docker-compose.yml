@@ -44,9 +44,9 @@ services:
       - 33060
       - 33061
     ports:
-      - 3306:3306
-      - 33060:33060
-      - 33061:33061
+      - "3306:3306"
+      - "33060:33060"
+      - "33061:33061"
     # networks:
     #   lamp-network:
     #     ipv4_address: 172.16.238.18    # default gateway  172.16.238.1
@@ -65,108 +65,108 @@ services:
       # - mysql_secret_key
       # - mysql_secret_pub
 #####################################################################
-  app:
-    # image: dalexander2israel/lendit_book_kiosk:base_v1
-    build:
-      context: .
-      dockerfile: app.Dockerfile      
-      args:
-        UPGRADE_PACKAGES: "true"
-        JAVA_VERSION: 11
-        SDKMAN_DIR: "/root/.sdkman/bin/sdkman-init.sh"
-        # Update the VARIANT arg to pick a Java version: 11, 16
-        VARIANT: "bionic"
-        # Options
-        INSTALL_MAVEN: "false"
-        INSTALL_GRADLE: "true"
-        NODE_VERSION: "16"
-        APP_DIR: "/home/vscode/Lendit_Book_Kiosk_App"
-        GIT_REPO: "https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git"
-        GIT_BRANCH: "main"
-        MAVEN_VERSION: "3.8.4"
-        # Add Github USER.NAME
-        GIT_USER: "${GIT_USER}"
-        # Add Github USER.EMAIL
-        GIT_EMAIL: "${GIT_EMAIL}"
-        INSTALL_ZSH: "true"
-        USE_MOBY: "true"
-        # User Info
-        USERNAME: "vscode"
-        USERCRED: ""
-        # Define JAVA_HOME
-        JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
-        # Add packages whitespaced apart in quotation => "pkg1 pkg2 pkg3"
-        ADDITIONAL_PACKAGES: ""
-    container_name: Lendit_Book_Kiosk-app
-
-    environment:
-      - DISPLAY=Lendit_Book_Kiosk_App
-      - MYSQL_HOST=Lendit_Book_Kiosk-db
-      - MYSQL_PORT="${MYSQL_PORT}"
-      - MYSQL_USER="${MYSQL_USER}"
-      - GIT_USER="${GIT_USER}"
-      - GIT_EMAIL="${GIT_EMAIL}"
-      - M2=/opt/apache-maven-3.8.4/bin
-      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-      - M2_HOME=/opt/apache-maven-3.8.4
-      - MAVEN_OPTS='-Xms256m -Xmx512m'
-      - APP_DIR="/home/vscode/Lendit_Book_Kiosk_App"
-      - GIT_REPO='https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git'
-      # - PATH='/opt/apache-maven-3.8.4/bin:/usr/local/share/nvm/current/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/openjdk-11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sdkman/candidates/gradle/current/bin'
-    volumes: 
-      # Forwards the local Docker socket to the container.
-      # - /var/run/docker.sock:/var/run/docker-host.sock
-      # Update this to wherever you want VS Code to mount the folder of your project
-      - ../:/home/vscode/Lendit_Book_Kiosk_App
-      # Extensions directory
-      - vscode-std-extensions:/home/vscode/.vscode-server/extensions
-      # And/or for VS Code Insiders
-      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
-      # Maven persisted volume
-      - maven-m2-repository:/home/vscode/.m2
-      # Docker-In-Docker
-      - dind-var-lib-docker:/var/lib/docker
-
-    # Overrides default command so things don't shut down after the process ends.
-    # entrypoint: /usr/local/share/docker-init.sh
-    # command: sleep infinity
-    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
-    # cap_add:
-    #  - SYS_PTRACE
-    # security_opt:
-    #   - seccomp:unconfined
-    # Setup web app dependencies
-    depends_on:
-      - db
-    # links:
-    #   - db
-    # # Uncomment the next line to use a non-root user for all processes.
-    # user: vscode
-    #restart: "no"
-    #restart: always
-    # restart: on-failure
-    restart: unless-stopped
-    expose:
-      - 8081
-      - 8082
-    ports:
-    - 8081:8081
-    - 8082:8082
-    # # network_mode: service:db
-    # networks:
-    #   lamp-network:
-    #     ipv4_address: 172.16.238.20     # default gateway  172.16.238.1
-    #     ipv6_address: 2001:3984:3989::10
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
-    # secrets:
-    #   - MYSQL_USER
-    #   - MYSQL_PASSWD
-    #   - GIT_USER
-    #   - GIT_EMAIL
-    #   - MYSQL_HOST
-      # - mysql_secret_key
-      # - mysql_secret_pub
+#  app:
+#    # image: dalexander2israel/lendit_book_kiosk:base_v1
+#    build:
+#      context: .
+#      dockerfile: app.Dockerfile
+#      args:
+#        UPGRADE_PACKAGES: "true"
+#        JAVA_VERSION: 11
+#        SDKMAN_DIR: "/root/.sdkman/bin/sdkman-init.sh"
+#        # Update the VARIANT arg to pick a Java version: 11, 16
+#        VARIANT: "bionic"
+#        # Options
+#        INSTALL_MAVEN: "false"
+#        INSTALL_GRADLE: "true"
+#        NODE_VERSION: "16"
+#        APP_DIR: "/home/vscode/Lendit_Book_Kiosk_App"
+#        GIT_REPO: "https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git"
+#        GIT_BRANCH: "main"
+#        MAVEN_VERSION: "3.8.4"
+#        # Add Github USER.NAME
+#        GIT_USER: "${GIT_USER}"
+#        # Add Github USER.EMAIL
+#        GIT_EMAIL: "${GIT_EMAIL}"
+#        INSTALL_ZSH: "true"
+#        USE_MOBY: "true"
+#        # User Info
+#        USERNAME: "vscode"
+#        USERCRED: ""
+#        # Define JAVA_HOME
+#        JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+#        # Add packages whitespaced apart in quotation => "pkg1 pkg2 pkg3"
+#        ADDITIONAL_PACKAGES: ""
+#    container_name: Lendit_Book_Kiosk-app
+#
+#    environment:
+#      - DISPLAY=Lendit_Book_Kiosk_App
+#      - MYSQL_HOST=Lendit_Book_Kiosk-db
+#      - MYSQL_PORT="${MYSQL_PORT}"
+#      - MYSQL_USER="${MYSQL_USER}"
+#      - GIT_USER="${GIT_USER}"
+#      - GIT_EMAIL="${GIT_EMAIL}"
+#      - M2=/opt/apache-maven-3.8.4/bin
+#      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+#      - M2_HOME=/opt/apache-maven-3.8.4
+#      - MAVEN_OPTS='-Xms256m -Xmx512m'
+#      - APP_DIR="/home/vscode/Lendit_Book_Kiosk_App"
+#      - GIT_REPO='https://github.com/dellius-alexander/Lendit_Book_Kiosk_App.git'
+#      # - PATH='/opt/apache-maven-3.8.4/bin:/usr/local/share/nvm/current/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/openjdk-11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sdkman/candidates/gradle/current/bin'
+#    volumes:
+#      # Forwards the local Docker socket to the container.
+#      # - /var/run/docker.sock:/var/run/docker-host.sock
+#      # Update this to wherever you want VS Code to mount the folder of your project
+#      - ../:/home/vscode/Lendit_Book_Kiosk_App
+#      # Extensions directory
+#      - vscode-std-extensions:/home/vscode/.vscode-server/extensions
+#      # And/or for VS Code Insiders
+#      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
+#      # Maven persisted volume
+#      - maven-m2-repository:/home/vscode/.m2
+#      # Docker-In-Docker
+#      - dind-var-lib-docker:/var/lib/docker
+#
+#    # Overrides default command so things don't shut down after the process ends.
+#    # entrypoint: /usr/local/share/docker-init.sh
+#    # command: sleep infinity
+#    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
+#    # cap_add:
+#    #  - SYS_PTRACE
+#    # security_opt:
+#    #   - seccomp:unconfined
+#    # Setup web app dependencies
+#    depends_on:
+#      - db
+#    # links:
+#    #   - db
+#    # # Uncomment the next line to use a non-root user for all processes.
+#    # user: vscode
+#    #restart: "no"
+#    #restart: always
+#    # restart: on-failure
+#    restart: unless-stopped
+#    expose:
+#      - 8081
+#      - 8082
+#    ports:
+#    - 8081:8081
+#    - 8082:8082
+#    # # network_mode: service:db
+#    # networks:
+#    #   lamp-network:
+#    #     ipv4_address: 172.16.238.20     # default gateway  172.16.238.1
+#    #     ipv6_address: 2001:3984:3989::10
+#    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+#    # (Adding the "ports" property to this file will not forward from a Codespace.)
+#    # secrets:
+#    #   - MYSQL_USER
+#    #   - MYSQL_PASSWD
+#    #   - GIT_USER
+#    #   - GIT_EMAIL
+#    #   - MYSQL_HOST
+#      # - mysql_secret_key
+#      # - mysql_secret_pub
 #####################################################################
   adminer:
     image: adminer:latest
@@ -175,7 +175,7 @@ services:
     expose:
     - 8080
     ports:
-    - 8080:8080
+    - "8083:8080"
     # entrypoint: 
     # - "entrypoint.sh"
     # - "docker-php-entrypoint"

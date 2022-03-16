@@ -1,17 +1,21 @@
 package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
+
+import com.library.lendit_book_kiosk.Role.ROLE;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Student.Major;
-import com.library.lendit_book_kiosk.User.User;
-import com.library.lendit_book_kiosk.User.UserRepository;
 import com.library.lendit_book_kiosk.Student.Student;
 import com.library.lendit_book_kiosk.Student.StudentRepository;
+import com.library.lendit_book_kiosk.User.GENDER;
+import com.library.lendit_book_kiosk.User.User;
+import com.library.lendit_book_kiosk.User.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -58,58 +62,58 @@ public class LendITBookKioskApplication implements CommandLineRunner
     ){
         return args -> {
 
-
-            Student janeDoe = new Student (
-                    true,
-                    Set.of(new Major("CSCI"), new Major("MBA") )
-            );
-
-            Student johnDoe = new Student (
-                    true,
-                    Set.of(new Major("BSCS"), new Major("MBA"))
-            );
-
-            Student bobDoe = new Student (
-                    true,
-                    Set.of(new Major("BSA"), new Major("MBA"))
-            );
-
-            User jane = new User(
-                    "Jane Doe",
-                    "jane@gmail.com",
-                    "password",
-                    "FEMALE",
-                    LocalDate.of(1989, Month.JANUARY, 6),
-                    "Student:Senior",
-                    Set.of(new Role("ADMIN"),new Role("SUPERUSER")),
-                    Set.of(janeDoe)
-            );
-
-            User john = new User(
-                    "John Doe",
-                    "john@gmail.com",
-                    "password",
-                    "Male",
-                    LocalDate.of(1989, Month.JANUARY, 5),
-                    "Faculty:Professor",
-                    Set.of(new Role("ADMIN"),new Role("SUPERUSER")),
-                    Set.of(johnDoe)
-            );
-
-            User bob = new User(
-                    "John Doe",
-                    "john@gmail.com",
-                    "password",
-                    "Male",
-                    LocalDate.of(1979, Month.JANUARY, 12),
-                    "Student:Junior",
-                    Set.of(new Role("FACULTY")),
-                    Set.of(bobDoe)
-            );
-            //             save users to the database
-            userRepository.saveAll(
-                    List.of(jane,john,bob)
-            );
+//
+//            Student janeDoe = new Student (
+//                    true,
+//                    Set.of(new Major("CSCI"), new Major("MBA") )
+//            );
+//
+//            Student johnDoe = new Student (
+//                    true,
+//                    Set.of(new Major("BSCS"), new Major("MBA"))
+//            );
+//
+//            Student bobDoe = new Student (
+//                    true,
+//                    Set.of(new Major("BSA"), new Major("MBA"))
+//            );
+//
+//            User jane = new User(
+//                    "Jane Doe",
+//                    "jane@gmail.com",
+//                    "password",
+//                    GENDER.FEMALE,
+//                    LocalDate.of(1989, Month.JANUARY, 6),
+//                    "Student:Senior",
+//                    Set.of(new Role(ROLE.ADMIN),new Role(ROLE.SUPERUSER)),
+//                    Set.of(janeDoe)
+//            );
+//
+//            User john = new User(
+//                    "John Doe",
+//                    "john@gmail.com",
+//                    "password",
+//                    GENDER.MALE,
+//                    LocalDate.of(1989, Month.JANUARY, 5),
+//                    "Faculty:Professor",
+//                    Set.of(new Role(ROLE.ADMIN),new Role(ROLE.SUPERUSER)),
+//                    Set.of(johnDoe)
+//            );
+//
+//            User bob = new User(
+//                    "Bob Doe",
+//                    "bob@gmail.com",
+//                    "password",
+//                    GENDER.MALE,
+//                    LocalDate.of(1979, Month.JANUARY, 12),
+//                    "Student:Junior",
+//                    Set.of(new Role(ROLE.GUEST)),
+//                    Set.of(bobDoe)
+//            );
+////           //             save users to the database
+//            userRepository.saveAll(
+//                    List.of(jane,john,bob)
+//            );
 
 
         };

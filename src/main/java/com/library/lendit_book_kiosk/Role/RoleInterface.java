@@ -7,9 +7,9 @@ public interface RoleInterface extends Serializable {
 
     void setId(Long id);
 
-    String getRole();
+   ROLE getRole();
 
-    void setRole(String name);
+    void setRole(ROLE name);
 
     void setDescription(String description);
 
@@ -17,14 +17,14 @@ public interface RoleInterface extends Serializable {
 
     Role getRoleById(Long id);
 
-    Role getRoleByName(String name);
+    Role getRoleByName(ROLE name);
 
     Role getRoleByid(Long id);
 
     @Override
     boolean equals(Object o);
 
-    boolean equals(String name1, String name2);
+    boolean equals(ROLE name1, ROLE name2);
 
     boolean equals(Role role1, Role role2);
 

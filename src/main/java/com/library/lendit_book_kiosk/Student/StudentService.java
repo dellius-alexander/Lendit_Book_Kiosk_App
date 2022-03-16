@@ -2,38 +2,43 @@ package com.library.lendit_book_kiosk.Student;
 /////////////////////////////////////////////////////////////////////
 // Import Dependencies
 import java.util.*;
-import java.util.regex.Pattern;
 
 import java.io.Serializable;
 
 // LOGGING CLASSES
-import org.json.JSONObject;
+import com.library.lendit_book_kiosk.User.User;
+import com.library.lendit_book_kiosk.User.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
 
 /////////////////////////////////////////////////////////////////////
 /**
  * Service Layer Class that supports our API layer
  */
-@Service
+@Transactional
+@Service(value = "")
 public class StudentService {
     private static final Logger log = LoggerFactory.getLogger(StudentService.class);
     /**
      * Import our Student Repository Data Access Layer, so we can Query the database
      */
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
     /**
      * Service access layer connects to Data access layer to retrieve students.
      * This represents the connection between the two layers.
      * @param studentRepository
+     * @param userRepository
      */
-    @Autowired // needed to automatically connect to StudentRepository
-    public StudentService(StudentRepository studentRepository) {
+    @Autowired // needed to automatically connect to StudentRepository and UserRepository
+    public StudentService(StudentRepository studentRepository, UserRepository userRepository) {
         this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -46,19 +51,26 @@ public class StudentService {
         
         return std_list;
     }
-//    /**
-//     * Search and find students by name
-//     * @param name the name of the student
-//     * @return a list of students matching the regex <code>name</code>
-//     */
-//    public List<Student> getStudents(String name) {
-//        List<Student> students = studentRepository.findStudentByName(name);
-//        if (students.isEmpty()) {
-//            throw new IllegalStateException("Student: " + name + " does not exist.");
-//        }
-//        log.info("RequestedMethod GET: Students => [ {} ]",students.toString());
-//        return students;
-//    }
+
+
+    /**
+     * Search and find students by name
+     * @param name the name of the student
+     * @return a list of students matching the regex <code>name</code>
+     */
+    public List<Student> getStudent(String name) {
+        Optional<User> user = userRepository.findUserByName(name);
+        Optional<Student> students = studentRepository.findStudentById(user.get().getId());
+        if (students.isEmpty()) {
+            throw new IllegalStateException("Student: " + name + " does not exist.");
+        }
+        log.info("RequestedMethod GET: Students => [ {} ]",students.toString());
+
+        return List.of(students.orElseThrow(() ->
+                new IllegalStateException("Student with name: "+ name + ", not found.")));
+    }
+
+
     /**
      * Add a student to Student Table
      * @param student
@@ -139,8 +151,7 @@ public class StudentService {
 	public List<Student> findStudentById(Long studentId) {
         Optional<Student> student = studentRepository.findStudentById(studentId);
 		return List.of(
-                student
-                        .orElseThrow(() ->
+                student.orElseThrow(() ->
                                 new IllegalStateException("Student with studentId: "+ studentId + ", not found.")));
 	}
     

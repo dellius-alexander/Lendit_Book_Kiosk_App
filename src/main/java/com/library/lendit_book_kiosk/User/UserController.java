@@ -5,12 +5,15 @@ import java.util.List;
 
 import com.library.lendit_book_kiosk.Role.Role;
 // LOGGING CLASSES
-import org.json.JSONObject;
+import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,7 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * </code>
  *
  */
-@RestController
+@RestController(value = "/api/v1/user")
 @RequestMapping(value = "/api/v1/user")
 //@RequiredArgsConstructor
 public class UserController {
@@ -41,7 +44,6 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = userService.getUsers();
         log.info("USERS: \n{}\n",users.toString());
-        JSONObject json = new JSONObject(users);
         return ResponseEntity.ok().body(users);
     }
 
@@ -75,6 +77,15 @@ public class UserController {
         log.info(form.toString());
         // return ResponseEntity.ok().build();
         return null;
+    }
+    @GetMapping("/create")
+    @Secured("ROLE_ADMIN")
+    public String createUserForm(Model model) {
+//        model.addAttribute("user", new CreateUserFormData());
+//        model.addAttribute("genders", List.of(Gender.MALE, Gender.FEMALE, Gender.
+//                OTHER));
+//        model.addAttribute("editMode", EditMode.CREATE);
+        return "users/edit";
     }
 
 }

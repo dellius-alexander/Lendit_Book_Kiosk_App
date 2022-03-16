@@ -16,9 +16,14 @@ import org.springframework.stereotype.Repository;
 //@Component(value = "UserRepository")  // Use Component scan for @Autowired dependency injection
 public interface UserRepository extends JpaRepository<User, Long> {
     // @Query provides a way to customize the query to findByUsername
-    @Query("SELECT u FROM User u WHERE u.name = ?1")
-    Optional<User> findByUsername(String name);
+    @Query("SELECT u FROM User u WHERE u.name LIKE %?1%")
+    Optional<User> findUserByName(String name);
 
-    @Query("SELECT u FROM User u WHERE u.email = ?1")
-    Optional<User> findByEmail(String email);
+    @Query("SELECT u FROM User u WHERE u.email LIKE %?1%")
+    Optional<User> findUserByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE u.id = ?1")
+    Optional<User> findUserById(Long id);
+
+
 }

@@ -3,6 +3,10 @@ package com.library.lendit_book_kiosk.Student;
 // Import Dependencies
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import com.library.lendit_book_kiosk.User.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,8 +17,9 @@ import org.springframework.stereotype.Repository;
  * @extends JpaRepository<Student, Long>
  */
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Long>  {
-    
+public interface StudentRepository extends JpaRepository<Student, Long>    {
+
+    UserRepository userRepository = null;
 //    /**
 //     * Custom query to locate student by email
 //     * @param email
@@ -32,20 +37,20 @@ public interface StudentRepository extends JpaRepository<Student, Long>  {
 //    Optional<Student> findStudentByEmailAAndPassword(String email, String password);
 
     /**
-     * Custom query to locate student by id
-     * @param id
-     * @return
+     * Find student by id
+     * @param id studentId
+     * @return  Optional<Student>
      */
     @Query("SELECT s FROM Student s WHERE s.id = ?1")
     Optional<Student> findStudentById(Long id);
 
-//    /**
-//     * Custom query to locate student by name
-//     * @param name
-//     * @return
-//     */
-//    @Query("SELECT s FROM Student s WHERE s.user.name like ?1")
-//    List<Student> findStudentByName(String name);
+    /**
+     * Find all students enrolled|not-enrolled
+     * @param enrolled true|false
+     * @return List<Student>
+     */
+    @Query("SELECT s FROM Student s WHERE s.enrolled = ?1")
+    List<Student> findStudentsByEnrolled(boolean enrolled);
 
 }
     
