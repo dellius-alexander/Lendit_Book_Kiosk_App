@@ -30,7 +30,7 @@ public class Major implements Serializable {
     private Long id;
     @Column(
             name = "major",
-            columnDefinition = "varchar(224)"
+            columnDefinition = "varchar(128)"
 //            unique = true
     )
     private String major;
@@ -38,7 +38,7 @@ public class Major implements Serializable {
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id")
+//    @JoinColumn(name = "student_id")
     private Student student;
     ///////////////////////////////////////////////////////
     public Major(Long id, String major){

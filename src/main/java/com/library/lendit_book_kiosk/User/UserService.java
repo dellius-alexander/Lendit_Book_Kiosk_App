@@ -10,10 +10,11 @@ import com.library.lendit_book_kiosk.Role.RoleRepository;
 
 
 // LOGGING CLASSES
-import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,7 +45,6 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
-
     /**
      * Saves a single user
      * @param user
@@ -54,12 +54,6 @@ public class UserService implements UserDetailsService {
         log.info("Saving new user: {}", user);
         return userRepository.save(user);
     }
-
-    public Role saveRole(Role role){
-        log.info("Saving new getRoleByRolename: {}", role);
-        return roleRepository.save(role);
-    }
-
     /**
      * Adds getRoleByRolename to user.
      * @param username
@@ -69,7 +63,7 @@ public class UserService implements UserDetailsService {
         // TODO: REMEMBER TO INCLUDE MORE VALIDATION CODE
         log.info("Adding UserRole: {} to USER: {}",roleName, username);
         Optional<User> userOptional = userRepository
-            .findUserByName(username);
+                .findUserByName(username);
         Optional<Role> roleOptional = roleRepository.findRoleByName(roleName);
         // the user is not present in the User table
         if (userOptional.isEmpty()){
@@ -101,9 +95,7 @@ public class UserService implements UserDetailsService {
                 "\n}";
         log.info(response);
     }
-
     // TODO: REMEMBER TO REMOVE ON PRODUCTION DEPLOY
-
     /**
      * Gets the user by username
      * @param username username
@@ -114,16 +106,22 @@ public class UserService implements UserDetailsService {
         // return User or else return null
         return userOptional.orElse(null);
     }
-
     // TODO: REMEMBER TO REMOVE ON PRODUCTION DEPLOY
     /**
-     * Gets a user, if user exists
+     * Get all users
+     * @return
      */
     public List<User> getUsers(){
         log.info("Fetching all USERS. FOR TESTING PURPOSES ONLY.......");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        log.info("\nUsers Received from DB: {}\n");
+        return users;
     }
-
+    /**
+     * Get <code>User</code> by email
+     * @param email user email
+     * @return User
+     */
     public User getByEmail(String email){
         Optional<User> user = userRepository.findUserByEmail(email);
         log.info("\n\nUSER FOUND: {}\n\n",user.get());
@@ -131,11 +129,44 @@ public class UserService implements UserDetailsService {
                 new IllegalStateException("User with email " + email +
                         " was not found."));
     }
-
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) getUser(username); 
+    /**
+     * Get <code>User</code> by id
+     * @param id user id
+     * @return <code>User</code>
+     */
+    public User getById(Long id){
+        Optional<User> user = userRepository.findUserById(id);
+        log.info("\n\nUSER FOUND: {}\n\n",user.get());
+        return user.orElseThrow(() ->
+                new IllegalStateException("User with user_id " + id +
+                        " was not found."));
     }
-
-
-
+    /**
+     * Update a <code>User</code> account
+     * @param user a <code>User</code>
+     * @return <code>User</code>
+     */
+    public User updateUser(User user){
+        log.info("\nUser: {}\n", user.toString());
+        return userRepository.save(user);
+    }
+    /**
+     * Loads UserDetails by username search
+     * @param username user email
+     * @return <code>UserDetails</code>
+     * @throws UsernameNotFoundException
+     */
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("\nUSERNAME: {}\n", username);
+        return (UserDetails) getUser(username);
+    }
+    /**
+     * Delete a <code>User</code> by user id
+     * @param id the user id
+     * @return the response status
+     */
+    public ResponseEntity<?> deleteUser(Long id){
+        userRepository.deleteById(id);
+        return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
+    }
 }

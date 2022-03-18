@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-//@Api(value = "Books Rest Controller", description = "REST API for Books")
-@RestController(value = "/api/v1/book")
+/**
+ * Api Layer <br/>
+ * <code style="color:orange;font-style:bold;">/api/v1/book</code>
+ */
+@RestController
 @RequestMapping(value = "/api/v1/book")
 public class BookController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -23,8 +25,19 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping(value = {"/getByTitle/{title}"})
-    public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable("title") String title){
+    /**
+     * Get books by title using <code>{title}</code> pattern match
+     * @param title book title
+     * @return a list of books matching
+     */
+    @RequestMapping(
+            value = {"/getByTitle/{title}","/getByTitle/title={title}"},
+            method = RequestMethod.GET,
+            consumes = {"text/*"},
+            produces = "application/json")
+    public ResponseEntity<List<Book>> getBooksByTitle(
+            @PathVariable("title") String title
+    ){
         return ResponseEntity.ok().body(
                 this.bookService.getBooksByTitle(title)
         );

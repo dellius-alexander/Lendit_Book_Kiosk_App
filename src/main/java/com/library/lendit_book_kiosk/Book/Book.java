@@ -18,7 +18,7 @@ public class Book implements BookInterface {
     @Column(
             name = "isbn",
             unique = true,
-            columnDefinition = "VARCHAR(128)"
+            columnDefinition = "VARCHAR(224)"
 
     )
     public String isbn;

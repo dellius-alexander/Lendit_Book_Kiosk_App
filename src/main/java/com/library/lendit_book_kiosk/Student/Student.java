@@ -29,20 +29,19 @@ public class Student implements StudentInterface {
     private final static Logger log = LoggerFactory.getLogger(Student.class);
     ///////////////////////////////////////////////////////
     // Table outline/fields
-    //    @Id
-    //    @Column(name = "student_id")
-    //    @SequenceGenerator(
-    //        name = "student_sequence",
-    //        sequenceName = "student_sequence",
-    //        allocationSize = 1
-    //    )
-    //    @GeneratedValue(
-    //        // strategy = AUTO
-    //        strategy = GenerationType.SEQUENCE,
-    //        generator = "student_sequence"
-    //    )
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+        @Id
+        @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+        )
+        @GeneratedValue(
+            // strategy = AUTO
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+        )
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name = "student_id",
             unique = true

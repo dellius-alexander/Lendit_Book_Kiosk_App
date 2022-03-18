@@ -48,7 +48,7 @@ public class StudentService {
     public List<Student> getStudents() {
         List<Student> std_list = studentRepository.findAll();
         log.info("RequestedMethod GET: Student => [ {} ]",std_list);
-        
+
         return std_list;
     }
 
@@ -86,10 +86,10 @@ public class StudentService {
         if (studentOptional.isPresent()){
             throw new IllegalStateException("Student: " + student.toString() + " exists.");
         }
-            studentRepository.save(student);
-            log.info(student.toString());
-            message = String.format("\nSuccessfully added new Student: [%s]",student);
-            log.info(message);
+        studentRepository.save(student);
+        log.info(student.toString());
+        message = String.format("\nSuccessfully added new Student: [%s]",student);
+        log.info(message);
         return List.of(message);
     }
     /**
@@ -100,7 +100,7 @@ public class StudentService {
         boolean exists = studentRepository.existsById(studentId);
         if (!exists){
             throw new IllegalStateException(
-                "Student with Id " + studentId + " does not exist."
+                    "Student with Id " + studentId + " does not exist."
             );
         }
         studentRepository.deleteById(studentId);
@@ -157,11 +157,11 @@ public class StudentService {
      * @param studentId the student id
      * @return List<Student>
      */
-	public List<Student> findStudentById(Long studentId) throws IllegalArgumentException {
+    public List<Student> findStudentById(Long studentId) throws IllegalArgumentException {
         Optional<Student> student = studentRepository.findById(studentId);
-		return List.of(
+        return List.of(
                 student.orElseThrow(() ->
-                                new IllegalStateException("Student with studentId: "+ studentId + ", not found.")));
-	}
-    
+                        new IllegalStateException("Student with studentId: "+ studentId + ", not found.")));
+    }
+
 }

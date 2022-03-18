@@ -21,20 +21,17 @@ import java.util.Set;
 public class User implements UserInterface, Serializable {
     private final static Logger log = LoggerFactory.getLogger(User.class);
     ///////////////////////////////////////////////////////
-//    @Id
-//    @Column(name = "user_id")
-//    @SequenceGenerator(
-//            name = "user_sequence",
-//            sequenceName = "user_sequence",
-//            allocationSize = 1
-//    )
-//    @GeneratedValue(
-//            // strategy = AUTO
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "user_sequence"
-//    )
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            // strategy = AUTO
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     @Column(
             name = "user_id",
             unique = true
