@@ -245,7 +245,7 @@ public class Book implements BookInterface {
         result = result * PRIME + ($cover_img == null ? 43 : $cover_img.hashCode());
         return result;
     }
-
+    @Override
     public String toString() {
         return "{\n" +
                 "\"isbn\":\"" + this.getIsbn() + "\",\n" +

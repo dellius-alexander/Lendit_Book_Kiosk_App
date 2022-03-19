@@ -54,17 +54,6 @@ public class Student implements StudentInterface {
             inverseJoinColumns = @JoinColumn(name = "major_id_fk", nullable = false, table = "major")
     )
     private Set<Major> majors;
-
-//            = new AbstractSet<>() {
-//        @Override
-//        public Iterator<Major> iterator() {
-//            return majors.iterator();
-//        }
-//        @Override
-//        public int size() {
-//            return majors.size();
-//        }
-//    };
     @ManyToMany(
             mappedBy = "students"
     )

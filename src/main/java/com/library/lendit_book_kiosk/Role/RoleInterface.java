@@ -11,8 +11,6 @@ public interface RoleInterface extends Serializable {
 
     void setRole(UserRole name);
 
-    void setRole(Role role);
-
     void setDescription(String description);
 
     String getDescription();
