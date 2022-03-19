@@ -52,7 +52,7 @@ public class Role implements RoleInterface, Serializable {
     @Enumerated(EnumType.STRING)
     // TODO: fix duplicate role names
     @Column(
-//            unique = true,
+            unique = true,
             columnDefinition = "varchar(224)"
     )
     private UserRole name;
@@ -103,10 +103,7 @@ public class Role implements RoleInterface, Serializable {
     public void setRole(UserRole name) {
         this.name = name;
     }
-    @Override
-    public void setRole(Role role) {
-        this.name = role.name;
-    }
+
     @Override
     public void setDescription(String description){
         this.description = description; }

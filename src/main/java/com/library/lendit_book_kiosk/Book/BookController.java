@@ -35,7 +35,8 @@ public class BookController {
     @RequestMapping(
             value = {"/getByTitle/{title}","/getByTitle/title={title}"},
             method = RequestMethod.GET,
-            produces = "application/*")
+            consumes = "*/*",
+            produces = "application/json")
     public ResponseEntity<Set<Book>> getBooksByTitle(
             @PathVariable("title") @RequestParam String title
     ){

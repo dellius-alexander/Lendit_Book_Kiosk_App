@@ -18,7 +18,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
@@ -126,10 +125,10 @@ public class LendITBookKioskApplication implements CommandLineRunner
 					Set.of(bobDoe)
 			);
 
-
 			log.info("\nUSERS: \n{} \n{} \n{}\n",jane,john,bob);
+//			userRepository.save(bob);
 //			userRepository.saveAll(
-//					Set.of(jane, john, bob)
+//					List.of(jane, john, bob)
 //			);
 
 //			init_books(bookRepository);
