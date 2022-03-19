@@ -45,6 +45,15 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
+
+    /**
+     * Save a list of users: [ List<<code>User</code>> ]
+     * @param users
+     * @return List<<code>User</code>>
+     */
+    public List<User> saveAll(List<User> users){
+        return userRepository.saveAll(users);
+    }
     /**
      * Saves a single user
      * @param user
@@ -111,10 +120,10 @@ public class UserService implements UserDetailsService {
      * Get all users
      * @return
      */
-    public List<User> getUsers(){
+    public List<User> findAll(){
         log.info("Fetching all USERS. FOR TESTING PURPOSES ONLY.......");
         List<User> users = userRepository.findAll();
-        log.info("\nUsers Received from DB: {}\n");
+        log.info("\nUsers Received from DB: {}\n",users.toString());
         return users;
     }
     /**
@@ -122,24 +131,33 @@ public class UserService implements UserDetailsService {
      * @param email user email
      * @return User
      */
-    public User getByEmail(String email){
+    public User findUserByEmail(String email){
+        log.info("\nUSERNAME: {}\n", email);
+        email = email.trim();
         Optional<User> user = userRepository.findUserByEmail(email);
+        if (!user.isPresent())
+        {
+            throw new IllegalStateException("User with email " +
+                    email + " was not found.");
+        }
         log.info("\n\nUSER FOUND: {}\n\n",user.get());
-        return user.orElseThrow(() ->
-                new IllegalStateException("User with email " + email +
-                        " was not found."));
+        return user.get();
     }
     /**
      * Get <code>User</code> by id
      * @param id user id
      * @return <code>User</code>
      */
-    public User getById(Long id){
+    public User findUserById(Long id){
+        log.info("\nUSER ID: {}\n", id);
         Optional<User> user = userRepository.findUserById(id);
+        if (!user.isPresent())
+        {
+            throw new IllegalStateException("User with user_id " +
+                    id + " was not found.");
+        }
         log.info("\n\nUSER FOUND: {}\n\n",user.get());
-        return user.orElseThrow(() ->
-                new IllegalStateException("User with user_id " + id +
-                        " was not found."));
+        return user.get();
     }
     /**
      * Update a <code>User</code> account
@@ -156,7 +174,8 @@ public class UserService implements UserDetailsService {
      * @return <code>UserDetails</code>
      * @throws UsernameNotFoundException
      */
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
         log.info("\nUSERNAME: {}\n", username);
         return (UserDetails) getUser(username);
     }

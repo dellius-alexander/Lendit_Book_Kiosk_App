@@ -72,11 +72,10 @@ public class User implements UserInterface {
     @ManyToMany(
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "user_student",
+            cascade = {CascadeType.ALL})
+    @JoinTable(name = "user_students",
             joinColumns = @JoinColumn (name = "user_id_fk", nullable = false, table = "user"),
             inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
-    @SortNatural
     private Set<Student> students;
     ///////////////////////////////////////////////////////
 

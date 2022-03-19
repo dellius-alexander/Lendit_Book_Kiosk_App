@@ -39,7 +39,8 @@ public class UserDetailServices implements UserDetailsService {
                         )
                 );
         log.info("\nUSER RETRIEVED: {}\n",userOptional.toString());
-        return new UserLoginDetails(userOptional);
+        UserLoginDetails uld = new UserLoginDetails(userOptional);
+        return (UserDetails) uld;
     }
 
 }

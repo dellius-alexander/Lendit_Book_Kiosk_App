@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.library.lendit_book_kiosk.Role.Role;
 // LOGGING CLASSES
-import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.NullArgumentException;
@@ -43,7 +42,7 @@ public class UserController {
             produces = {"application/json"}
     )
     public ResponseEntity<List<User>> getUsers(){
-        List<User> users = userService.getUsers();
+        List<User> users = userService.findAll();
         log.info("USERS: \n{}\n",users.toString());
         return ResponseEntity.ok().body(users);
     }
@@ -59,7 +58,7 @@ public class UserController {
     public ResponseEntity<User> getUserById(
             @PathVariable("user_id") @RequestParam Long user_id){
         log.info("\nUser Id: {}\n");
-        return ResponseEntity.ok().body(userService.getById(user_id));
+        return ResponseEntity.ok().body(userService.findUserById(user_id));
     }
     /**
      * Save a new <code>User</code>
@@ -111,7 +110,7 @@ public class UserController {
                         .path("/user/assign-role/*")
                         .toUriString());
         log.info("URI: \n{}\n",uri);
-        User user = userService.getById(user_id);
+        User user = userService.findUserById(user_id);
         user.setRole(role);
         return ResponseEntity.created(uri).body(userService.updateUser(user));
     }

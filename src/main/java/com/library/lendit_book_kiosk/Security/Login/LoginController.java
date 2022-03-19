@@ -1,6 +1,7 @@
 package com.library.lendit_book_kiosk.Security.Login;
 
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
+import com.library.lendit_book_kiosk.Security.UserDetails.UserDetailServices;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.UserService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,21 +50,23 @@ public class LoginController implements Serializable {
      *
      * @return login page
      */
-    @RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String login(
-            Model model
-    ) {
-//        User user = new User();
-//        model.addAttribute("user", user);
-        model.addAttribute("userLoginDetails", new UserLoginDetails());
+    @RequestMapping(
+            value = "/login",
+            path = "/login",
+            method = RequestMethod.GET,
+            produces = "text/html")
+    public String login(Model model) {
+        UserLoginDetails userLoginAuth = new UserLoginDetails();
+        UserDetailServices userDetailServices = new UserDetailServices();
+        model.addAttribute("userLoginAuth", userLoginAuth);
+        model.addAttribute("userDetailServices", userDetailServices);
 //        log.info("\n\nUser: {}\n\n",user.toString());
         log.info("\nUserLoginDetails form: {}\n", model.toString());
-        return "login";
+        return "/login";
     }
 
     /**
      * User login form
-     *
      * @param userLoginDetails
      * @param result           the results
      * @return
@@ -73,19 +77,19 @@ public class LoginController implements Serializable {
             @Valid
             @ModelAttribute("userLoginDetails") UserLoginDetails userLoginDetails,
             BindingResult result,
-            Model model,
-            HttpServletRequest request
+            Model model
     ) {
-        log.info("\n\nREQUEST INFO: \n\tURI = {}, \n\tCONTEXTPATH = {}"+
-                "\n\tSERVLETPATH = {}\n\tPATHINFO = {}\n\tQUERYSTR = {}",
-                request.getRequestURI(),
-                request.getContextPath(),
-                request.getServletPath(),
-                request.getPathInfo(),
-                request.getQueryString());
+//        log.info("\n\nREQUEST INFO: \n\tURI = {}, \n\tCONTEXTPATH = {}"+
+//                "\n\tSERVLETPATH = {}\n\tPATHINFO = {}\n\tQUERYSTR = {}",
+//                request.getRequestURI(),
+//                request.getContextPath(),
+//                request.getServletPath(),
+//                request.getPathInfo(),
+//                request.getQueryString());
+
         log.info("USERLOGINDETAILS Retrieved: {}", userLoginDetails);
         // Custom Authentication Token
-        User user = userService.getByEmail(userLoginDetails.getUsername());
+        User user = userService.findUserByEmail(userLoginDetails.getUsername());
         log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
         log.info("\n\nUserLoginDetails: {}\n\nMODEL: {} \n\nRESULTS: {}\n\nUSERS: {}\n\nAUTHENTICATION: {}\n\n",
                 userLoginDetails,
@@ -148,24 +152,26 @@ public class LoginController implements Serializable {
      */
     @RequestMapping(path = "index", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String index(){
+    public String index(
+            Model model
+    ){
+
         return "index";
     }
-
-    private Authentication getPrincipal() {
+    private String getPrincipal() {
         String userName = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(auth instanceof AnonymousAuthenticationToken)){
             log.info("\nAnonymousAuthenticationToken Exception: TOKEN => {}\n",auth.toString());
         }
-//        if (principal instanceof  UserDetails){
-//            userName = ((UserDetails)principal).getUsername();
-//        } else {
-//          userName = principal.toString();
-//        }
+        if (principal instanceof  UserDetails){
+            userName = ((UserDetails)principal).getUsername();
+        } else {
+          userName = principal.toString();
+        }
 
-        return auth;
+        return userName;
     }
 
 }

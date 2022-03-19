@@ -2,6 +2,7 @@ package com.library.lendit_book_kiosk.Security.Config;
 
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
+import org.codehaus.groovy.runtime.ArrayUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +26,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -90,10 +92,12 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         bean.setValidationMessageSource(messageSource);
         return bean;
     }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         // TODO: create and add custom formatters to the FormatterRegistry
-//        registry.addFormatter();
+        // registry.addFormatter();
+
     }
 
     /* ******************************************************************* */
@@ -125,28 +129,19 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                        "swagger-ui.html",
-                        "/webjars/**",
+                        "/swagger-ui.html",
                         "/images/**",
                         "/css/**",
                         "/js/**"
                 )
                 .addResourceLocations(
-                        "classpath:/META-INF/resources/",
-                        "classpath:/META-INF/resources/webjars/",
+                        "classpath:/META-INF/resources/",  // openapi config
+                        "classpath:/META-INF/resources/webjars/",  // openapi config
                         "classpath:/static/images/",
                         "classpath:/static/css/",
                         "classpath:/static/js/"
-
                 );
-//        //enabling swagger-ui part for visual documentation
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-
     }
-
 
     /* **************************************************************** */
     /*  THYMELEAF-SPECIFIC ARTIFACTS                                    */
@@ -168,11 +163,12 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 //        // templates to be automatically updated when modified.
 //        templateResolver.setCacheable(true);
 
+
         this.springResourceTemplateResolver.setApplicationContext(this.ctx);
-        this.springResourceTemplateResolver.setPrefix("classpath:/templates/");
+        this.springResourceTemplateResolver.setPrefix("classpath:/templates");
         this.springResourceTemplateResolver.setSuffix(".html");
         this.springResourceTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        this.springResourceTemplateResolver.setCacheable(true);
+        this.springResourceTemplateResolver.setCacheable(false);
         return this.springResourceTemplateResolver;
     }
 
@@ -197,7 +193,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         return templateEngine;
     }
     @Override
-    @Bean
+    @Bean(name = "SpringSecurity")
     public ThymeleafViewResolver viewResolver() {
 //        InternalResourceViewResolver viewResolver = new
 //                InternalResourceViewResolver();
@@ -207,6 +203,10 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setContentType("text/html");
+        viewResolver.setCharacterEncoding("UTF-8");
+        viewResolver.setViewNames(new String[]{"/**"});
+
         viewResolver.setApplicationContext(this.ctx);
         return viewResolver;
     }

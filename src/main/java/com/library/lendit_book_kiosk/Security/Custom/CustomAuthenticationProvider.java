@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
-    com.library.lendit_book_kiosk.User.User user = userService.getByEmail(username);
+    com.library.lendit_book_kiosk.User.User user = userService.findUserByEmail(username);
     log.info("User found: {}", user);
     if (user == null) {
         log.info("USER NOT FOUND: {}",

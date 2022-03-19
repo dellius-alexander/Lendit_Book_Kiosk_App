@@ -95,7 +95,7 @@ public class Major implements Serializable {
     @Override
     public String toString() {
         return "{\n" +
-                "\"id\":\"" + this.getId() +
+                "\"id\":" + this.getId() +
                 ",\n\"major\":\"" + this.getMajor() + "\""+
                 "\n}";
     }

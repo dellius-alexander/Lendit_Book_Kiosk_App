@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 //import springfox.documentation.builders.PathSelectors;
@@ -65,41 +66,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         log.info("Initializing Http handler...");
         // Apply options to our http client:
         http.authorizeRequests()    // - authorize each request
-                .antMatchers("/login",
+                .antMatchers("/login.html",
                         "/css/**",
                         "/js/**",
-                        "/static/images/**",
+                        "/images/**",
                         "/verify",
-                        "/**",
                         "/swagger-ui.html",
-                        "/index",
-                        "/error",
-                        "hello",
+                        "/index.html",
+                        "/error.html",
+                        "/hello.html",
                         "/**"
                 )
                     .permitAll()
-//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-//
-//                        "/login",
-//                        "/index",
-//                        "/error",
-//                        // TODO: CREATE Role based access for api
-//                        "/**",
-//                        "/user/users")
-//                        .access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
-//                .antMatchers("/**").access("hasAnyRole('ADMIN','SUPERUSER')")
-//            .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .logout()
-//                    .invalidateHttpSession(true)
-//                    .clearAuthentication(true)
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login?logout")
-//                    .permitAll()
+                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+                    "/login",
+                    "/index",
+                    "/error",
+                    // TODO: CREATE Role based access for api
+                    "/**")
+                    .access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
+                .antMatchers("/**")
+                    .access("hasAnyRole('ADMIN','SUPERUSER')")
+            .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+                    .permitAll()
+            .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login")
+                    .permitAll()
 //            .and()
 //                .exceptionHandling()
             .and()
@@ -143,8 +142,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .roles("USER");
         /////////////////////////////////////////////////////////////
     }
-
-
 
 
     @Override

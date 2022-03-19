@@ -1,8 +1,6 @@
 package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
 
-import com.library.lendit_book_kiosk.Book.Book;
-import com.library.lendit_book_kiosk.Book.BookRepository;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Student.Major;
@@ -10,7 +8,7 @@ import com.library.lendit_book_kiosk.Student.Student;
 //import com.library.lendit_book_kiosk.Student.StudentRepository;
 import com.library.lendit_book_kiosk.User.GENDER;
 import com.library.lendit_book_kiosk.User.User;
-import com.library.lendit_book_kiosk.User.UserRepository;
+import com.library.lendit_book_kiosk.User.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +16,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
+import com.google.gson.*;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
@@ -35,7 +33,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 	// Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.getLogger(LendITBookKioskApplication.class);
 
-	private static  UserRepository userRepository;
+	private static UserService userService;
 	////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////
 	////////////////////	MAIN DRIVER 	////////////////////
@@ -65,11 +63,11 @@ public class LendITBookKioskApplication implements CommandLineRunner
 	////////////////////////////////////////////////////////////
 	@Bean
 	@Autowired
-	CommandLineRunner commandLineRunner(
-			UserRepository userRepository){
-		return args -> {
+	CommandLineRunner commandLineRunner(UserService userService)
+	{
 
-//			List<User> users =  userRepository.findAll();
+
+//			List<User> users =  userService.findAll();
 			Major CSCI = new Major("CSCI");
 			Major BSCS = new Major("BSCS");
 			Major MBA = new Major("MBA");
@@ -126,11 +124,25 @@ public class LendITBookKioskApplication implements CommandLineRunner
 					Set.of(bobDoe)
 			);
 
+			List<User> users_new = new ArrayList<>();
+			List<User> users = userService.findAll();  // check for Users
+			Gson gson = new Gson();
+			users_new.add(bob); users_new.add(jane); users_new.add(john);
 
-			log.info("\nUSERS: \n{} \n{} \n{}\n",jane,john,bob);
-//			userRepository.saveAll(
-//					Set.of(jane, john, bob)
-//			);
+		return args -> {
+
+			if (users.size() > 0){  // the DB already has users
+				log.info("\nUSERS: \n{} \n",users.toString());
+			}
+			else{  // no user found so we add a few for testing
+				log.info("\nUSERS: \n{} \n",users_new.toString());
+				userService.saveAll(
+						List.of(jane, john, bob)
+				);
+			}
+
+
+
 
 //			init_books(bookRepository);
 		};

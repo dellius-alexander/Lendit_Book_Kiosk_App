@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Data
-public class UserLoginDetails implements UserDetails{
+public class UserLoginDetails {
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
     private Long id;
     private String username;
@@ -33,6 +33,7 @@ public class UserLoginDetails implements UserDetails{
             String password,
             Set<GrantedAuthority> authorities){
         this.id = id;
+
         this.username = username;
         this.displayName = displayName;
         this.password = password;
@@ -62,35 +63,40 @@ public class UserLoginDetails implements UserDetails{
      * @return the authorities granted to the principal, or an empty collection if the token has not been
      * authenticated. Never null.
      */
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-    @Override
+
+
     public String getPassword() {
         return password;
     }
 
-    @Override
+
     public String getUsername() {
         return username;
     }
-    @Override
+
+
     public boolean isAccountNonExpired() {
         return true;
     }
-    @Override
+
+
     public boolean isAccountNonLocked() {
         return true;
     }
-    @Override
+
+
     public boolean isCredentialsNonExpired() {
         return true;
     }
-    @Override
+
+
     public boolean isEnabled() {
         return true;
     }
+
     public Long getId() {
         return id;
     }

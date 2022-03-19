@@ -86,14 +86,16 @@ public class StudentController implements Serializable {
     /**
      * Registers a new <code>Student</code>
      * @param student a <code>Student</code> object
+     * @return response status/message & status [code]
      */
     @RequestMapping(
-            value = {"/register/{student}","/register"},
+            value = {"/register/{student}"},
             method = RequestMethod.POST,
             consumes = {"application/json"},
             produces = {"application/json"})
     public ResponseEntity<List<Serializable>>  registerNewStudent(
-            @PathVariable("student") @RequestBody Student student){
+            @PathVariable("student") @RequestBody Student student
+    ){
         if(student == null){
             throw new NullArgumentException("Empty payload received.");
         }
@@ -108,15 +110,15 @@ public class StudentController implements Serializable {
         );
         log.info("RequestedMethod POST: Student => {}", student);
         return ResponseEntity.created(uri).body(studentService.addNewStudent(student));
-
     }
     /**
      * Delete a <code>Student</code> by <code>student_Id</code>
      * @param studentId the student id
+     * @return response message
      */
     @DeleteMapping(
             value = {"/delete/{studentId}"},
-            produces = {"application/*"})
+            produces = {"application/json"})
     public ResponseEntity<List<String>>  deleteStudent(
             @PathVariable("studentId") Long studentId){
         log.info("Delete RequestedMethod POST: StudentId => {}", studentId);
