@@ -33,10 +33,10 @@ import org.slf4j.LoggerFactory;
 @Component(value = "com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider")
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final static Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
-
+    @Autowired
     private  UserService userService;
 
-    @Autowired
+//    @Autowired
     public CustomAuthenticationProvider(UserService userService){
         this.userService = userService;
     }

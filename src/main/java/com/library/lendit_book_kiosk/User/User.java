@@ -3,39 +3,43 @@ package com.library.lendit_book_kiosk.User;
 import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Student.Student;
+import org.hibernate.annotations.SortNatural;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
-// LOGGING CLASSES
-//import org.hibernate.annotations.GenericGenerator;
+/////////////////////////////////////////////////////////////////
 
+/**
+ * User class
+ */
 @Entity  // Tells Hibernate to make a table out of this class
 @Table(name = "User")
-public class User implements UserInterface, Serializable {
+public class User implements UserInterface {
     private final static Logger log = LoggerFactory.getLogger(User.class);
     ///////////////////////////////////////////////////////
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+    @SequenceGenerator(  // LendIT Book Kiosk
+            name = "TGVuZElUIEJvb2sgS2lvc2s_sequence",
+            sequenceName = "TGVuZElUIEJvb2sgS2lvc2s_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
     )
     @Column(
             name = "user_id",
-            unique = true
-    )
+            unique = true,
+            columnDefinition = "bigint",
+            nullable = false)
     private Long id;
     private String name;
     @Column(  // customize this field to support unique key
@@ -62,17 +66,18 @@ public class User implements UserInterface, Serializable {
             fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL})
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn (name = "user_id_fk"),
-            inverseJoinColumns = @JoinColumn(name = "role_id_fk"))
+            joinColumns = @JoinColumn (name = "user_id_fk", nullable = false,table = "user"),
+            inverseJoinColumns = @JoinColumn(name = "role_id_fk", nullable = false, table = "role"))
     private Set<Role> roles;
     @ManyToMany(
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "user_student",
-            joinColumns = @JoinColumn (name = "user_id_fk"),
-            inverseJoinColumns = @JoinColumn(name = "student_id_fk"))
-    private Set<Student> student;
+            joinColumns = @JoinColumn (name = "user_id_fk", nullable = false, table = "user"),
+            inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
+    @SortNatural
+    private Set<Student> students;
     ///////////////////////////////////////////////////////
 
     /**
@@ -90,7 +95,7 @@ public class User implements UserInterface, Serializable {
      * @param dob
      * @param profession
      * @param roles
-     * @param student
+     * @param students
      */
     public User(
             Long id,
@@ -101,7 +106,7 @@ public class User implements UserInterface, Serializable {
             LocalDate dob,
             String profession,
             Set<Role> roles,
-            Set<Student> student
+            Set<Student> students
     ) {
         this.id = id;
         this.name = name;
@@ -111,7 +116,7 @@ public class User implements UserInterface, Serializable {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.student = student;
+        this.students = students;
     }
 
     /**
@@ -142,7 +147,7 @@ public class User implements UserInterface, Serializable {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.student = students;
+        this.students = students;
     }
 
     /**
@@ -235,9 +240,8 @@ public class User implements UserInterface, Serializable {
     }
 
     @Override
-    public void  setRole(UserRole userRole){
-        this.roles.addAll(Set.of(new Role(userRole)));
-
+    public void  setRole(Role role){
+        this.roles.addAll((Collection<? extends Role>) role);
     }
     @Override
     public Integer getAge() {
@@ -386,22 +390,22 @@ public class User implements UserInterface, Serializable {
         final Object other$roles = other.getRoles();
         if (!Objects.equals(this$roles, other$roles))
             return false;
-        final Object this$students = this.getStudent();
-        final Object other$students = other.getStudent();
+        final Object this$students = this.getStudents();
+        final Object other$students = other.getStudents();
         if (!Objects.equals(this$students, other$students))
             return false;
         return true;
     }
 
-    public void setStudent(Set<Student> students){
-        this.student = students;
+    public void setStudents(Set<Student> students){
+        this.students = students;
     }
     public void addStudent(Student student){
-        this.student = Set.of(student);
+        this.students = Set.of(student);
     }
 
-    public Set<Student> getStudent(){
-        return this.student;
+    public Set<Student> getStudents(){
+        return this.students;
     }
     @Override
     public boolean canEqual(final Object other) {
@@ -451,6 +455,7 @@ public class User implements UserInterface, Serializable {
                 ",\n\"dob\":\"" + dob + "\"" +
                 ",\n\"profession\":\"" + profession + "\"" +
                 ",\n\"roles\":\"" + roles + "\"" +
+                ",\n\"student\":\""+ students + "\"" +
                 "\n}";
         log.info(json);
         return json;

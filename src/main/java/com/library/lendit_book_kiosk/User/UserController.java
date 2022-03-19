@@ -19,10 +19,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * Api Layer <br/>
- * <code style="color:orange;font-style:bold;">/api/v1/user</code>
+ * <code style="color:orange;font-style:bold;">/user</code>
  */
 @RestController
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
@@ -78,7 +78,7 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/v1/user/save/*")
+                        .path("/user/save/*")
                         .toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
@@ -108,11 +108,11 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/v1/user/assign-role/*")
+                        .path("/user/assign-role/*")
                         .toUriString());
         log.info("URI: \n{}\n",uri);
         User user = userService.getById(user_id);
-        user.setRole(role.getRole());
+        user.setRole(role);
         return ResponseEntity.created(uri).body(userService.updateUser(user));
     }
     /**

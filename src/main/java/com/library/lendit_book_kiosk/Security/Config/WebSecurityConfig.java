@@ -70,19 +70,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/js/**",
                         "/static/images/**",
                         "/verify",
-                        "/api/v1/**",
+                        "/**",
                         "/swagger-ui.html",
                         "/index",
-                        "/**")
+                        "/error",
+                        "hello",
+                        "/**"
+                )
                     .permitAll()
 //                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
 //
 //                        "/login",
 //                        "/index",
 //                        "/error",
-//                        // TODO: CREATE Role based access for api/v1/**
+//                        // TODO: CREATE Role based access for api
 //                        "/**",
-//                        "/api/v1/user/users").access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
+//                        "/user/users")
+//                        .access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
 //                .antMatchers("/**").access("hasAnyRole('ADMIN','SUPERUSER')")
 //            .and()
 //                .formLogin()

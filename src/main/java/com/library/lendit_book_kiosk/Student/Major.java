@@ -3,43 +3,34 @@ package com.library.lendit_book_kiosk.Student;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
 @Entity  // Tells Hibernate to make a table out of this class
-@Table(name = "majors")
+@Table(name = "major")
 public class Major implements Serializable {
-    ///////////////////////////////////////////////////////
-    // Table outline/fields
-
-//    @SequenceGenerator(
-//            name = "major_sequence",
-//            sequenceName = "major_sequence",
-//            allocationSize = 1
-//    )
-//    @GeneratedValue(
-//            // strategy = AUTO
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "major_sequence"
-//    )
+    /////////////////////////////////////////////////////////////////
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(
+            // strategy = AUTO
+            strategy = GenerationType.SEQUENCE,
+            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+    )
     @Column(
             name = "major_id",
-            unique = true
-    )
+            unique = true,
+            columnDefinition = "bigint",
+            nullable = false)
     private Long id;
     @Column(
             name = "major",
-            columnDefinition = "varchar(128)"
+            columnDefinition = "varchar(224)"
 //            unique = true
     )
     private String major;
-    @ManyToOne(
-            targetEntity = Student.class,
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-//    @JoinColumn(name = "student_id")
-    private Student student;
+    @ManyToMany( mappedBy = "majors"
+            )
+    private Set<Student> students;
     ///////////////////////////////////////////////////////
     public Major(Long id, String major){
         this.id = id;
@@ -56,14 +47,6 @@ public class Major implements Serializable {
 //    public int hashCode() {
 //        return Objects.hash(this.id, this.major);
 //    }
-
-    @Override
-    public String toString(){
-        return          "{\n"+
-                        "\n\"Id\":" + getId() +
-                        "\n\"major\":\"" + getMajor() + "\"" +
-                        "\n}";
-    }
 
     public Long getId() {
         return this.id;
@@ -98,7 +81,7 @@ public class Major implements Serializable {
     protected boolean canEqual(final Object other) {
         return other instanceof Major;
     }
-
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -107,5 +90,13 @@ public class Major implements Serializable {
         final Object $major = this.getMajor();
         result = result * PRIME + ($major == null ? 43 : $major.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\"id\":\"" + this.getId() +
+                ",\n\"major\":\"" + this.getMajor() + "\""+
+                "\n}";
     }
 }

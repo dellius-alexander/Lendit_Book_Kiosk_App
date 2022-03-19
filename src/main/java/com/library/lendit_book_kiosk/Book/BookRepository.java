@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Data Access Layer
@@ -13,8 +14,8 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, String> {
 
     // find books by title match
-    @Query(value = "SELECT b from Book b WHERE b.title LIKE %?1%")
-    List<Book> findBookByTitle(String title);
+    @Query(value = "SELECT b from Book b WHERE b.title LIKE %?1")
+    Set<Book> findBookByTitle(String title);
 
     // find books by author name match
     @Query(value = "SELECT b from Book b WHERE b.authors LIKE %?1%")

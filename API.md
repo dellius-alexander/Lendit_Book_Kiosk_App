@@ -21,7 +21,7 @@
 
 ```json
 { 
-  "browse-by-category": "/api/v1/book/cat/{category|genre}"
+  "browse-by-category": "/book/cat/{category|genre}"
 }
 ```
 ---
@@ -30,9 +30,9 @@
 
 ```json
 {
-  "search-by-title": "/api/v1/book/title/{title}",
-  "search-by-author": "/api/v1/book/author/{author}",
-  "search-by-author-title": "/api/v1/book/author={author}&title={title}"
+  "search-by-title": "/book/title/{title}",
+  "search-by-author": "/book/author/{author}",
+  "search-by-author-title": "/book/author={author}&title={title}"
 }
 ```
 
@@ -42,8 +42,8 @@
 
 ```json
 {
-  "borrow-by-isbn": "/api/v1/book/borrow/isbn={isbn}&student_id={student_id}",
-  "borrow-by-id": "/api/v1/book/borrow/book_id={book_id}&student_id={student_id}"
+  "borrow-by-isbn": "/book/borrow/isbn={isbn}&student_id={student_id}",
+  "borrow-by-id": "/book/borrow/book_id={book_id}&student_id={student_id}"
 }
 ```
 
@@ -64,7 +64,7 @@
 
 ```json
 {
-  "login-by-id": "/api/v1/student/login/student_id={student_id}&password={password}"
+  "login-by-id": "/student/login/student_id={student_id}&password={password}"
 }
 ```
 
@@ -74,6 +74,6 @@
 
 ```json
 {
-  "donate-by-isbn": "/api/v1/book/donate/isbn={isbn}&title={title}"
+  "donate-by-isbn": "/book/donate/isbn={isbn}&title={title}"
 }
 ```

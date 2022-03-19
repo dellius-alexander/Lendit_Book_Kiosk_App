@@ -7,17 +7,17 @@ The textbook for higher education is soaring every year. Clayton State Universit
 
 ```bash
 # root uri
-http://localhost:<port>/api/v1/student
+http://localhost:<port>/student
 
 # create new student
-http://localhost:<port>/api/v1/student/new
+http://localhost:<port>/student/new
 
 # delete student
-http://localhost:<port>/api/v1/delete/{studentId}
+http://localhost:<port>/delete/{studentId}
 
 # update student
-http://localhost:<port>/api/v1/student/update/{studentId}
+http://localhost:<port>/student/update/{studentId}
 
 # search for student by name
-http://localhost:<port>/api/v1/student/find/{name}
+http://localhost:<port>/student/find/{name}
 ```

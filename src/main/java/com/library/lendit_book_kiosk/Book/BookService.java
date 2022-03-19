@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service layer control logic
@@ -26,7 +27,7 @@ public class BookService {
      * @param title book title
      * @return a list of books
      */
-    public List<Book> getBooksByTitle(String title){
+    public Set<Book> getBooksByTitle(String title){
         return this.bookRepository.findBookByTitle(title);
     }
 }

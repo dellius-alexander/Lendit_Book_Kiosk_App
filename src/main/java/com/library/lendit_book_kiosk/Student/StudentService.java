@@ -82,7 +82,7 @@ public class StudentService {
     public List<Serializable> addNewStudent(Student student) {
         String message;
         Optional<Student> studentOptional = studentRepository
-                .findStudentById(student.getId());
+                .findStudentById(student.getStudentId());
         if (studentOptional.isPresent()){
             throw new IllegalStateException("Student: " + student.toString() + " exists.");
         }

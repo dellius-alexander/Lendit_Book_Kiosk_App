@@ -36,19 +36,18 @@ public class Role implements RoleInterface, Serializable {
     // Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.
     getLogger(Role.class);
-
-    // Table outline/fields
+    /////////////////////////////////////////////////////////////////
     @Id
-    @Column(name = "role_id")
-    @SequenceGenerator(
-        name = "role_sequence",
-        sequenceName = "role_sequence",
-        allocationSize = 1
-    )
+//
     @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "role_sequence"
-        )
+            // strategy = AUTO
+            strategy = GenerationType.SEQUENCE,
+            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+    )
+    @Column(name = "role_id",
+            unique = true,
+            columnDefinition = "bigint",
+            nullable = false)
     private Long id;
     @Enumerated(EnumType.STRING)
     // TODO: fix duplicate role names
@@ -67,8 +66,9 @@ public class Role implements RoleInterface, Serializable {
         log.info("UserRole: {}", this.toString());
     }
 
-    public Role(UserRole name) {
+    public Role(UserRole name,String description) {
         this.name = name;
+        this.description = description;
     }
 
     public Role(
@@ -103,7 +103,10 @@ public class Role implements RoleInterface, Serializable {
     public void setRole(UserRole name) {
         this.name = name;
     }
-
+    @Override
+    public void setRole(Role role) {
+        this.name = role.name;
+    }
     @Override
     public void setDescription(String description){
         this.description = description; }

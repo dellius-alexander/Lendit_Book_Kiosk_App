@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
             }
         }
         // add getRoleByRolename to user
-        userOptional.get().setRole(roleOptional.get().getRole());
+        userOptional.get().setRole(roleOptional.get());
 
         // update the database
         userRepository.save(userOptional.get());

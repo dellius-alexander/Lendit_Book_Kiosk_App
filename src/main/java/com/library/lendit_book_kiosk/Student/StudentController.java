@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
 /////////////////////////////////////////////////////////////////////
 /**
  * Api Layer <br/>
- * <code style="color:orange;font-style:bold;">/api/v1/student</code>
+ * <code style="color:orange;font-style:bold;">/student</code>
  */
 @RestController
-@RequestMapping(value = "/api/v1/student")
+@RequestMapping(value = "/student")
 public class StudentController implements Serializable {
 
     // Define a logger instance and log what you want.
@@ -103,7 +103,7 @@ public class StudentController implements Serializable {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentContextPath()
-                        .path("/api/v1/student/register")
+                        .path("/student/register")
                         .toUriString()
         );
         log.info("RequestedMethod POST: Student => {}", student);

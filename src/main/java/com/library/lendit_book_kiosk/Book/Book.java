@@ -12,9 +12,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "Books")
 public class Book implements BookInterface {
-    ///////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(
+            // strategy = AUTO
+            strategy = GenerationType.SEQUENCE,
+            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+    )
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name = "isbn",
             unique = true,

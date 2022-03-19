@@ -3,13 +3,15 @@ package com.library.lendit_book_kiosk.User;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
 
-public interface UserInterface {
+import java.io.Serializable;
+
+public interface UserInterface extends Serializable {
 
     /**
      * Assigns the given userRole
-     * @param userRole
+     * @param role
      */
-    void setRole(UserRole userRole);
+    void setRole(Role role);
 
     /**
      * Assigns the given user
