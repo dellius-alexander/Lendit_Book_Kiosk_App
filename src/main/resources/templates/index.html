@@ -57,8 +57,8 @@
             <h1 class="card-header">User Info</h1>
 
             <div class="list-group">
-                <div class="display-user" th:object="${user}" >
-                    <pre th:text="${user}"></pre>
+                <div class="display-user" th:object="${#authentication}" >
+                    <pre th:text="${#authentication}"></pre>
                 </div>
 <!--                <script type="text/javascript" th:object="${user}">-->
 <!--                     user = [[${user}]]-->

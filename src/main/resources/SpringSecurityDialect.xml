@@ -16,4 +16,5 @@
             </set>
         </property>
     </bean>
+    <bean id="templateResolver" class="com.library.lendit_book_kiosk.Security.Config.WebMvcConfig"/>
 </beans>

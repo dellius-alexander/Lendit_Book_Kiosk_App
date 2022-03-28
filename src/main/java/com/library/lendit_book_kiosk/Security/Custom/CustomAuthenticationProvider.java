@@ -2,6 +2,8 @@ package com.library.lendit_book_kiosk.Security.Custom;
 
 
 //import com.library.lendit_book_kiosk.User.UserRepository;
+import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
+import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 //import java.util.Collections;
 //import java.util.List;
@@ -36,10 +39,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private  UserService userService;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserLoginDetails userLoginDetails;
+
 //    @Autowired
-    public CustomAuthenticationProvider(UserService userService){
-        this.userService = userService;
-    }
+    public CustomAuthenticationProvider(){ }
 /**
  * Takes an <code>authentication</code> (token|payload|object) and validates the username
  * and password against a datastore of static values. We use the AuthenticationProvider,
@@ -48,7 +58,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
  * @return a CustomAuthentication token for future communication
  */
 @Override
-public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+public UsernamePasswordAuthenticationToken authenticate(Authentication authentication) throws AuthenticationException {
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
     com.library.lendit_book_kiosk.User.User user = userService.getByEmail(username);
@@ -72,25 +82,30 @@ public Authentication authenticate(Authentication authentication) throws Authent
             username,
             password,
             authentication);
-    final UserDetails principal = new org.springframework.security.core.userdetails.User(
-            username,
-            password,
-            authentication
-                    .getAuthorities()
-                    .stream()
-                    .map(   x -> new SimpleGrantedAuthority(
-                                    x.getAuthority()
-                            )).collect(Collectors.toSet())
-    );
+
+    final UserDetails principal = customUserDetailsService.loadUserByUsername(username);
+    this.userLoginDetails = new UserLoginDetails(user);
+//            new org.springframework.security.core.userdetails.User(
+//            username,
+//            password,
+//            authentication
+//                    .getAuthorities()
+//                    .stream()
+//                    .map(   x -> new SimpleGrantedAuthority(
+//                                    x.getAuthority()
+//                            )).collect(Collectors.toSet())
+//    );
+
     return new UsernamePasswordAuthenticationToken(
             principal,
             password,
-            authentication
-                    .getAuthorities()
-                    .stream()
-                    .map(   x -> new SimpleGrantedAuthority(
-                            x.getAuthority()
-                    )).collect(Collectors.toSet())
+            this.userLoginDetails.getAuthorities()
+//            authentication
+//                    .getAuthorities()
+//                    .stream()
+//                    .map(   x -> new SimpleGrantedAuthority(
+//                            x.getAuthority()
+//                    )).collect(Collectors.toSet())
     );
   }
 

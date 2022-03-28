@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 @Configuration
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     /**
      * Defines root configuration classes

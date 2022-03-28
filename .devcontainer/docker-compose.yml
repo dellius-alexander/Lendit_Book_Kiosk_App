@@ -168,19 +168,19 @@ services:
 #      # - mysql_secret_key
 #      # - mysql_secret_pub
 #####################################################################
-  adminer:
-    image: adminer:latest
-    container_name: Lendit_Book_Kiosk-adminer
-    restart: unless-stopped
-    expose:
-    - 8080
-    ports:
-    - "8083:8080"
-    # entrypoint: 
-    # - "entrypoint.sh"
-    # - "docker-php-entrypoint"
-    # depends_on:
-    # - db
+#  adminer:
+#    image: adminer:latest
+#    container_name: Lendit_Book_Kiosk-adminer
+#    restart: unless-stopped
+#    expose:
+#    - 8080
+#    ports:
+#    - "8083:8080"
+#    # entrypoint:
+#    # - "entrypoint.sh"
+#    # - "docker-php-entrypoint"
+#    # depends_on:
+#    # - db
 ################################# volumes ###########################
 # since we are using direct access to host directories, we do not need to 
 # declare any virtual volume mounts

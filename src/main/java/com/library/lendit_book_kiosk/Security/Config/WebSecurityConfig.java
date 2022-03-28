@@ -1,6 +1,6 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
-import com.library.lendit_book_kiosk.Security.UserDetails.UserDetailServices;
+import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +25,9 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
 //import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 //import springfox.documentation.builders.PathSelectors;
@@ -53,7 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDetailServices userDetailServices;
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * Http Security Configuration Options
@@ -65,41 +71,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         log.info("Initializing Http handler...");
         // Apply options to our http client:
         http.authorizeRequests()    // - authorize each request
-                .antMatchers("/login",
+                .antMatchers(
                         "/css/**",
                         "/js/**",
-                        "/static/images/**",
+                        "/images/**",
                         "/verify",
-                        "/**",
                         "/swagger-ui.html",
-                        "/index",
+                        "/login",
                         "/error",
-                        "hello",
-                        "/**"
+                        "hello"
                 )
                     .permitAll()
-//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-//
-//                        "/login",
-//                        "/index",
-//                        "/error",
-//                        // TODO: CREATE Role based access for api
-//                        "/**",
-//                        "/user/users")
+                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+
+                        "/logout",
+                        "/index",
+                        // TODO: CREATE Role based access for api
+                        "/swagger-ui.html")
+                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
 //                        .access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
-//                .antMatchers("/**").access("hasAnyRole('ADMIN','SUPERUSER')")
-//            .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .logout()
-//                    .invalidateHttpSession(true)
-//                    .clearAuthentication(true)
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login?logout")
-//                    .permitAll()
+                .antMatchers("/**")
+                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
+//                .access("hasAnyRole('ADMIN','SUPERUSER')")
+            .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+                    .permitAll()
+            .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login?logout")
+                    .permitAll()
 //            .and()
 //                .exceptionHandling()
             .and()
@@ -122,10 +127,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // authenticate user via database using our:
         // - CustomAuthenticationProvider.class - Method 1
         auth.authenticationProvider(customAuthenticationProvider)
-                .userDetailsService(userDetailServices)
-                .passwordEncoder(passwordEncoder);
+                .jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(passwordEncoder)
 //                .inMemoryAuthentication()
-//                .passwordEncoder(passwordEncoder);
+//                .passwordEncoder(passwordEncoder)
         /////////////////////////////////////////////////////////////
         // Creates a demo user for testing:
         // - Built-in authentication provider - Method 2
@@ -141,10 +147,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .accountExpired(true)
 //                .accountLocked(true)
 //                .roles("USER");
+        ;
         /////////////////////////////////////////////////////////////
     }
-
-
 
 
     @Override

@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,24 +28,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.net.URI;
 
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+
 @Controller(value = "/")
 public class LoginController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-
-    private final CustomAuthenticationProvider customAuthenticationProvider;
-    private final UserService userService;
-
     @Autowired
-    public LoginController(
-            CustomAuthenticationProvider customAuthenticationProvider,
-            UserService userService) {
-        this.customAuthenticationProvider = customAuthenticationProvider;
-        this.userService = userService;
-    }
+    private CustomAuthenticationProvider customAuthenticationProvider;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    public LoginController() { }
 
     /**
      * Initial login
@@ -74,44 +78,38 @@ public class LoginController implements Serializable {
             @ModelAttribute("userLoginDetails") UserLoginDetails userLoginDetails,
             BindingResult result,
             Model model,
-            HttpServletRequest request
+            HttpServletRequest req
     ) {
-        log.info("\n\nREQUEST INFO: \n\tURI = {}, \n\tCONTEXTPATH = {}"+
-                "\n\tSERVLETPATH = {}\n\tPATHINFO = {}\n\tQUERYSTR = {}",
-                request.getRequestURI(),
-                request.getContextPath(),
-                request.getServletPath(),
-                request.getPathInfo(),
-                request.getQueryString());
-        log.info("USERLOGINDETAILS Retrieved: {}", userLoginDetails);
-        // Custom Authentication Token
-        User user = userService.getByEmail(userLoginDetails.getUsername());
-        log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
-        log.info("\n\nUserLoginDetails: {}\n\nMODEL: {} \n\nRESULTS: {}\n\nUSERS: {}\n\nAUTHENTICATION: {}\n\n",
-                userLoginDetails,
-                model.toString(),
-                result.toString());
-//        if (result.hasErrors()) {
-//            throw new NullArgumentException("Empty payload received. \n" + result);
-//        }
-        if (result.hasErrors()) {
-            return "login";
+        try{
+            if (result.hasErrors()) {
+                return "login";
+            }
+            log.info("\n\nUserLoginDetails: {}\n\nMODEL: {} \n\nRESULTS: {}\n\nUSERS: {}\n\nAUTHENTICATION: {}\n\n",
+                    userLoginDetails.toString(),
+                    model.toString(),
+                    result.toString());
+            // get the user
+            User user = userService.getByEmail(userLoginDetails.getUsername());
+            // create a principal
+            UserDetails principal = (UserDetails) new UserLoginDetails(user);
+            // now a custom authentication token
+            UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(
+                            principal.getUsername(),
+                            user.getPassword(),
+                            principal.getAuthorities()
+            );
+
+            Authentication auth = customAuthenticationProvider.authenticate(authReq);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+    //        SecurityContext sc = SecurityContextHolder.getContext();
+    //        sc.setAuthentication(auth);
+    //        HttpSession session = req.getSession(true);
+    //        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
+        } catch (Exception e) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            log.error("Failure in autoLogin", e);
         }
-        // TODO: validate user
-        URI uri = URI.create(
-                ServletUriComponentsBuilder
-                        .fromCurrentContextPath().path("/verify").toUriString());
-
-        UserLoginDetails uld = new UserLoginDetails(user);
-        model.addAttribute("user", uld);
-
-        log.info(
-                "\n\nURI: {}\n\nRequestedMethod POST: \nUserLoginDetails form => {}\n\n" +
-                        "Results: {}\n\nModel: {}\n\nAUTHENTICATION: {}\n\n",
-                uri,
-                userLoginDetails,
-                result,
-                model);
         return "index";
     }
 

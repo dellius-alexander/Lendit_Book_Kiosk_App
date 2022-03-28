@@ -24,7 +24,7 @@ ERROR 	YES 	  YES 	  YES 	YES 	YES 	  NO
     <!-- Assign a LOG_DIR property -->
     <property name="LOG_DIR" value="data/logs"/>
     <!-- ROLLING FILE APPENDER -->
-    <appender name="ROLLINGTRANSPORTLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="TRANSPORTABILITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/dev_lendit_book_kiosk_${dateTimeFormat}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>${LOG_DIR}/dev_lendit_book_kiosk_${dateTimeFormat}.%i.log</fileNamePattern>

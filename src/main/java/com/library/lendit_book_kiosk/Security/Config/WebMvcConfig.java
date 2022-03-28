@@ -2,6 +2,8 @@ package com.library.lendit_book_kiosk.Security.Config;
 
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -29,10 +31,11 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-@Configuration
+@Configuration("WebMvcConfig")
 @EnableWebMvc
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
 public class WebMvcConfig implements WebMvcConfigInterface {
+    private final static Logger log = LoggerFactory.getLogger(WebMvcConfig.class);
     @Autowired
     private ApplicationContext ctx;
 
@@ -41,11 +44,13 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 
     public WebMvcConfig(SpringResourceTemplateResolver springResourceTemplateResolver) {
 //        super();
+        log.info("\nSpringResourceTemplateResolver: {}\n",springResourceTemplateResolver.toString());
         this.springResourceTemplateResolver = springResourceTemplateResolver;
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        log.info("\nApplicationContext: {}\n",applicationContext.toString());
         this.ctx = applicationContext;
     }
     @Override
@@ -125,8 +130,6 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                        "swagger-ui.html",
-                        "/webjars/**",
                         "/images/**",
                         "/css/**",
                         "/js/**"
@@ -197,7 +200,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         return templateEngine;
     }
     @Override
-    @Bean
+    @Bean("com.library.lendit_book_kiosk.Security.Config.SpringSecurity")
     public ThymeleafViewResolver viewResolver() {
 //        InternalResourceViewResolver viewResolver = new
 //                InternalResourceViewResolver();
