@@ -29,17 +29,17 @@
         <!--        <link rel="icon" th:href="@{images/kiosk.png}" alt="Lendit Book Kiosk Icon" />-->
 
         <!--    Favicon Options     -->
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" th:href="@{/images/favicon/apple-touch-icon-57x57.png}"  />
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{/images/favicon/apple-touch-icon-144x144.png}"  />
-        <link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{/images/favicon/apple-touch-icon-60x60.png}"  />
-        <link rel="apple-touch-icon-precomposed" sizes="120x120" th:href="@{/images/favicon/apple-touch-icon-120x120.png}"  />
-        <link rel="apple-touch-icon-precomposed" sizes="76x76" th:href="@{/images/favicon/apple-touch-icon-76x76.png}"  />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" th:href="@{/images/favicon/apple-touch-icon-152x152.png}"  />
-        <link rel="icon" type="image/png" sizes="196x196"  th:href="@{/images/favicon/favicon-196x196.png}" />
-        <link rel="icon" type="image/png" sizes="96x96"  th:href="@{/images/favicon/favicon-96x96.png}" />
-        <link rel="icon" type="image/png" sizes="32x32"  th:href="@{/images/favicon/favicon-32x32.png}" />
-        <link rel="icon" type="image/png" sizes="16x16"  th:href="@{/images/favicon/favicon-16x16.png}" />
-        <link rel="icon" type="image/png" sizes="128x128"  th:href="@{/images/favicon/favicon-128.png}" />
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" th:href="@{/images/icons/favicon/apple-touch-icon-57x57.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{/images/icons/favicon/apple-touch-icon-144x144.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{/images/icons/favicon/apple-touch-icon-60x60.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" th:href="@{/images/icons/favicon/apple-touch-icon-120x120.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" th:href="@{/images/icons/favicon/apple-touch-icon-76x76.png}"  />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" th:href="@{/images/icons/favicon/apple-touch-icon-152x152.png}"  />
+        <link rel="icon" type="image/png" sizes="196x196"  th:href="@{/images/icons/favicon/favicon-196x196.png}" />
+        <link rel="icon" type="image/png" sizes="96x96"  th:href="@{/images/icons/favicon/favicon-96x96.png}" />
+        <link rel="icon" type="image/png" sizes="32x32"  th:href="@{/images/icons/favicon/favicon-32x32.png}" />
+        <link rel="icon" type="image/png" sizes="16x16"  th:href="@{/images/icons/favicon/favicon-16x16.png}" />
+        <link rel="icon" type="image/png" sizes="128x128"  th:href="@{/images/icons/favicon/favicon-128.png}" />
         <meta name="application-name" content="&nbsp;"/>
         <meta name="msapplication-TileColor" content="#FFFFFF" />
         <!--        <meta name="msapplication-TileImage" th:content="@{images/favicon/mstile-144x144.png}" />-->
@@ -70,13 +70,15 @@
                 <div class="container-fluid" sec:authorize="isAuthenticated()">
                     <p> This content is only shown to authenticated users.</p>
                     <div >
-                        Authenticated as: <span sec:authentication="name"></span>
+                        Authenticated as:
+                        <div th:text="${#authentication.name}">
+                            The value of the "name" property of the authentication object
+                            should appear here.
+                        </div>
                     </div>
 <!--                    Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>-->
                 </div>
-                <div th:text="${#authentication.name}">
-                    The value of the "name" property of the authentication object should appear here.
-                </div>
+
 <!--                <div sec:authorize="isAuthenticated()">-->
 <!--                    This content is only shown to authenticated users.-->
 <!--                </div>-->

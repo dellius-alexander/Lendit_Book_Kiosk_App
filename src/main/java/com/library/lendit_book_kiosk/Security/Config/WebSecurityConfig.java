@@ -1,5 +1,6 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
+import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationFilter;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 //import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -24,10 +27,13 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 //import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 //import springfox.documentation.builders.PathSelectors;
@@ -61,6 +67,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/webjars/**"
+    };
+
     /**
      * Http Security Configuration Options
      * @param http  HttpSecurity.class
@@ -69,52 +81,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.info("Initializing Http handler...");
+        http.csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(STATELESS);
+        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(), authenticationProviderBean()));
         // Apply options to our http client:
-        http.authorizeRequests()    // - authorize each request
+        http.authorizeRequests()    // authorize each request
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(
                         "/css/**",
                         "/js/**",
                         "/images/**",
                         "/verify",
-                        "/swagger-ui.html",
                         "/login",
                         "/error",
-                        "hello"
+                        "/index"
                 )
-                    .permitAll()
-                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-
-                        "/logout",
-                        "/index",
-                        // TODO: CREATE Role based access for api
-                        "/swagger-ui.html")
-                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//                        .access("hasAnyRole('GUEST','ADMIN','USER','FACULTY','SUPERUSER')")
-                .antMatchers("/**")
-                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//                .access("hasAnyRole('ADMIN','SUPERUSER')")
-            .and()
-                .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-                    .permitAll()
-            .and()
-                .logout()
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/login?logout")
-                    .permitAll()
+                .permitAll()
+                   // For OPENAPI callers and urs
+//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+//                        "/logout",
+//                        "/index",
+//                        "/hello",
+//                        // TODO: CREATE Role based access for api
+//                        "/user/**",
+//                        "/student/**",
+//                        "/book/**")
+//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
+//
+//                .antMatchers("/**")
+//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
+//            .and()
+//                .formLogin()
+//                    .loginPage("/login")
+//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+//                    .permitAll()
+//            .and()
+//                .logout()
+//                    .invalidateHttpSession(true)
+//                    .clearAuthentication(true)
+//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                    .logoutSuccessUrl("/login")
+//                    .permitAll()
 //            .and()
 //                .exceptionHandling()
-            .and()
-                .csrf().disable();
+            ;
 
         // Cross-Site Request Forgery (CSRF) is an attack that
         // forces an end user to execute unwanted actions on a
         // web application in which they’re currently authenticated.
     }
-
     /**
      * Configures Authentication for handler for application.
      * @param auth AuthenticationManagerBuilder.class
@@ -151,12 +166,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         /////////////////////////////////////////////////////////////
     }
 
-
+    /**
+     * Web Security configuration.
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(
+                AUTH_WHITELIST
+        );
+    }
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
 
-
+    public CustomAuthenticationProvider authenticationProviderBean() throws Exception{
+        return customAuthenticationProvider;
+    }
 }

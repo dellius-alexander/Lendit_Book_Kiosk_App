@@ -73,8 +73,10 @@ public class LendITBookKioskApplication implements CommandLineRunner
 			Major BSCS = new Major("BSCS");
 			Major MBA = new Major("MBA");
 
+			Role USER = new Role(UserRole.USER, "User");
 			Role ADMIN = new Role(UserRole.ADMIN, "Administrator");
 			Role GUEST = new Role(UserRole.GUEST,"Guest visitor");
+			Role STUDENT = new Role(UserRole.STUDENT, "Student");
 			Role SUPERUSER = new Role(UserRole.SUPERUSER,"Super Administrator");
 
 			Student janeDoe = new Student (
@@ -99,7 +101,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 					GENDER.FEMALE,
 					LocalDate.of(1989, Month.JANUARY, 6),
 					"Student:Senior",
-					Set.of(ADMIN,SUPERUSER),
+					Set.of(STUDENT,USER),
 					Set.of(janeDoe)
 			);
 
@@ -109,8 +111,8 @@ public class LendITBookKioskApplication implements CommandLineRunner
 					"password",
 					GENDER.MALE,
 					LocalDate.of(1989, Month.JANUARY, 5),
-					"Faculty:Professor",
-					Set.of(ADMIN,SUPERUSER),
+					"Student:Senior",
+					Set.of(STUDENT,USER,ADMIN),
 					Set.of(johnDoe)
 			);
 
@@ -120,12 +122,10 @@ public class LendITBookKioskApplication implements CommandLineRunner
 					"password",
 					GENDER.MALE,
 					LocalDate.of(1979, Month.JANUARY, 12),
-					"Student:Junior",
+					"Visitor:GSU",
 					Set.of(GUEST),
 					Set.of(bobDoe)
 			);
-
-
 
 			List<User> users =  userService.findAll();
 			if (users.size() == 0){
