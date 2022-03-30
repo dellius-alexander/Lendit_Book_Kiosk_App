@@ -10,6 +10,7 @@ import com.library.lendit_book_kiosk.Role.RoleRepository;
 
 
 // LOGGING CLASSES
+import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
+
     /**
      * Saves a single user
      * @param user
@@ -158,7 +160,13 @@ public class UserService implements UserDetailsService {
      */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("\nUSERNAME: {}\n", username);
-        return (UserDetails) getUser(username);
+        User user = userRepository.findUserByEmail(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "<p>Unable to locate User: " + username + "</p>"
+                        )
+                );
+        return (UserDetails) new UserLoginDetails(user);
     }
     /**
      * Delete a <code>User</code> by user id

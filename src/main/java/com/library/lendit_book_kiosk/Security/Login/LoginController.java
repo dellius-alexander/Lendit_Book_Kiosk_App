@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,10 +102,10 @@ public class LoginController implements Serializable {
 
             Authentication auth = customAuthenticationProvider.authenticate(authReq);
             SecurityContextHolder.getContext().setAuthentication(auth);
-    //        SecurityContext sc = SecurityContextHolder.getContext();
+            SecurityContext sc = SecurityContextHolder.getContext();
     //        sc.setAuthentication(auth);
-    //        HttpSession session = req.getSession(true);
-    //        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            HttpSession session = req.getSession(true);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
             log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
         } catch (Exception e) {
             SecurityContextHolder.getContext().setAuthentication(null);
@@ -112,7 +113,7 @@ public class LoginController implements Serializable {
         }
         return "index";
     }
-
+    
     /**
      * Login-error
      * @param throwable
@@ -145,11 +146,16 @@ public class LoginController implements Serializable {
      * @return index
      */
     @RequestMapping(path = "index", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String index(){
+    public String index(HttpServletRequest req){
+        HttpSession session = req.getSession(true);
+        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, getPrincipal());
         return "index";
     }
 
+    /**
+     * Gets the Authentication token from the SecurityContextHolder.
+     * @return the Authentication token of current authenticated user
+     */
     private Authentication getPrincipal() {
         String userName = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

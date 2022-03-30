@@ -2,6 +2,7 @@ package com.library.lendit_book_kiosk.Security.Config;
 
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
+import org.hsqldb.lib.ArrayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -27,6 +28,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -130,23 +132,23 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
+                        //enabling swagger-ui part for visual documentation
+                        "/manage/swagger-ui/**",
+                        "/manage/webjars/**",
                         "/images/**",
                         "/css/**",
                         "/js/**"
                 )
                 .addResourceLocations(
+                        //enabling swagger-ui part for visual documentation
                         "classpath:/META-INF/resources/",
                         "classpath:/META-INF/resources/webjars/",
                         "classpath:/static/images/",
                         "classpath:/static/css/",
                         "classpath:/static/js/"
-
                 );
-//        //enabling swagger-ui part for visual documentation
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+
 
     }
 
@@ -200,7 +202,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         return templateEngine;
     }
     @Override
-    @Bean("com.library.lendit_book_kiosk.Security.Config.SpringSecurity")
+    @Bean
     public ThymeleafViewResolver viewResolver() {
 //        InternalResourceViewResolver viewResolver = new
 //                InternalResourceViewResolver();
@@ -211,6 +213,9 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setApplicationContext(this.ctx);
+        viewResolver.setCharacterEncoding("UTF-8");
+        viewResolver.setContentType("text/html");
+        viewResolver.setViewNames(new String[]{"*.html"});
         return viewResolver;
     }
 

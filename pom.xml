@@ -16,13 +16,18 @@
 	<name>lendit_book_kiosk</name>
 	<description>The textbook for higher education is soaring every year. Clayton State University initiated campus textbook lending kiosk project to help students learning and reduce cost.</description>
 	 <scm>
+		 <!-- gh repo clone dellius-alexander/Lendit_Book_Kiosk_App -->
 		<url>scm:git:git@github.com:dellius-alexander/Lendit_Book_Kiosk_App.git</url>
 		<connection>scm:git:git@github.com:dellius-alexander/Lendit_Book_Kiosk_App.git</connection>
 		<developerConnection>scm:git:git@github.com:dellius-alexander/Lendit_Book_Kiosk_App.git</developerConnection>
+		 <tag>
+			dev
+		 </tag>
 	</scm>
-	<!-- gh repo clone dellius-alexander/Lendit_Book_Kiosk_App -->
+
 	<properties>
 		<java.version>11</java.version>
+		<!-- <project.build.sourceEncoding>US-ASCII</project.build.sourceEncoding> -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <company>com.library</company>
@@ -30,35 +35,35 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.compiler.release>${java.version}</maven.compiler.release>
-		<!-- <project.build.sourceEncoding>US-ASCII</project.build.sourceEncoding> -->
 		<thymeleaf.version>3.1.0.M1</thymeleaf.version>
 		<thymeleafspringsecurity5.version>3.1.0.M1</thymeleafspringsecurity5.version>
 		<springframework.version>5.3.17</springframework.version>
 		<springsecurity.version>5.6.2</springsecurity.version>
 		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
 		<hsqldb.version>1.8.0.10</hsqldb.version>
-		<hibernate.version>5.6.5.Final</hibernate.version>
-		<hibernate.validator>7.0.3.Final</hibernate.validator>
+		<hibernate.version>5.6.7.Final</hibernate.version>
+		<hibernate.validator.version>7.0.3.Final</hibernate.validator.version>
 		<mysql.version>8.0.28</mysql.version>
 		<spring-boot-maven-plugin.version>2.6.5</spring-boot-maven-plugin.version>
 <!--		<springdoc-openapi-maven-plugin></springdoc-openapi-maven-plugin>-->
 		<springdoc.version>1.6.6</springdoc.version>
+		<com.auth0.java-jwt.version>3.19.0</com.auth0.java-jwt.version>
     </properties>
 
 	<dependencies>
 
-<!-- 		https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate</groupId>-->
-<!--			<artifactId>hibernate-entitymanager</artifactId>-->
-<!--			<version>${hibernate.version}</version>-->
-<!--		</dependency>-->
-<!--		 https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+		<!-- 		https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
 
+		<!--		 https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
 <!--		<dependency>-->
 <!--			<groupId>org.hibernate.validator</groupId>-->
 <!--			<artifactId>hibernate-validator</artifactId>-->
-<!--			<version>${hibernate.validator}</version>-->
+<!--			<version>${hibernate.validator.version}</version>-->
 <!--		</dependency>-->
 
 		<dependency>
@@ -67,6 +72,7 @@
 			<version>2.1.210</version>
 			<scope>runtime</scope>
 		</dependency>
+
 		<!-- HSQL Dependency -->
 		<dependency>
 			<groupId>hsqldb</groupId>
@@ -82,31 +88,31 @@
         </dependency>
 
 
-<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<!--		<dependency> -->
 		<!--			<groupId>org.json</groupId>-->
 		<!--			<artifactId>json</artifactId>-->
 		<!--			<version>20211205</version>-->
 		<!--		</dependency> -->
 
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-security</artifactId>
-                    <version>${spring-boot-maven-plugin.version}</version>
-                </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>${spring-boot-maven-plugin.version}</version>
+		</dependency>
 
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-test</artifactId>
-                    <version>5.6.2</version>
-                    <scope>test</scope>
-                </dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>5.6.2</version>
+			<scope>test</scope>
+		</dependency>
 
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-crypto</artifactId>
-                    <version>5.6.2</version>
-                    <!-- <version>5.0.4.RELEASE</version> -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.6.2</version>
+			<!-- <version>5.0.4.RELEASE</version> -->
         </dependency>
 
 		<!-- For datasource configuration -->
@@ -186,6 +192,8 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+
+		<!--		We are using thymeleaf for webmvc	-->
 		<dependency>
 		  <groupId>org.thymeleaf</groupId>
 		  <artifactId>thymeleaf-spring5</artifactId>
@@ -197,8 +205,9 @@
 		  <groupId>org.thymeleaf.extras</groupId>
 		  <artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		  <version>${thymeleafspringsecurity5.version}</version>
-<!--		  <scope>compile</scope>-->
+			<scope>compile</scope>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
 		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
@@ -233,11 +242,11 @@
 		  <version>${springframework.version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--		  <groupId>org.springframework</groupId>-->
-<!--		  <artifactId>spring-webmvc</artifactId>-->
-<!--		  <version>${springframework.version}</version>-->
-<!--		</dependency>-->
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-webmvc</artifactId>
+		  <version>${springframework.version}</version>
+		</dependency>
 
 
 		<dependency>
@@ -255,6 +264,7 @@
 		  <artifactId>spring-security-config</artifactId>
 		  <version>${springsecurity.version}</version>
 		</dependency>
+
 		<!-- bootstrap and jquery -->
 		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
 		<dependency>
@@ -275,19 +285,6 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 		<!--	API Documentation setup -->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-boot-starter</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
-		<!-- 	 Swagger 2 for a Spring REST web service 	-->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger2</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
-
-
 		<!--
 		Spring WebMvc support
 		- Documentation will be available at the following url for json format: http://server:port/context-path/v3/api-docs
@@ -305,13 +302,6 @@
 <!--			<scope>test</scope>-->
 <!--		</dependency>-->
 
-		<!--	Swagger UI	-->
-<!--		<dependency>-->
-<!--			<groupId>io.springfox</groupId>-->
-<!--			<artifactId>springfox-swagger-ui</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
-
 		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -319,9 +309,16 @@
 			<version>1.6.6</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>${com.auth0.java-jwt.version}</version>
+		</dependency>
 
 
 	<!--
+	https://mvnrepository.com/artifact/org.springframework.boot/springdoc-openapi-javadoc
 	Javadoc support
 	For a project that wants to enable javadoc support, you should add the following
 	dependency, in combination with the springdoc-openapi-ui dependency:
@@ -331,29 +328,35 @@
 			<artifactId>springdoc-openapi-javadoc</artifactId>
 			<version>${springdoc.version}</version>
 		</dependency>
-
-
-
-
-<!--		<dependency>-->
-<!--			<groupId>com.fasterxml.jackson.dataformat</groupId>-->
-<!--			<artifactId>jackson-dataformat-xml</artifactId>-->
-<!--		</dependency>-->
-
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/springdoc-openapi-security -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<!--	https://mvnrepository.com/artifact/org.springframework.boot/springdoc-openapi-data-rest
+			This dependency enables the support of spring-boot-starter-data-rest types like:
+			@RepositoryRestResource and QuerydslPredicate annotations.
+			-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-data-rest</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<version>${spring-boot-maven-plugin.version}</version>
+			<optional>true</optional>
 		</dependency>
-
 	</dependencies>
 
 	<build>
 		<resources>
 			<resource>
 				<!--
-
+				Copy resources directory
 				-->
 				<directory>src/main/resources</directory>
 				<includes>
@@ -373,48 +376,23 @@
 
 			<resource>
 				<!--
-
 				 -->
 				<directory>src/main/java</directory>
 				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
-					<include>**/*.json</include>
-					<include>**/*.html</include>
-					<include>**/*.jsp</include>
-					<include>**/*.sql</include>
+<!--					<include>**/*.properties</include>-->
+<!--					<include>**/*.xml</include>-->
+<!--					<include>**/*.json</include>-->
+<!--					<include>**/*.html</include>-->
+<!--					<include>**/*.jsp</include>-->
+<!--					<include>**/*.sql</include>-->
+<!--					<include>**/*.css</include>-->
+<!--					<include>**/*.js</include>-->
+					<include>**/**</include>
 				</includes>
 			</resource>
 
 		</resources>
 		<plugins>
-<!--			<plugin>-->
-<!--				&lt;!&ndash;-->
-<!--				The aim of springdoc-openapi-maven-plugin is to generate json and yaml-->
-<!--				OpenAPI description during build time. The plugin works during integration-tests-->
-<!--				phase, and generate the OpenAPI description. The plugin works in conjunction-->
-<!--				with spring-boot-maven plugin.-->
-<!--				You can test it during the integration tests phase using the maven command:-->
-<!--				- mvn verify-->
-<!--				&ndash;&gt;-->
-<!--				<groupId>org.springframework.boot</groupId>-->
-<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--				<configuration>-->
-<!--					<excludes>-->
-<!--						<exclude>-->
-<!--							<groupId>org.project-lombok</groupId>-->
-<!--							<artifactId>lombok</artifactId>-->
-<!--						</exclude>-->
-<!--					</excludes>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
-
-<!--			<plugin>-->
-<!--			&lt;!&ndash;  &ndash;&gt;-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-compiler-plugin</artifactId>-->
-<!--				<version>3.8.1</version>-->
-<!--			</plugin>-->
 
 			<plugin>
 			<!--  -->
@@ -487,6 +465,11 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<apiDocsUrl>http://localhost:8081/v3/api-docs</apiDocsUrl>
+					<outputFileName>openapi.json</outputFileName>
+					<outputDir>${project.build.directory}</outputDir>
+				</configuration>
 			</plugin>
 
 			<!--
