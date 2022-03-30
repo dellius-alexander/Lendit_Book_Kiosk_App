@@ -8,7 +8,9 @@
             id="templateEngine"
             class="org.thymeleaf.spring5.SpringTemplateEngine"
     >
-        <property name="templateResolver" ref="templateResolver" />
+        <property name="templateResolver"  >
+            <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver" />
+        </property>
         <property name="additionalDialects">
             <set>
                 <bean class="nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect" />
