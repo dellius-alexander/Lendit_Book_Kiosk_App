@@ -1,0 +1,16 @@
+# TODO: Finish setting up Secret Vault
+# create public/private key pair and keystore.jks files
+spring:
+  application:
+    name: 'LendIT Book Kiosk'
+  spring.cloud.vault:
+    host: localhost # hostname of vault server
+    port: 8200  # vault server port
+    scheme: http # connection scheme http or https
+    uri: http://localhost:8200 # vault endpoint
+    connection-timeout: 10000 # connection timeout in milliseconds
+    read-timeout: 5000  # read timeout in milliseconds
+    config:
+      order: -10  # order for property source
+    token: hvs.uqwTMTmkFZ8jjHe2HpMTZU1X
+  health.vault.enabled: true  # health endpoint enabled using spring actuator

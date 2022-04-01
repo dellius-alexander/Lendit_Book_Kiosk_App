@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk.Fragments;
+package com.library.lendit_book_kiosk.WebApp.Fragments;
 
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import org.springframework.stereotype.Controller;
@@ -12,5 +12,11 @@ public class FragmentsController {
     public String login_form(Model model){
         model.addAttribute("userLoginDetails",new UserLoginDetails());
         return "fragments/login_form";
+    }
+
+    @GetMapping(value = {"fragments/login_page"})
+    public String login_page(Model model){
+        model.addAttribute("userLoginDetails",new UserLoginDetails());
+        return "fragments/login_page";
     }
 }

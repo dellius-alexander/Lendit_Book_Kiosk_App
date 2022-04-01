@@ -15,12 +15,14 @@ import com.library.lendit_book_kiosk.User.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.context.annotation.Bean;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -35,6 +37,13 @@ public class LendITBookKioskApplication implements CommandLineRunner
 	// Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.getLogger(LendITBookKioskApplication.class);
 
+//	@Value("${password}")
+//	String password;
+//	@PostConstruct
+//	private void postConstruct() {
+//		System.out.println("Secret in LendIT Book Kiosk User password is: " +
+//				password);
+//	}
 	////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////
 	////////////////////	MAIN DRIVER 	////////////////////

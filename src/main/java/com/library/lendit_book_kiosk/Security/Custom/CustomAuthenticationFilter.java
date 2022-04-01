@@ -3,18 +3,14 @@ package com.library.lendit_book_kiosk.Security.Custom;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
-import com.library.lendit_book_kiosk.User.User;
-import com.library.lendit_book_kiosk.User.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,13 +21,18 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Slf4j
+//@Component(value = "com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationFilter")
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     private final AuthenticationManager authenticationManager;
     @Autowired
     private final CustomAuthenticationProvider customAuthenticationProvider;
 
-
+    /**
+     * Custom authentication filter is used to authenticate user credentials.
+     * @param authenticationManager
+     * @param customAuthenticationProvider
+     */
     public CustomAuthenticationFilter(
             AuthenticationManager authenticationManager,
             CustomAuthenticationProvider customAuthenticationProvider) {

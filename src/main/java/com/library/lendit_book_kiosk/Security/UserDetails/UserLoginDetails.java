@@ -1,32 +1,38 @@
 package com.library.lendit_book_kiosk.Security.UserDetails;
 
-import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.User.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
+import org.springframework.util.Assert;
+import java.util.stream.Collectors;
+import org.slf4j.LoggerFactory;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
+import org.slf4j.Logger;
 import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
 @Component
-public class UserLoginDetails implements UserDetails{
+public class UserLoginDetails extends UsernamePasswordAuthenticationToken implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
+    @Autowired
+    private static PasswordEncoder passwordEncoder;
     private Long id;
     private String username;
     private String displayName;
     private String password;
     private Set<GrantedAuthority> authorities;
 
-    public UserLoginDetails(){}
+    public UserLoginDetails(){
+        super("","");
+        this.setUsername("");
+        this.setPassword("");
+    }
 
     public UserLoginDetails(
             Long id,
@@ -34,29 +40,37 @@ public class UserLoginDetails implements UserDetails{
             String displayName,
             String password,
             Set<GrantedAuthority> authorities){
+        super(username,password,authorities);
         this.setAuthorities(authorities);
         this.setDisplayName(displayName);
         this.setUsername(username);
         this.setId(id);
         this.setPassword(password);
+        super.setDetails(this);
         log.info(toString());
     }
 
     public UserLoginDetails(User user) {
-        Set<Role> roles = user.getRoles();
-        Set<GrantedAuthority> authoritiesList = new HashSet<>();
-        for (Role r : roles){
-            authoritiesList.add(new SimpleGrantedAuthority("ROLE_"+r.getRole().name()));
-//            this.authorities.add(new SimpleGrantedAuthority("ROLE_"+r.getRole().name()));
-        }
-        this.setAuthorities(authoritiesList);
+        /**
+         * MUST pass user credentials to super class holding auth token.
+         * Auth tokens can only be authenticated upon creation.
+         */
+        super(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
+                        "ROLE_" + x.getRole().name())).collect(Collectors.toSet())
+        );
+        this.setAuthorities(user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
+                "ROLE_" + x.getRole().name())).collect(Collectors.toSet()));
         this.setDisplayName(user.getName());
         this.setUsername(user.getEmail());
         this.setId(user.getId());
         this.setPassword(user.getPassword());
+        this.setDetails(user);
         log.info(toString());
     }
-
+    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){return this;}
     /**
      * Set by an AuthenticationManager to indicate the authorities that the principal has been granted.
      * Note that classes should not rely on this value as being valid unless it has been set by a trusted
@@ -65,7 +79,7 @@ public class UserLoginDetails implements UserDetails{
      * authenticated. Never null.
      */
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return authorities;
     }
     @Override
@@ -77,6 +91,7 @@ public class UserLoginDetails implements UserDetails{
     public String getUsername() {
         return username;
     }
+    // TODO: add variables to replace hard coded values below
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -105,8 +120,34 @@ public class UserLoginDetails implements UserDetails{
         return displayName;
     }
 
+    /**
+     * The password
+     * @return
+     */
+    @Override
+    public Object getCredentials() {
+        return super.getCredentials();
+    }
+    /**
+     * The username
+     * @return
+     */
+    @Override
+    public Object getPrincipal() {
+        return super.getPrincipal();
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+    @Override
+    public void eraseCredentials() {
+        super.eraseCredentials();
+    }
+
+    @Override
+    public void setDetails(Object details) {
+        super.setDetails(this);
     }
 
     public void setDisplayName(String displayName) {
@@ -121,6 +162,12 @@ public class UserLoginDetails implements UserDetails{
         this.authorities = authorities;
     }
 
+    @Override
+    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+        Assert.isTrue(!isAuthenticated,
+                "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
+        super.setAuthenticated(false);
+    }
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof UserLoginDetails)) return false;
@@ -168,10 +215,9 @@ public class UserLoginDetails implements UserDetails{
     @Override
     public String toString() {
         return "{\n" +
-                "\"id\":" + this.getId() + "," +
                 "\"username\":\"" + this.getUsername() + "\",\n" +
                 "\"displayName\":\"" + this.getDisplayName() + "\",\n" +
-                "\"password\":\"" + this.getPassword() + "\",\n" +
+                "\"password\":\"" + this.getPassword().hashCode() + "\",\n" + // TODO: comment out password on production deploy
                 "\"authorities\":\"" + this.getAuthorities() + "\"" +
                 "\n}";
     }

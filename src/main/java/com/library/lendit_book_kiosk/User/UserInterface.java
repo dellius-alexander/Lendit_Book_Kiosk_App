@@ -2,8 +2,10 @@ package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public interface UserInterface extends Serializable {
 
@@ -39,6 +41,12 @@ public interface UserInterface extends Serializable {
      * @return integer representing the hashcode of the class
      */
     int hashCode();
+
+    /**
+     * Get Granted Authorities
+     * @return a Collection GrantedAuthority
+     */
+    Collection<GrantedAuthority> getAuthorities();
 
     /**
      * Get the user id

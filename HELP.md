@@ -53,6 +53,206 @@ unix2dos <file_name>
 
 ---
 ---
+```json
+{
+  "id": null,
+  "name": "James Bond",
+  "email": "james@gmail.com",
+  "password": "password",
+  "gender": "MALE",
+  "dob": "1979-01-03",
+  "profession": "Student:Senior",
+  "roles": [
+    {
+      "id": null,
+      "description": "Administrator",
+      "role": "ADMIN"
+    }
+  ],
+  "students": [
+    {
+      "enrolled": true,
+      "majors": [
+        {
+          "id": null,
+          "major": "BIT"
+        }
+      ],
+      "studentId": null
+    }
+  ],
+  "role": {
+    "id": null,
+      "description": "Administrator",
+      "role": "ADMIN"
+  },
+   "age": 43,
+  "user": "string"
+
+}
+```
+
+```json
+{
+  "id": null,
+  "name": "James Bond",
+  "email": "james@gmail.com",
+  "password": "password",
+  "gender": "MALE",
+  "dob": "1979-01-03",
+  "profession": "Student:Senior",
+  "roles": [
+    {
+      "id": null,
+      "description": "Administrator",
+      "role": "ADMIN"
+    }
+  ],
+  "students": [
+    {
+      "enrolled": true,
+      "majors": [
+        {
+          "id": null,
+          "major": "BIT"
+        }
+      ],
+      "studentId": null
+    }
+  ],
+  "role": {
+    "id": null,
+      "description": "Administrator",
+      "role": "ADMIN"
+  },
+   "age": 43,
+  "user": "string"
+}
+```
+
+
+```json
+{
+    "id": 1,
+    "name": "Jane Doe",
+    "email": "jane@gmail.com",
+    "password": "password",
+    "gender": "FEMALE",
+    "dob": [
+      1989,
+      1,
+      6
+    ],
+    "profession": "Student:Senior",
+    "roles": [
+      {
+        "id": -47,
+        "description": "Student",
+        "role": "STUDENT"
+      },
+      {
+        "id": -46,
+        "description": "User",
+        "role": "USER"
+      }
+    ],
+    "student": [
+      {
+        "enrolled": true,
+        "majors": [
+          {
+            "id": 54,
+            "major": "MBA"
+          },
+          {
+            "id": 53,
+            "major": "CSCI"
+          }
+        ],
+        "studentId": 3
+      }
+    ],
+    "age": 33
+  }
+```
+
+
+```json
+{
+   "name": "James Bond",
+   "email": "james@gmail.com",
+   "password": "password",
+   "gender": "MALE",
+   "dob": "1989-02-27",
+   "profession": "Student:Senior",
+   "roles": [
+      {
+         "description": "Administrator",
+         "role": "ADMIN"
+      }
+   ],
+   "students": [
+      {
+         "enrolled": true,
+         "majors": [
+            {
+               "major": "BIT"
+            }
+         ]
+      }
+   ]
+}
+```
+
+```json
+{
+  "id": 1,
+  "name": "Jane Doe",
+  "email": "jane@gmail.com",
+  "password": "password",
+  "gender": "FEMALE",
+  "dob": [
+    1989,
+    1,
+    6
+  ],
+  "profession": "Student:Senior",
+  "roles": [
+    {
+      "id": -47,
+      "description": "Student",
+      "role": "STUDENT"
+    },
+    {
+      "id": -46,
+      "description": "User",
+      "role": "USER"
+    }
+  ],
+  "student": [
+    {
+      "enrolled": true,
+      "majors": [
+        {
+          "id": 54,
+          "major": "MBA"
+        },
+        {
+          "id": 53,
+          "major": "CSCI"
+        }
+      ],
+      "studentId": 3
+    }
+  ],
+  "age": 33
+}
+```
+
+---
+---
+
+
 ## [Smart-Doc Maven Plugin](https://smart-doc-group.github.io/#/diy/config?id=allconfig)
 
 smart-doc-maven-plugin is a maven plugin developed by the smart-doc official team. This plugin is available from smart-doc 1.7.9. Using smart-doc-maven-plugin makes it easier to integrate smart-doc into your project, and integration is more lightweight. You no longer need to write unit tests in your project to Start smart-doc to scan source code analysis and generate API documents. You can run the maven command directly or click on the preset goal of the smart-doc-maven-plugin in the IDE to generate API documentation. smart-doc-maven-plugin will also make smart-doc's ability to generate API documentation more powerful.
@@ -129,7 +329,7 @@ Create a json configuration file in your project. The smart-doc-maven-plugin plu
   "showAuthor":true,// display author,default is true
   "inlineEnum":true,// Set to true to display enumeration details in the parameter table
   "recursionLimit":7,// Set the number of recursive executions to avoid stack overflow, the default is 7
-  "allInOneDocFileName":"index.html",//Customize the output document name
+  "allInOneDocFileName":"login_page.html",//Customize the output document name
   "requestExample":"true",//Whether to display the request example in the document, the default value is true.
   "responseExample":"true",//Whether to display the response example in the document, the default is true.
   "requestParamsTable": true, //@since 2.2.5,Whether to display the request params table in the document, the default value is true.

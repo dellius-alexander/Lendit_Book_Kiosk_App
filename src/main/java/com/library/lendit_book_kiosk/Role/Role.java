@@ -57,7 +57,7 @@ public class Role implements RoleInterface, Serializable {
     )
     private UserRole name;
     private String description;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.REMOVE})
     private Set<User> users;
 
     public Role(Long id, UserRole name) {

@@ -25,7 +25,7 @@ import java.util.Set;
 /////////////////////////////////////////////////////////////////
 // Tells Hibernate to make a table out of this class
 @Entity
-@Table(name = "Student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
+@Table(name = "student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
 public class Student implements StudentInterface {
     private final static Logger log = LoggerFactory.getLogger(Student.class);
     /////////////////////////////////////////////////////////////////
@@ -54,10 +54,10 @@ public class Student implements StudentInterface {
             inverseJoinColumns = @JoinColumn(name = "major_id_fk", nullable = false, table = "major")
     )
     private Set<Major> majors;
-    @ManyToMany(
-            mappedBy = "students"
-    )
-    private Set<User> users;
+//    @ManyToMany(
+//            mappedBy = "id"
+//    )
+//    private Set<User> users;
     ///////////////////////////////////////////////////////
     public Student() {}
 

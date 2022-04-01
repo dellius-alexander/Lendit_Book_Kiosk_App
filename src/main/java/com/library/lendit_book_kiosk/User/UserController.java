@@ -11,10 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 
 
 /**
@@ -66,21 +69,27 @@ public class UserController {
      * @param user a new <code>User</code>
      * @return the saved user and response status code
      */
-    @RequestMapping(
-            value = {"/save/user={user}","/save/{user}"},
-            method = RequestMethod.POST,
-            consumes = {"application/json"},
-            produces = {"application/json"})
-    public ResponseEntity<User> saveUser(
-            @PathVariable("user") @RequestBody User user
-    ) {
+//            (
+//            value = {"/save/user={user}","/save/{user}"},
+////            method = RequestMethod.POST,
+//            consumes = {"*/*"},
+//            produces = {"application/json"},
+//            params = {"user"},
+//            name = "user")
+    @PostMapping(
+            value = {"/save/{user}"},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @Valid
+    public ResponseEntity<User> saveUser(@RequestBody User user)
+    {
         log.info("USER: \n{}\n", user.toString());
-        URI uri = URI.create(
-                ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("/user/save/*")
-                        .toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        return ResponseEntity.created(URI.create(
+                    ServletUriComponentsBuilder
+                            .fromCurrentContextPath()
+                            .path("/user/save/*")
+                            .toUriString())).body(userService.saveUser(user));
     }
     // TODO: Change visibility to protected
     /**
@@ -123,10 +132,10 @@ public class UserController {
     @DeleteMapping(
             value = {"/delete/{user_id}"},
             produces = {"application/json"})
-    public ResponseEntity<?>  deleteUser(
+    public ResponseEntity<HttpStatus> deleteUser(
             @PathVariable("user_id") Long user_id){
         log.info("Delete RequestedMethod POST: StudentId => {}", user_id);
-        return  ResponseEntity.ok().body(userService.deleteUser(user_id));
+        return  ResponseEntity.ok().body(userService.deleteUserById(user_id).getBody());
     }
 
 //    /**

@@ -1,11 +1,11 @@
 package com.library.lendit_book_kiosk.User;
 
-import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Student.Student;
-import org.hibernate.annotations.SortNatural;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +13,7 @@ import java.time.Period;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /////////////////////////////////////////////////////////////////
 
@@ -20,7 +21,7 @@ import java.util.Set;
  * User class
  */
 @Entity  // Tells Hibernate to make a table out of this class
-@Table(name = "User")
+@Table(name = "user")
 public class User implements UserInterface {
     private final static Logger log = LoggerFactory.getLogger(User.class);
     ///////////////////////////////////////////////////////
@@ -64,7 +65,7 @@ public class User implements UserInterface {
     @ManyToMany(
             targetEntity = Role.class,
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
+            cascade = { CascadeType.ALL })
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn (name = "user_id_fk", nullable = false,table = "user"),
             inverseJoinColumns = @JoinColumn(name = "role_id_fk", nullable = false, table = "role"))
@@ -72,11 +73,11 @@ public class User implements UserInterface {
     @ManyToMany(
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
+            cascade = { CascadeType.ALL })
     @JoinTable(name = "user_student",
-            joinColumns = @JoinColumn (name = "user_id_fk", nullable = false, table = "user"),
+            joinColumns = @JoinColumn ( name = "user_id_fk", nullable = false, table = "user"),
             inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
-    private Set<Student> students;
+    private Set<Student> student;
     ///////////////////////////////////////////////////////
 
     /**
@@ -94,7 +95,7 @@ public class User implements UserInterface {
      * @param dob
      * @param profession
      * @param roles
-     * @param students
+     * @param student
      */
     public User(
             Long id,
@@ -105,7 +106,7 @@ public class User implements UserInterface {
             LocalDate dob,
             String profession,
             Set<Role> roles,
-            Set<Student> students
+            Set<Student> student
     ) {
         this.id = id;
         this.name = name;
@@ -115,11 +116,11 @@ public class User implements UserInterface {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.students = students;
+        this.student = student;
     }
 
     /**
-     * All but [id] Args Constructor
+     * Create Student User. All but [id] Args Constructor
      * @param name
      * @param email
      * @param password
@@ -127,7 +128,7 @@ public class User implements UserInterface {
      * @param dob
      * @param profession
      * @param roles
-     * @param students
+     * @param student
      */
     public User(
             String name,
@@ -137,7 +138,7 @@ public class User implements UserInterface {
             LocalDate dob,
             String profession,
             Set<Role> roles,
-            Set<Student> students
+            Set<Student> student
     ) {
         this.name = name;
         this.email = email;
@@ -146,11 +147,11 @@ public class User implements UserInterface {
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
-        this.students = students;
+        this.student = student;
     }
 
     /**
-     *
+     * Create Standard User. Add Occupation later.
      * @param name
      * @param email
      * @param password
@@ -177,24 +178,16 @@ public class User implements UserInterface {
         this.roles = roles;
     }
 
-
-    public User(
-            String name,
-            String email,
-            String password,
-            GENDER gender,
-            LocalDate dob,
-            String profession) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.gender = gender;
-        this.dob = dob;
-        this.profession = profession;
+    /**
+     * Get Granted Authorities
+     * @return a Collection GrantedAuthority
+     */
+    @Override
+    public Collection<GrantedAuthority> getAuthorities(){
+        return this.getRoles().stream().map(
+                    x -> new SimpleGrantedAuthority(x.getRole().name())).collect(Collectors.toList());
     }
-
-
-
+    @Override
     public Long getId() {
         return this.id;
     }
@@ -242,9 +235,9 @@ public class User implements UserInterface {
     public void  setRole(Role role){
         this.roles.addAll((Collection<? extends Role>) role);
     }
+
     @Override
     public Integer getAge() {
-
         return Period.between(this.getDob(), LocalDate.now()).getYears();
     }
 
@@ -389,22 +382,22 @@ public class User implements UserInterface {
         final Object other$roles = other.getRoles();
         if (!Objects.equals(this$roles, other$roles))
             return false;
-        final Object this$students = this.getStudents();
-        final Object other$students = other.getStudents();
+        final Object this$students = this.getStudent();
+        final Object other$students = other.getStudent();
         if (!Objects.equals(this$students, other$students))
             return false;
         return true;
     }
 
-    public void setStudents(Set<Student> students){
-        this.students = students;
+    public void setStudent(Set<Student> students){
+        this.student = students;
     }
     public void addStudent(Student student){
-        this.students = Set.of(student);
+        this.student = Set.of(student);
     }
 
-    public Set<Student> getStudents(){
-        return this.students;
+    public Set<Student> getStudent(){
+        return this.student;
     }
     @Override
     public boolean canEqual(final Object other) {
@@ -446,15 +439,15 @@ public class User implements UserInterface {
     @Override
     public String toString() {
         String json = "{" +
-                "\n\"id\":" + id +
-                ",\n\"name\":\"" + name + "\"" +
-                ",\n\"email\":\"" + email + "\"" +
-                ",\n\"password\":\"" + password + "\"" +
-                ",\n\"gender\":\"" + gender + "\"" +
-                ",\n\"dob\":\"" + dob + "\"" +
-                ",\n\"profession\":\"" + profession + "\"" +
-                ",\n\"roles\":\"" + roles + "\"" +
-                ",\n\"student\":\""+ students + "\"" +
+                "\n\"id\":" + this.getId() +
+                ",\n\"name\":\"" + this.getName() + "\"" +
+                ",\n\"email\":\"" + this.getEmail() + "\"" +
+                ",\n\"password\":\"" + this.getPassword().hashCode() + "\"" +
+                ",\n\"gender\":\"" + this.getGender() + "\"" +
+                ",\n\"dob\":\"" + this.getDob() + "\"" +
+                ",\n\"profession\":\"" + this.getProfession() + "\"" +
+                ",\n\"roles\":\"" + this.getRoles() + "\"" +
+                ",\n\"student\":\""+ this.getStudent() + "\"" +
                 "\n}";
         log.info(json);
         return json;

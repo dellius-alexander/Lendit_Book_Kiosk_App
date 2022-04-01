@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk.Security.Login;
+package com.library.lendit_book_kiosk.WebApp.Login;
 
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.User.User;
@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,27 +24,24 @@ import org.springframework.web.bind.annotation.*;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.net.URI;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
-@Controller(value = "/")
+@Controller
 public class LoginController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+
     public LoginController() { }
 
     /**
@@ -91,19 +87,13 @@ public class LoginController implements Serializable {
                     result.toString());
             // get the user
             User user = userService.getByEmail(userLoginDetails.getUsername());
-            // create a principal
-            UserDetails principal = (UserDetails) new UserLoginDetails(user);
-            // now a custom authentication token
-            UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(
-                            principal.getUsername(),
-                            user.getPassword(),
-                            principal.getAuthorities()
-            );
-
-            Authentication auth = customAuthenticationProvider.authenticate(authReq);
+            // create an auth token for verified user
+            Authentication auth = customAuthenticationProvider.authenticate(
+                    new UserLoginDetails(user).getUsernamePasswordAuthenticationToken());
+            // set the SecurityContextHolder auth token
             SecurityContextHolder.getContext().setAuthentication(auth);
+            // now retrieve the auth token back from SecurityContextHolder
             SecurityContext sc = SecurityContextHolder.getContext();
-    //        sc.setAuthentication(auth);
             HttpSession session = req.getSession(true);
             session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
             log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);

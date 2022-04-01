@@ -2,7 +2,6 @@ package com.library.lendit_book_kiosk.Security.Config;
 
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
-import org.hsqldb.lib.ArrayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -26,16 +25,14 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
 @Configuration("WebMvcConfig")
 @EnableWebMvc
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
+@ComponentScan
 public class WebMvcConfig implements WebMvcConfigInterface {
     private final static Logger log = LoggerFactory.getLogger(WebMvcConfig.class);
     @Autowired
@@ -110,6 +107,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+
         registry.addRedirectViewController("/", "index");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/login").setViewName("login");
@@ -130,11 +128,11 @@ public class WebMvcConfig implements WebMvcConfigInterface {
      * @param registry resource handler registry
      */
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers( ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
                         //enabling swagger-ui part for visual documentation
-                        "/manage/swagger-ui/**",
-                        "/manage/webjars/**",
+                        "/swagger-ui/**",
+                        "/webjars/**",
                         "/images/**",
                         "/css/**",
                         "/js/**"
@@ -158,12 +156,12 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     /*  TemplateResolver <- TemplateEngine <- ViewResolver              */
     /* **************************************************************** */
 
-    @Override
+//    @Override
     @Bean
     public SpringResourceTemplateResolver templateResolver(){
         // SpringResourceTemplateResolver automatically integrates with Spring's own
         // resource resolution infrastructure, which is highly recommended.
-//        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
 //        templateResolver.setApplicationContext(this.ctx);
 //        templateResolver.setPrefix("classpath:/templates/");
 //        templateResolver.setSuffix(".html");
@@ -173,12 +171,12 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 //        // templates to be automatically updated when modified.
 //        templateResolver.setCacheable(true);
 
-        this.springResourceTemplateResolver.setApplicationContext(this.ctx);
-        this.springResourceTemplateResolver.setPrefix("classpath:/templates/");
-        this.springResourceTemplateResolver.setSuffix(".html");
-        this.springResourceTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        this.springResourceTemplateResolver.setCacheable(true);
-        return this.springResourceTemplateResolver;
+        resolver.setApplicationContext(this.ctx);
+        resolver.setPrefix("classpath:/templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setCacheable(true);
+        return resolver;
     }
 
     @Override

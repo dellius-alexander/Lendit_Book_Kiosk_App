@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -173,7 +174,7 @@ public class UserService implements UserDetailsService {
      * @param id the user id
      * @return the response status
      */
-    public ResponseEntity<?> deleteUser(Long id){
+    public ResponseEntity<HttpStatus> deleteUserById(Long id){
         userRepository.deleteById(id);
         return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
     }

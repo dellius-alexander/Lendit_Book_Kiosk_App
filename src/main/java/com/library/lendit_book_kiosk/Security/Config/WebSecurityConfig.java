@@ -5,16 +5,12 @@ import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsServi
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,37 +18,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 // import logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import javax.sql.DataSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-//import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-//import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-//import springfox.documentation.builders.PathSelectors;
-//import springfox.documentation.builders.RequestHandlerSelectors;
-//import springfox.documentation.spi.DocumentationType;
-//import springfox.documentation.spring.web.plugins.Docket;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-//@Import(BeanValidatorPluginsConfiguration.class)
+///////////////////////////////////////////////////////////////////////////////
 @Configuration(
         value = "WebSecurityConfig"
 )
-//@EnableGlobalMethodSecurity(  // TODO: disable debug mode on production
-//        securedEnabled = true,
-//        jsr250Enabled = true,
-//        prePostEnabled = true
-//)
+@EnableGlobalMethodSecurity(  // TODO: disable debug mode on production
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 @EnableWebSecurity
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
     @Autowired
@@ -145,6 +125,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder)
+                .usersByUsernameQuery("select email, password from user where email = ?")
+                .getUserDetailsService()
 //                .inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder)
         /////////////////////////////////////////////////////////////

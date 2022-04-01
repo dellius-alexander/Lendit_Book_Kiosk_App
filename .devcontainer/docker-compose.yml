@@ -197,6 +197,24 @@ services:
         # - subnet: 2001:3984:3989::/64
           #gateway: 2001:3984:3989::1
 #####################################################################
+  vault:
+    build:
+      context: .
+      dockerfile: vault.Dockerfile
+#    image: hashicorp/vault:latest
+    container_name: Lendit_Book_Kiosk-vault
+    restart: unless-stopped
+    expose:
+      - 8200
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+#    command:
+#      - "vault token create"
+#      - "/bin/sh /bin/vault server -config /tmp/config/vault.conf"
+
+#####################################################################
 # SECRETS can be passed into any container after defined her in secrets definition.
 # secrets:
 #   GIT_EMAIL:
