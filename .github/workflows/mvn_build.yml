@@ -2,14 +2,17 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time+
-name: Testing Project Environment
+##########################################################################
+# This workflow will build a Java project with Gradle and
+# cache/restore any dependencies to improve the workflow execution time
+##########################################################################
+name: 'BUILD => TEST => PACKAGE => UPLOAD_ARTIFACT'
 env:
   MYSQL_DATABASE: 'Lendit_Book_Kiosk'
   MYSQL_USER: 'admin'
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
-  MAVEN_VERSION: 3.8.4
+  MAVEN_VERSION: 3.8.5
   MYSQL_HOST: Lendit_Book_Kiosk-db
   MYSQL_PORT: 3306
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64'

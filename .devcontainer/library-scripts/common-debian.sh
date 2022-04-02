@@ -353,7 +353,7 @@ __zsh_prompt
 EOF
 )"
 
-# Add RC snippet and custom bash prompt
+# Add RC snippet and Custom bash prompt
 if [ "${RC_SNIPPET_ALREADY_ADDED}" != "true" ]; then
     echo "${rc_snippet}" >> /etc/bash.bashrc
     echo "${codespaces_bash}" >> "${user_rc_path}/.bashrc"
@@ -395,7 +395,7 @@ if [ "${INSTALL_ZSH}" = "true" ]; then
         echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true" > ${user_rc_file}
         sed -i -e 's/ZSH_THEME=.*/ZSH_THEME="codespaces"/g' ${user_rc_file}
 
-        mkdir -p ${oh_my_install_dir}/custom/themes
+        mkdir -p ${oh_my_install_dir}/Custom/themes
         echo "${codespaces_zsh}" > "${oh_my_install_dir}/custom/themes/codespaces.zsh-theme"
         # Shrink git while still enabling updates
         cd "${oh_my_install_dir}"

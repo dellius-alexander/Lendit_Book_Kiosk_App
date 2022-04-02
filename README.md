@@ -3,5 +3,21 @@
 The textbook for higher education is soaring every year. Clayton State University initiated campus textbook lending kiosk project to help students learning and reduce cost.
 
 
-[[{"id":1,"name":"Jane Doe","email":"jane.doe@gmail.com","dob":"1989-01-06","age":33,"major":"CIS"}]] 
-[[{"id":1,"name":"Jane Doe", "email":"jane.doe@gmail.com","dob":"1989-01-06","age":33,"major":"CIS"}]]
+# STUDENT API
+
+```bash
+# root uri
+http://localhost:<port>/student
+
+# create new student
+http://localhost:<port>/student/new
+
+# delete student
+http://localhost:<port>/delete/{studentId}
+
+# update student
+http://localhost:<port>/student/update/{studentId}
+
+# search for student by name
+http://localhost:<port>/student/find/{name}
+```

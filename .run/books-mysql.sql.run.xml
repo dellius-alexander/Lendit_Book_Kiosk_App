@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="books-mysql.sql" type="DatabaseScript" editBeforeRun="true" singleton="false" nameIsGenerated="true">
+    <script-file value="$PROJECT_DIR$/src/main/resources/books-mysql.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="7c560bf7-2e74-4c2a-bc43-e23ebce59b66" namespace="schema/&quot;Lendit_Book_Kiosk&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

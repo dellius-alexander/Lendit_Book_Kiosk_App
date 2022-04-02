@@ -1,0 +1,102 @@
+<link rel="apple-touch-icon-precomposed" sizes="57x57" th:href="@{images/favicon/apple-touch-icon-57x57.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" th:href="@{images/favicon/apple-touch-icon-114x114.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" th:href="@{images/favicon/apple-touch-icon-72x72.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{images/favicon/apple-touch-icon-144x144.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{images/favicon/apple-touch-icon-60x60.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" th:href="@{images/favicon/apple-touch-icon-120x120.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" th:href="@{images/favicon/apple-touch-icon-76x76.png}" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" th:href="@{images/favicon/apple-touch-icon-152x152.png}" />
+<link rel="icon" type="image/png" th:href="@{images/favicon/favicon-196x196.png}" sizes="196x196" />
+<link rel="icon" type="image/png" th:href="@{images/favicon/favicon-96x96.png}" sizes="96x96" />
+<link rel="icon" type="image/png" th:href="@{images/favicon/favicon-32x32.png}" sizes="32x32" />
+<link rel="icon" type="image/png" th:href="@{images/favicon/favicon-16x16.png}" sizes="16x16" />
+<link rel="icon" type="image/png" th:href="@{images/favicon/favicon-128.png}" sizes="128x128" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" th:content="@{images/favicon/mstile-144x144.png}" />
+<meta name="msapplication-square70x70logo" th:content="@{images/favicon/mstile-70x70.png}" />
+<meta name="msapplication-square150x150logo" th:content="@{images/favicon/mstile-150x150.png}" />
+<meta name="msapplication-wide310x150logo" th:content="@{images/favicon/mstile-310x150.png}" />
+<meta name="msapplication-square310x310logo" th:content="@{images/favicon/mstile-310x310.png}" />
+
+
+<!--
+
+    public User(Long id, String name, String email, String password, String gender, LocalDate dob, String profession, Set<Role> roles) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
+        this.dob = dob;
+        this.profession = profession;
+        this.roles = roles;
+    }
+
+-->
+
+<!--
+
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof User)) return false;
+        final User other = (User) o;
+        if (!other.canEqual((Object) this)) return false;
+        final Object this$id = this.getId();
+        final Object other$id = other.getId();
+        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+        final Object this$name = this.getName();
+        final Object other$name = other.getName();
+        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+        final Object this$email = this.getEmail();
+        final Object other$email = other.getEmail();
+        if (this$email == null ? other$email != null : !this$email.equals(other$email)) return false;
+        final Object this$password = this.getPassword();
+        final Object other$password = other.getPassword();
+        if (this$password == null ? other$password != null : !this$password.equals(other$password)) return false;
+        final Object this$gender = this.getGender();
+        final Object other$gender = other.getGender();
+        if (this$gender == null ? other$gender != null : !this$gender.equals(other$gender)) return false;
+        final Object this$dob = this.getDob();
+        final Object other$dob = other.getDob();
+        if (this$dob == null ? other$dob != null : !this$dob.equals(other$dob)) return false;
+        final Object this$profession = this.getProfession();
+        final Object other$profession = other.getProfession();
+        if (this$profession == null ? other$profession != null : !this$profession.equals(other$profession))
+            return false;
+        final Object this$roles = this.getRoles();
+        final Object other$roles = other.getRoles();
+        if (this$roles == null ? other$roles != null : !this$roles.equals(other$roles)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof User;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $id = this.getId();
+        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+        final Object $name = this.getName();
+        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+        final Object $email = this.getEmail();
+        result = result * PRIME + ($email == null ? 43 : $email.hashCode());
+        final Object $password = this.getPassword();
+        result = result * PRIME + ($password == null ? 43 : $password.hashCode());
+        final Object $gender = this.getGender();
+        result = result * PRIME + ($gender == null ? 43 : $gender.hashCode());
+        final Object $dob = this.getDob();
+        result = result * PRIME + ($dob == null ? 43 : $dob.hashCode());
+        final Object $profession = this.getProfession();
+        result = result * PRIME + ($profession == null ? 43 : $profession.hashCode());
+        final Object $roles = this.getRoles();
+        result = result * PRIME + ($roles == null ? 43 : $roles.hashCode());
+        return result;
+    }
+
+
+
+-->
