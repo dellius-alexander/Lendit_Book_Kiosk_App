@@ -1,11 +1,16 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -111,7 +116,7 @@ public class User implements UserInterface {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = new CustomPasswordEncoder().encode(password);
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
@@ -142,7 +147,7 @@ public class User implements UserInterface {
     ) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = new CustomPasswordEncoder().encode(password);
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
@@ -171,7 +176,7 @@ public class User implements UserInterface {
     ) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = new CustomPasswordEncoder().encode(password);
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
@@ -300,7 +305,7 @@ public class User implements UserInterface {
      */
     @Override
     public void setPassword(String password) {
-        this.password = password;
+        this.password =  new CustomPasswordEncoder().encode(password);
     }
 
     /**
@@ -436,13 +441,15 @@ public class User implements UserInterface {
     public Set<Role> getRoles() {
         return this.roles;
     }
+
+
     @Override
     public String toString() {
         String json = "{" +
                 "\n\"id\":" + this.getId() +
                 ",\n\"name\":\"" + this.getName() + "\"" +
                 ",\n\"email\":\"" + this.getEmail() + "\"" +
-                ",\n\"password\":\"" + this.getPassword().hashCode() + "\"" +
+                ",\n\"password\":\"" + this.getPassword() + "\"" +
                 ",\n\"gender\":\"" + this.getGender() + "\"" +
                 ",\n\"dob\":\"" + this.getDob() + "\"" +
                 ",\n\"profession\":\"" + this.getProfession() + "\"" +

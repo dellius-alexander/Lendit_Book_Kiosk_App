@@ -11,12 +11,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.logging.Logger;
 
-@Configuration("ApplicationConfig")
+@Configuration("AppDataSource")
 @PropertySource("classpath:application.properties")
-@Component
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
-public class ApplicationConfig {
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
+public class AppDataSource {
 
     @Autowired
     private Environment env;
@@ -24,7 +26,7 @@ public class ApplicationConfig {
     @Bean
     public DataSource getDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-//        dataSource.setDriverClassName(env.getProperty("mysql.driver"));
+        dataSource.setDriverClassName(env.getProperty("mysql.driver"));
         dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
 //        dataSource.setUrl(env.getProperty("mysql.jdbcUrl"));
         dataSource.setUrl(env.getProperty("spring.datasource.url"));

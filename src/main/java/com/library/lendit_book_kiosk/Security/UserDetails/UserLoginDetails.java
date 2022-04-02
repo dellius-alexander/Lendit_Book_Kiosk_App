@@ -1,12 +1,14 @@
 package com.library.lendit_book_kiosk.Security.UserDetails;
 
+import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import java.util.stream.Collectors;
@@ -17,11 +19,9 @@ import org.slf4j.Logger;
 import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
-@Component
+@Component(value = "UserLoginDetails")
 public class UserLoginDetails extends UsernamePasswordAuthenticationToken implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
-    @Autowired
-    private static PasswordEncoder passwordEncoder;
     private Long id;
     private String username;
     private String displayName;
@@ -32,6 +32,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         super("","");
         this.setUsername("");
         this.setPassword("");
+        ;
     }
 
     public UserLoginDetails(
@@ -45,7 +46,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.setDisplayName(displayName);
         this.setUsername(username);
         this.setId(id);
-        this.setPassword(password);
+        this.setPassword(new CustomPasswordEncoder().encode(password));
         super.setDetails(this);
         log.info(toString());
     }
@@ -57,7 +58,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
          */
         super(
                 user.getEmail(),
-                user.getPassword(),
+                new CustomPasswordEncoder().encode(user.getPassword()),
                 user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
                         "ROLE_" + x.getRole().name())).collect(Collectors.toSet())
         );
@@ -66,11 +67,14 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.setDisplayName(user.getName());
         this.setUsername(user.getEmail());
         this.setId(user.getId());
-        this.setPassword(user.getPassword());
+        this.setPassword(new CustomPasswordEncoder().encode(user.getPassword()));
         this.setDetails(user);
         log.info(toString());
     }
-    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){return this;}
+    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){
+        return new UsernamePasswordAuthenticationToken(
+                        getPrincipal(), getCredentials(),getAuthorities());
+    }
     /**
      * Set by an AuthenticationManager to indicate the authorities that the principal has been granted.
      * Note that classes should not rely on this value as being valid unless it has been set by a trusted
@@ -86,6 +90,9 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String getName(){return username;}
 
     @Override
     public String getUsername() {
@@ -128,6 +135,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     public Object getCredentials() {
         return super.getCredentials();
     }
+
     /**
      * The username
      * @return
@@ -217,8 +225,10 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         return "{\n" +
                 "\"username\":\"" + this.getUsername() + "\",\n" +
                 "\"displayName\":\"" + this.getDisplayName() + "\",\n" +
-                "\"password\":\"" + this.getPassword().hashCode() + "\",\n" + // TODO: comment out password on production deploy
-                "\"authorities\":\"" + this.getAuthorities() + "\"" +
+                // TODO: comment out password on production deploy
+                "\"password\":\"" + this.getPassword() + "\",\n" +
+                "\"authorities\":\"" + this.getAuthorities() + "\",\n" +
+                "\"principal\":\"" + this.getPrincipal() + "\",\n" +
                 "\n}";
     }
 }

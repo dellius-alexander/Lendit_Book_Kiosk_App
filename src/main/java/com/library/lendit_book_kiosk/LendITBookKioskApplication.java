@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
@@ -143,10 +144,8 @@ public class LendITBookKioskApplication implements CommandLineRunner
 				);
 				log.info("\nSAVING NEW USERS TO DB: \n{} \n{} \n{}\n",jane,john,bob);
 			} else{
-				log.info("\nDB ALREADY HAS USERS: {}\n", users.toString());
+				log.info("\nDB ALREADY HAS USERS: {}\n", users.stream().map(User::toString).collect(Collectors.toList()));
 			}
-
-
 		};
 	}
 }

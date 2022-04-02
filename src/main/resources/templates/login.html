@@ -40,103 +40,20 @@
               crossorigin="anonymous"
         >
         <title>LendIT Book Kiosk</title>
-<!--        <link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"/>-->
-<!--        <script type="text/javascript" th:src="@{/js/login.js}"></script>-->
-<!--        <style>-->
-<!--            .container-fluid {-->
-<!--                margin: 0 auto;-->
-<!--                max-width: 50%;-->
-<!--                align-content: center;-->
-<!--                padding: 25px;-->
-<!--                background-color: aquamarine;-->
-<!--                border-radius: 20px;-->
-<!--            }-->
-<!--            .logo-img {-->
-<!--                max-height: 80%;-->
-<!--                max-width: 80%;-->
-<!--                border-radius: 20px;-->
-<!--            }-->
-<!--            .submit {-->
-<!--                color: #fff;-->
-<!--                font-weight: bolder;-->
-<!--                background-color: navy;-->
-<!--            }-->
-<!--            .form-control {-->
-<!--                border-radius: 15px;-->
-<!--            }-->
-<!--        </style>-->
+
     </head>
     <body>
         <nav></nav>
         <header></header>
         <main>
-<!--            &lt;!&ndash; show notification on error &ndash;&gt;-->
-<!--            <div class="alert-danger" th:if="${param.error}" >-->
-<!--                Invalid username or password.-->
-<!--            </div>-->
 
-<!--            &lt;!&ndash; show notification of logout &ndash;&gt;-->
-<!--            <div class="alert-success"  th:if="${param.logout}">-->
-<!--                You have been logged out.-->
-<!--            </div>-->
-
-            <!-- login form -->
             <div>
-<!--                <div>-->
-<!--                    <img class="logo-img" src="#" th:src="@{/images/icons/favicon/mstile-310x310.png}" alt="Lendit Book Kiosk Icon" />-->
-<!--                </div>-->
-                <div th:replace="fragments/login_page :: #login_page"></div>
-<!--                <form-->
-<!--                        id="userLoginDetails"-->
-<!--                        name="userLoginDetails"-->
-<!--                        method="post"-->
-<!--                        th:action="@{/verify}"-->
-<!--                        th:object="${userLoginDetails}"-->
-<!--                >-->
-<!--                    <h2 >Please sign in</h2>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="username" >User Name</label>-->
-<!--                        <input-->
-<!--                                class="form-control"-->
-<!--                                id="username"-->
-<!--                                type="text"-->
-<!--                                name="username"-->
-<!--                                placeholder="something@example.com"-->
-<!--                                th:required="required"-->
-<!--                                th:autofocus="autofocus"-->
-<!--                                th:field="*{username}" />-->
-<!--                        <br/>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="password">Password</label>-->
-<!--                        <input-->
-<!--                               class="form-control"-->
-<!--                               id="password"-->
-<!--                               type="password"-->
-<!--                               name="password"-->
-<!--                               placeholder="password"-->
-<!--                               th:required="required"-->
-<!--                               th:autofocus="autofocus"-->
-<!--                               th:field="*{password}" />-->
-<!--                        <br/>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <input-->
-<!--                                class="btn btn-primary form-control submit"-->
-<!--                                type="submit"-->
-<!--                                value="Sign In"-->
-<!--                        />-->
-<!--                    </div>-->
-<!--                </form>-->
 
+                <div th:insert="fragments/login_page :: #login_page"></div>
 
 
             </div>
         </main>
         <footer></footer>
-<!--            &lt;!&ndash; jQuery (necessary for Bootstrap's JavaScript plugins) &ndash;&gt;-->
-<!--            <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>-->
-<!--            &lt;!&ndash; Include all compiled plugins (below), or include individual files as needed &ndash;&gt;-->
-<!--            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>-->
     </body>
 </html>

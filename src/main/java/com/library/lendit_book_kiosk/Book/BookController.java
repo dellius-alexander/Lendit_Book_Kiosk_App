@@ -16,7 +16,7 @@ import java.util.Set;
  * Api Layer <br/>
  * <code style="color:orange;font-style:bold;">/book</code>
  */
-@RestController
+@RestController(value = "BookController")
 @RequestMapping(value = "/book")
 public class BookController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -33,13 +33,17 @@ public class BookController {
      * @return a list of books matching
      */
     @RequestMapping(
-            value = {"/getByTitle/{title}","/getByTitle/title={title}"},
+            value = {"/getByTitle/{title}"},
+            path = {"/getByTitle/{title}"},
             method = RequestMethod.GET,
             consumes = "*/*",
             produces = "application/json")
     public ResponseEntity<Set<Book>> getBooksByTitle(
-            @PathVariable("title") @RequestParam String title
+            @PathVariable("title")
+            @RequestParam(value = "title")
+                    String title
     ){
+        log.info("Title: {}",title);
         return ResponseEntity.ok().body(
                 this.bookService.getBooksByTitle(title)
         );

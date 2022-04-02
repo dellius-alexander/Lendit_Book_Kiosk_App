@@ -5,6 +5,7 @@ import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.UserService;
 //import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.access.annotation.Secured;
@@ -15,32 +16,37 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.util.Map;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
-@Controller
+@Controller(value = "LoginController")
 public class LoginController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
+
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
+
+    protected static UsernamePasswordAuthenticationToken auth;
 
     public LoginController() { }
 
@@ -53,45 +59,43 @@ public class LoginController implements Serializable {
     public String login(
             Model model
     ) {
-//        User user = new User();
-//        model.addAttribute("user", user);
         model.addAttribute("userLoginDetails", new UserLoginDetails());
-//        log.info("\n\nUser: {}\n\n",user.toString());
         log.info("\nUserLoginDetails form: {}\n", model.toString());
         return "login";
     }
 
     /**
-     * User login form
-     *
+     * User login form verification
      * @param userLoginDetails
-     * @param result           the results
+     * @param result
+     * @param req
      * @return
      */
-    @RequestMapping(value = "/verify", method = RequestMethod.POST)
-//    @Secured({"ROLE_*","ROLE_GUEST","ROLE_USER","ROLE_STUDENT","ROLE_FACULTY","ROLE_ADMIN","ROLE_SUPERUSER"})
+    @RequestMapping(value = {"/verify"}, method = RequestMethod.POST)
     public String verify(
             @Valid
             @ModelAttribute("userLoginDetails") UserLoginDetails userLoginDetails,
             BindingResult result,
-            Model model,
-            HttpServletRequest req
-    ) {
+            HttpServletRequest req)
+    {
         try{
-            if (result.hasErrors()) {
-                return "login";
+            if (result.hasErrors())
+            {
+                return "redirect:login";
             }
-            log.info("\n\nUserLoginDetails: {}\n\nMODEL: {} \n\nRESULTS: {}\n\nUSERS: {}\n\nAUTHENTICATION: {}\n\n",
+
+            log.info("\n\nUserLoginDetails: {}" +
+                    "\n\nRESULTS: {}\n\n",
                     userLoginDetails.toString(),
-                    model.toString(),
                     result.toString());
             // get the user
             User user = userService.getByEmail(userLoginDetails.getUsername());
             // create an auth token for verified user
-            Authentication auth = customAuthenticationProvider.authenticate(
-                    new UserLoginDetails(user).getUsernamePasswordAuthenticationToken());
+            this.auth = customAuthenticationProvider.authenticate(
+                    new UserLoginDetails(user).getUsernamePasswordAuthenticationToken()
+            );
             // set the SecurityContextHolder auth token
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            SecurityContextHolder.getContext().setAuthentication(this.auth);
             // now retrieve the auth token back from SecurityContextHolder
             SecurityContext sc = SecurityContextHolder.getContext();
             HttpSession session = req.getSession(true);
@@ -99,11 +103,11 @@ public class LoginController implements Serializable {
             log.info("\n\nUserService Retrieved User: [ {} ]\n\n", user);
         } catch (Exception e) {
             SecurityContextHolder.getContext().setAuthentication(null);
-            log.error("Failure in autoLogin", e);
+            log.error("Failure in autoLogin", e.getMessage());
+            return "redirect:login";
         }
-        return "index";
+        return "redirect:index";
     }
-    
     /**
      * Login-error
      * @param throwable
@@ -111,7 +115,7 @@ public class LoginController implements Serializable {
      * @return error
      */
     @ExceptionHandler(Throwable.class)
-//    @RequestMapping(value="/login-error", method= RequestMethod.POST)
+    @RequestMapping(value="/error", method= RequestMethod.POST)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String exception(
             final Throwable throwable,
@@ -119,8 +123,8 @@ public class LoginController implements Serializable {
         log.error("Exception during execution of LendIT Book Kiosk application", throwable);
         String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
         model.addAttribute("errorMessage", errorMessage);
-        return "error"; }
-
+        return "error";
+    }
     /**
      * Redirect logout to login
      * @return login
@@ -128,38 +132,46 @@ public class LoginController implements Serializable {
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String logout(){
-        return "/login";
+        return "login";
     }
-
     /**
      * Redirect logout to login
      * @return index
      */
-    @RequestMapping(path = "index", method = RequestMethod.GET)
-    public String index(HttpServletRequest req){
-        HttpSession session = req.getSession(true);
-        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, getPrincipal());
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index(
+            HttpServletRequest request){
+        try {
+            log.info("Authentication: {}",getPrincipal(request).toString());
+        }
+        catch (Exception e){
+            SecurityContextHolder.getContext().setAuthentication(null);
+            log.error("Failure to load /index", e.getMessage());
+            return "redirect:login";
+        }
         return "index";
     }
-
     /**
+     * Sets the
      * Gets the Authentication token from the SecurityContextHolder.
+     * @param request HttpServletRequest
      * @return the Authentication token of current authenticated user
      */
-    private Authentication getPrincipal() {
-        String userName = null;
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(auth instanceof AnonymousAuthenticationToken)){
-            log.info("\nAnonymousAuthenticationToken Exception: TOKEN => {}\n",auth.toString());
+    private Authentication getPrincipal(HttpServletRequest request) {
+        try {
+            // set the SecurityContextHolder auth token
+            SecurityContextHolder.getContext().setAuthentication(this.auth);
+            // now retrieve the auth token back from SecurityContextHolder
+            SecurityContext sc = SecurityContextHolder.getContext();
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            log.info("\nSuccessfully Authenticated: {}\n", auth.toString());
         }
-//        if (principal instanceof  UserDetails){
-//            userName = ((UserDetails)principal).getUsername();
-//        } else {
-//          userName = principal.toString();
-//        }
-
-        return auth;
+        catch (Exception e){
+            SecurityContextHolder.getContext().setAuthentication(null);
+            log.error("Failure to load /index", e.getMessage());
+            throw new NullArgumentException("Authentication token is null or Anonymous.");
+        }
+        return this.auth;
     }
-
 }

@@ -16,7 +16,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
-                ApplicationConfig.class,
+                AppDataSource.class,
                 WebSecurityConfig.class,
                 CustomAuthenticationProvider.class
         };
@@ -31,8 +31,6 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected Class<?>[] getServletConfigClasses() {
             return new Class[]{
                     WebMvcConfig.class
-
-
             };
         }
 

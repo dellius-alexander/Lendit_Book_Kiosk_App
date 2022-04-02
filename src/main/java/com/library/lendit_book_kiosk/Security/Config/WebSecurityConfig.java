@@ -1,13 +1,13 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
-import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationFilter;
+import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 // import logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.sql.DataSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -31,21 +31,21 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@EnableWebSecurity
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk.Security.Config"})
+@EnableWebSecurity(debug = false) // TODO: Security debugging is enabled.
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
     @Autowired
     private  CustomAuthenticationProvider customAuthenticationProvider;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private CustomPasswordEncoder customPasswordEncoder;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private DataSource dataSource;
+    private AppDataSource dataSource;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-ui/**",
@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         log.info("Initializing Http handler...");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(), authenticationProviderBean()));
+//        http.addFilter(new CustomAuthenticationFilter());
         // Apply options to our http client:
         http.authorizeRequests()    // authorize each request
                 .antMatchers(AUTH_WHITELIST).permitAll()
@@ -121,10 +121,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         /////////////////////////////////////////////////////////////
         // authenticate user via database using our:
         // - CustomAuthenticationProvider.class - Method 1
-        auth.authenticationProvider(customAuthenticationProvider)
+        auth.authenticationProvider(authenticationManagerBean())
                 .jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder)
+                .dataSource(dataSource())
+                .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select email, password from user where email = ?")
                 .getUserDetailsService()
 //                .inMemoryAuthentication()
@@ -154,18 +154,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @throws Exception
      */
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(
-                AUTH_WHITELIST
-        );
-    }
+    public void configure(WebSecurity web) throws Exception { web.ignoring().antMatchers(  AUTH_WHITELIST ); }
+
     @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception{
-        return super.authenticationManagerBean();
+//    @Primary
+//    @Bean(name = {"authenticationManagerBean"})
+    public CustomAuthenticationProvider authenticationManagerBean() throws Exception{ return  customAuthenticationProvider; }
+
+    @Bean(name = {"userDetailsService"})
+    @Override
+    public CustomUserDetailsService userDetailsService(){
+        return customUserDetailsService;
     }
 
-    public CustomAuthenticationProvider authenticationProviderBean() throws Exception{
-        return customAuthenticationProvider;
+    @Bean(  name = {"passwordEncoder"})
+    public CustomPasswordEncoder passwordEncoder(){ return customPasswordEncoder; }
+
+    public DataSource dataSource(){
+        return dataSource.getDataSource();
     }
+
 }

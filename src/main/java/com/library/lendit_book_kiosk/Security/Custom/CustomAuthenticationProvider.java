@@ -6,10 +6,13 @@ import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsServi
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,22 +41,16 @@ import org.slf4j.LoggerFactory;
  * Creates a CustomAuthenticationProvider by implementing the AuthenticationProvider interface.
  * @implements AuthenticationProvider
  */
-@Component(value = "com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider")
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+@Configuration("CustomAuthenticationProvider")
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security.Config"})
+public class CustomAuthenticationProvider implements AuthenticationManager, AuthenticationProvider {
     private final static Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
     @Autowired
     private  UserService userService;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private UserLoginDetails userLoginDetails;
 
-//    @Autowired
     public CustomAuthenticationProvider(){ }
 
 /**
@@ -67,6 +64,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 public UsernamePasswordAuthenticationToken authenticate(Authentication authentication) throws AuthenticationException {
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
+    if (authentication == null){
+        throw new NullArgumentException("Authentication Object is null: " + authentication.toString());
+    }
     com.library.lendit_book_kiosk.User.User user = userService.getByEmail(username);
     log.info("User found: {}", user);
     if (user == null) {
@@ -79,7 +79,7 @@ public UsernamePasswordAuthenticationToken authenticate(Authentication authentic
                 new BadCredentialsException("Authentication failed/1000"));
         throw new BadCredentialsException("Authentication failed/1000");
     }
-    if (!Pattern.matches(password, user.getPassword())) {
+    if (new CustomPasswordEncoder().matches(password, user.getPassword())) {
         log.info("USER NOT FOUND: {}",
             new BadCredentialsException("Authentication failed/1000"));
         throw new BadCredentialsException("Authentication failed/1000");
@@ -88,30 +88,12 @@ public UsernamePasswordAuthenticationToken authenticate(Authentication authentic
             username,
             password,
             authentication);
-
-    final UserDetails principal = customUserDetailsService.loadUserByUsername(username);
     this.userLoginDetails = new UserLoginDetails(user);
-//            new org.springframework.security.core.userdetails.User(
-//            username,
-//            password,
-//            authentication
-//                    .getAuthorities()
-//                    .stream()
-//                    .map(   x -> new SimpleGrantedAuthority(
-//                                    x.getAuthority()
-//                            )).collect(Collectors.toSet())
-//    );
-
     return new UsernamePasswordAuthenticationToken(
-            principal,
-            password,
+            this.userLoginDetails.getPrincipal(),
+            this.userLoginDetails.getCredentials(),
             this.userLoginDetails.getAuthorities()
-//            authentication
-//                    .getAuthorities()
-//                    .stream()
-//                    .map(   x -> new SimpleGrantedAuthority(
-//                            x.getAuthority()
-//                    )).collect(Collectors.toSet())
+
     );
   }
 

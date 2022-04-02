@@ -130,7 +130,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     @Override
     public void addResourceHandlers( ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                        //enabling swagger-ui part for visual documentation
+                        // enabling swagger-ui part for visual documentation
                         "/swagger-ui/**",
                         "/webjars/**",
                         "/images/**",
