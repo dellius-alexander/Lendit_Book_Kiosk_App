@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.SecureRandom;
 
 @Configuration(value = "CustomPasswordEncoder")
-@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security.Config"})
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class CustomPasswordEncoder extends BCryptPasswordEncoder{
 
     @Autowired

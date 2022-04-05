@@ -18,8 +18,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-@Configuration
-@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
+
+
 public interface WebMvcConfigInterface extends WebMvcConfigurer, ApplicationContextAware {
     @Override
     void setApplicationContext(ApplicationContext applicationContext) throws BeansException;

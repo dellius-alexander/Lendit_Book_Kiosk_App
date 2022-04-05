@@ -30,9 +30,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-@Configuration("WebMvcConfig")
 @EnableWebMvc
-@ComponentScan
+@Configuration("WebMvcConfig")
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
 public class WebMvcConfig implements WebMvcConfigInterface {
     private final static Logger log = LoggerFactory.getLogger(WebMvcConfig.class);
     @Autowired

@@ -7,11 +7,13 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
+@Configuration("OpenApiConfig")
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class OpenApiConfig {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     @Bean

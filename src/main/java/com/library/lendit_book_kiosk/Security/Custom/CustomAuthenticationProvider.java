@@ -1,40 +1,22 @@
 package com.library.lendit_book_kiosk.Security.Custom;
 
 
-//import com.library.lendit_book_kiosk.User.UserRepository;
-import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
-import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-//import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
-//import java.util.Collections;
-//import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.User;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 
 /**
@@ -42,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @implements AuthenticationProvider
  */
 @Configuration("CustomAuthenticationProvider")
-@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security.Config"})
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class CustomAuthenticationProvider implements AuthenticationManager, AuthenticationProvider {
     private final static Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
     @Autowired

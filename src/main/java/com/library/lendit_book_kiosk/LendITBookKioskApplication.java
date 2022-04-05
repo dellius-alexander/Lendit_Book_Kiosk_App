@@ -21,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -38,13 +39,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 	// Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.getLogger(LendITBookKioskApplication.class);
 
-//	@Value("${password}")
-//	String password;
-//	@PostConstruct
-//	private void postConstruct() {
-//		System.out.println("Secret in LendIT Book Kiosk User password is: " +
-//				password);
-//	}
+
 	////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////
 	////////////////////	MAIN DRIVER 	////////////////////

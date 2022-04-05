@@ -2,14 +2,12 @@ package com.library.lendit_book_kiosk.Security.UserDetails;
 
 import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.User.User;
-//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
@@ -18,8 +16,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import java.util.Set;
 
-// Tells Hibernate to make a table out of this class
-@Component(value = "UserLoginDetails")
+@Configuration(value = "UserLoginDetails")
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class UserLoginDetails extends UsernamePasswordAuthenticationToken implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
     private Long id;
