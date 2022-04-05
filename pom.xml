@@ -381,7 +381,7 @@
 			</resource>
 			<resource>
 				<!--
-
+				Copy docker directory
 				-->
 				<directory>src/main/docker</directory>
 				<includes>
@@ -392,6 +392,7 @@
 
 			<resource>
 				<!--
+				Copy our application packages
 				 -->
 				<directory>src/main/java</directory>
 				<includes>
