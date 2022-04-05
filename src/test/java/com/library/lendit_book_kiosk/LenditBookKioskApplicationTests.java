@@ -1,23 +1,22 @@
-package com.library.lendit_book_kiosk_test;
-
+package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.library.lendit_book_kiosk.WebApp.Login.LoginController;
+import com.library.lendit_book_kiosk.Student.StudentController;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 /////////////////////////////////////////////////////////////////////
-@SpringBootTest(classes = {LoginController.class})
-public class LenditBookKioskApplicationTests {
+@SpringBootTest
+class LenditBookKioskApplicationTests {
 
     @Autowired
-    private LoginController loginController;
+    private StudentController studentController;
 
     @Test
-    void contextLoads() {
-        assertThat(loginController).isNotNull();
+    public void contextLoads() {
+        assertThat(studentController).isNotNull();
     }
 
 }
