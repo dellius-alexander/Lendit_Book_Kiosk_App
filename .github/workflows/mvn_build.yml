@@ -13,7 +13,7 @@ env:
   MYSQL_PASSWORD: 'developer'
   MYSQL_ROOT_PASSWORD: 'developer'
   MAVEN_VERSION: 3.8.5
-  MYSQL_HOST: Lendit_Book_Kiosk-db
+  MYSQL_HOST: localhost
   MYSQL_PORT: 3306
   JAVA_HOME: '/__t/Java_Adopt_jdk/11.0.14-101/x64'
   APP_MYSQL_USER: root
