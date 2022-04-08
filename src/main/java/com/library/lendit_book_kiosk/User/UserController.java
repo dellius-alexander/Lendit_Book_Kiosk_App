@@ -48,7 +48,8 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = userService.getUsers();
         log.info("USERS: \n{}\n",users.toString());
-        return ResponseEntity.ok().body(users);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .location(URI.create("/findAll")).body(users);
     }
     /**
      * Find user by <code>user_Id</code>

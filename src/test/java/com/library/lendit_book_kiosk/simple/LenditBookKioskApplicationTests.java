@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk;
+package com.library.lendit_book_kiosk.simple;
 /////////////////////////////////////////////////////////////////////
 import static org.assertj.core.api.Assertions.assertThat;
 

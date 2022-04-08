@@ -7,7 +7,7 @@ import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
 @Entity  // Tells Hibernate to make a table out of this class
-@Table(name = "major")
+@Table(name = "Major")
 public class Major implements Serializable {
     /////////////////////////////////////////////////////////////////
     @Id

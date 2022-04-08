@@ -38,7 +38,7 @@ public class BookController {
             method = RequestMethod.GET,
             consumes = "*/*",
             produces = "application/json")
-    public ResponseEntity<Set<Book>> getBooksByTitle(
+    public ResponseEntity<List<Book>> getBooksByTitle(
             @PathVariable("title")
             @RequestParam(value = "title")
                     String title

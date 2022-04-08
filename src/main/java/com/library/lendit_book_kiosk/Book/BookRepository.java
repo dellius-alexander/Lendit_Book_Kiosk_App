@@ -15,7 +15,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     // find books by title match
     @Query(value = "SELECT b from Book b WHERE b.title LIKE %?1%")
-    Set<Book> findBookByTitle(String title);
+    List<Book> findBookByTitle(String title);
 
     // find books by author name match
     @Query(value = "SELECT b from Book b WHERE b.authors LIKE %?1%")

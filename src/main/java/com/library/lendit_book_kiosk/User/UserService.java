@@ -2,6 +2,7 @@ package com.library.lendit_book_kiosk.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -117,7 +118,7 @@ public class UserService implements UserDetailsService {
     public List<User> getUsers(){
         log.info("Fetching all USERS. FOR TESTING PURPOSES ONLY.......");
         List<User> users = userRepository.findAll();
-        log.info("\nUsers Received from DB: {}\n");
+        log.info("\nUsers Received from DB: {}\n",users.stream().toString());
         return users;
     }
     /**

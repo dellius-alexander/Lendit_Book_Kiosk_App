@@ -10,7 +10,7 @@ import java.util.Objects;
 //import java.util.regex.Pattern;
 
 @Entity
-@Table(name = "Books")
+@Table(name = "books")
 public class Book implements BookInterface {
     /////////////////////////////////////////////////////////////////
     @Id

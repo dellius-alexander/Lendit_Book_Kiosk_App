@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * User class
  */
 @Entity  // Tells Hibernate to make a table out of this class
-@Table(name = "user")
+@Table(name = "User")
 public class User implements UserInterface {
     private final static Logger log = LoggerFactory.getLogger(User.class);
     ///////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public class User implements UserInterface {
             targetEntity = Role.class,
             fetch = FetchType.EAGER,
             cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "User_Roles",
             joinColumns = @JoinColumn (name = "user_id_fk", nullable = false,table = "user"),
             inverseJoinColumns = @JoinColumn(name = "role_id_fk", nullable = false, table = "role"))
     private Set<Role> roles;
@@ -79,7 +79,7 @@ public class User implements UserInterface {
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
             cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_student",
+    @JoinTable(name = "User_Student",
             joinColumns = @JoinColumn ( name = "user_id_fk", nullable = false, table = "user"),
             inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
     private Set<Student> student;

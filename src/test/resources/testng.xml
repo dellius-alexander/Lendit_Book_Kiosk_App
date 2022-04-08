@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="SeleniumGridDocker" parallel="tests" thread-count="3" verbose="1">
+    <parameter name="hubURL" value="http://127.0.0.1:4444/wd/hub" />
+    <parameter name="appURL" value="http://127.0.0.1:8081" />
+<!--    <test name="Chrome Test" >-->
+<!--        <parameter name="browserType" value="chrome" />-->
+<!--        <parameter name="port" value="9001" />-->
+<!--        <classes>-->
+<!--&lt;!&ndash;            <class name="com.library.lendit_book_kiosk.selenium.BrowserOptionsOptions"></class>&ndash;&gt;-->
+<!--            <class name="com.library.lendit_book_kiosk.selenium.ParallelTests">-->
+<!--                <methods>-->
+<!--                    <include name="runSafariTest"/>-->
+<!--                </methods>-->
+<!--            </class>-->
+<!--        </classes>-->
+<!--    </test>-->
+    <test name="Firefox Test"  >
+        <parameter name="browserType" value="firefox" />
+        <parameter name="port" value="9002" />
+        <classes>
+<!--            <class name="com.library.lendit_book_kiosk.selenium.BrowserOptionsOptions"></class>-->
+            <class name="com.library.lendit_book_kiosk.selenium.ParallelTests">
+                <methods>
+                    <include name="runSafariTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

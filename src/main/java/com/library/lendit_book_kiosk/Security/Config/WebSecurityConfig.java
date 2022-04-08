@@ -3,12 +3,12 @@ package com.library.lendit_book_kiosk.Security.Config;
 import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,7 +34,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 )
 @EnableWebSecurity(debug = false) // TODO: Security debugging is enabled.
 @ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
-@EnableJpaRepositories(basePackages = {"com.library.lendit_book_kiosk"})
+//@EnableJpaRepositories(basePackages = {"com.library.lendit_book_kiosk"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
     @Autowired
@@ -129,6 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select email, password from user where email = ?")
                 .getUserDetailsService()
+
 //                .inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder)
         /////////////////////////////////////////////////////////////
@@ -176,4 +177,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return dataSource.getDataSource();
     }
 
+//    @Override
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+//
+//        return null;
+//    }
 }

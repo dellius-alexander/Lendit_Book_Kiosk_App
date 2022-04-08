@@ -124,8 +124,9 @@
           <div data-w-tab="Tab 3" class="tab-pane-tab-3 w-tab-pane"></div>
           <div data-w-tab="Tab 4" class="tab-pane-tab-4 w-tab-pane"></div>
           <div data-w-tab="Tab 5" class="tab-pane-tab-5 w-tab-pane">
-            <div class="w-form" th:object="${search_book}">
+            <div class="w-form" >
               <form
+                      th:object="${search_book}"
                       th:action="@{/book/getByTitle/*{title}}"
                       id="email-form-2"
                       name="email-form-2"

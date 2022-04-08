@@ -213,7 +213,56 @@ services:
 #    command:
 #      - "vault token create"
 #      - "/bin/sh /bin/vault server -config /tmp/config/vault.conf"
+#####################################################################
+##############    SELENIUM GRID IMPLEMENTATION     ##################
+#####################################################################
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: Lendit_Book_Kiosk-selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
 
+  chrome:
+    image: selenium/node-chrome:latest
+    container_name: Lendit_Book_Kiosk-selenium-node-chrome
+    shm_size: "2g"
+    volumes:
+      - chrome-dev-shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=Lendit_Book_Kiosk-selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#      - SE_NODE_MAX_SESSIONS=2
+    links:
+      - selenium-hub
+    ports:
+      - "9001:5900"
+
+
+  firefox:
+    image: selenium/node-firefox:latest
+    container_name: Lendit_Book_Kiosk-selenium-node-firefox
+    shm_size: "2g"
+    volumes:
+      - firefox-dev-shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=Lendit_Book_Kiosk-selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#      - SE_NODE_MAX_SESSIONS=2
+    links:
+      - selenium-hub
+    ports:
+      - "9002:5900"
+
+
+#####################################################################
 #####################################################################
 # SECRETS can be passed into any container after defined her in secrets definition.
 # secrets:
@@ -234,3 +283,6 @@ volumes:
   vscode-extensions-insiders: null
   maven-m2-repository: null
   dind-var-lib-docker: null
+  chrome-dev-shm: null
+  firefox-dev-shm: null
+  safari-dev-shm: null

@@ -48,9 +48,82 @@
 <!--		<springdoc-openapi-maven-plugin></springdoc-openapi-maven-plugin>-->
 		<springdoc.version>1.6.6</springdoc.version>
 		<com.auth0.java-jwt.version>3.19.0</com.auth0.java-jwt.version>
+		<org.seleniumhq.selenium.version>4.1.3</org.seleniumhq.selenium.version>
     </properties>
 
 	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+		Browser Testing tool
+		-->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-api -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-safari-driver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-safari-driver</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-chrome-driver</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-remote-driver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>${org.seleniumhq.selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.webdriver/webdriver-common -->
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-common</artifactId>
+			<version>0.9.7376</version>
+		</dependency>
+
+
+
+
+
+		<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server &ndash;&gt;-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.seleniumhq.selenium</groupId>-->
+		<!--			<artifactId>selenium-server</artifactId>-->
+		<!--			<version>3.141.59</version>-->
+		<!--		</dependency>-->
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.5</version>
+			<scope>test</scope>
+		</dependency>
+
+
+
 
 		<!--
 		Vault is an identity-based secrets and encryption management system. A secret is anything that
