@@ -22,10 +22,10 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.*;
 
-public class BrowserOptions {
+public abstract class BrowserOptions {
 
     public static final Logger log = LoggerFactory.getLogger(BrowserOptions.class);
-    protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    protected static ThreadLocal<RemoteWebDriver> driver = new ThreadLocal<>();
 
     /**
      * Sets up the remote web driver instance
@@ -34,8 +34,8 @@ public class BrowserOptions {
      */
     @BeforeMethod
     @BeforeClass
-    @Parameters(value = {"browserType","port","hubURL","appURL"})
-    public void setupThread(String browserType, String port, String hubURL, String appURL)
+    @Parameters(value = {"browserType","port","hubURL"})
+    public void setupThread(String browserType, String port, String hubURL)
     {
        log.info("\nBROWSER TYPE: {}\nHUB-URL: {}\n", browserType, hubURL);
        DesiredCapabilities desiredCapabilities = null;
@@ -43,9 +43,9 @@ public class BrowserOptions {
             if(browserType.equalsIgnoreCase("chrome")){
                 ChromeOptions chromeOptions = new ChromeOptions();
                 // Add the WebDriver proxy capability.
-                Proxy proxy = new Proxy();
-                proxy.setHttpProxy(appURL);
-                chromeOptions.setCapability("proxy", proxy);
+//                Proxy proxy = new Proxy();
+//                proxy.setHttpProxy(appURL);
+//                chromeOptions.setCapability("proxy", proxy);
                 chromeOptions.setCapability("platform", Platform.LINUX);
                 // start chrome maximized and create set temp user profile
                 chromeOptions.addArguments(Arrays.asList("start-maximized","user-data-dir=/tmp/temp_profile"));
@@ -74,18 +74,17 @@ public class BrowserOptions {
             else if (browserType.equalsIgnoreCase("firefox")) {
                 // create now FirefoxProfile
                 FirefoxProfile profile = new FirefoxProfile();
-                // Add the WebDriver proxy capability.
-                Proxy proxy = new Proxy();
-                proxy.setHttpProxy(appURL);
+//                // Add the WebDriver proxy capability.
+//                Proxy proxy = new Proxy();
+//                proxy.setHttpProxy(appURL);
                 profile.setAcceptUntrustedCertificates(true);
                 profile.setAssumeUntrustedCertificateIssuer(false);
                 // create FirefoxOptions and add the profile to FirefoxOptions
                 FirefoxOptions options = new FirefoxOptions();
-                options.setProxy(proxy);
+//                options.setProxy(proxy);
                 options.setProfile(profile);
-                options.setCapability("platform",Platform.LINUX);
-                options.setCapability("se:noVncPort", "7900");
-                options.setCapability("se:vncEnabled",true);
+//                options.setCapability("se:noVncPort", "7900");
+//                options.setCapability("se:vncEnabled",true);
                 options.setAcceptInsecureCerts(true);
                 options.setPlatformName("Linux");
                 options.setBrowserVersion("99.0");
@@ -116,7 +115,7 @@ public class BrowserOptions {
             }
             log.info(browserType.toUpperCase() + " RemoteWebDriver was created successfully..............!!!\n"+
                     "Launching Grid..............!!!\n");
-            log.info("\nREMOTE WEB DRIVER: {}\n", driver.get().toString());
+            log.info("\nWEB DRIVER: {}\n", driver.get().toString());
         }catch (NullArgumentException nae) {
             log.error(nae.getMessage());
         } catch (SecurityException se) {
@@ -130,14 +129,14 @@ public class BrowserOptions {
         }
     }
 
-    public WebDriver getDriver(){
+    public RemoteWebDriver getDriver(){
         log.info("Getting WebDriver.........");
         return driver.get();}
 
-    @AfterMethod
+    @AfterClass
     public void tearDown()
     {
-        getDriver().quit();
+        driver.get().quit();
         log.info("Tearing down session.........");
     }
 
