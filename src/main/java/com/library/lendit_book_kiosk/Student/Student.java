@@ -25,19 +25,18 @@ import java.util.Set;
 /////////////////////////////////////////////////////////////////
 // Tells Hibernate to make a table out of this class
 @Entity
-@Table(name = "Student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
-public class Student implements StudentInterface {
+@Table(name = "student") // Illegal use of @Table in a subclass of a SINGLE_TABLE hierarchy: com.library.lendit_book_kiosk.Student.Student
+public class Student  implements StudentInterface {
     private final static Logger log = LoggerFactory.getLogger(Student.class);
     /////////////////////////////////////////////////////////////////
     @Id
     @GeneratedValue(
             // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
-            name = "student_id",
             unique = true,
             columnDefinition = "bigint",
             nullable = false)
@@ -55,7 +54,7 @@ public class Student implements StudentInterface {
     )
     private Set<Major> majors;
 //    @ManyToMany(
-//            mappedBy = "id"
+//            mappedBy = "user_id"
 //    )
 //    private Set<User> users;
     ///////////////////////////////////////////////////////
@@ -123,8 +122,9 @@ public class Student implements StudentInterface {
         return this.compareTo(s);
     }
 
-
+    @Override
     public boolean equals(final Object o) {
+        super.equals((User) o);
         if (o == this) return true;
         if (!(o instanceof Student)) return false;
         final Student other = (Student) o;

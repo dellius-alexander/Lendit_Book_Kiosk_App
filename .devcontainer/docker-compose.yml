@@ -181,79 +181,9 @@ services:
   #    # - "docker-php-entrypoint"
   #    # depends_on:
   #    # - db
-  #####################################################################
-  node-docker:
-    #    image: selenium/node-docker:4.1.3-20220405
-    build:
-      context: .
-      dockerfile: node-docker.Dockerfile
-    container_name: Lendit_Book_Kiosk-node-docker
-    volumes:
-      # To have the assets saved on your host
-      - ./nodeAssets:/opt/selenium/assets
-      # The "dynamic" execution mode needs to be told
-      # what Docker images to use when the containers get
-      # started. Additionally, the Grid needs to know the URI of the Docker daemon.
-      #      - ./nodeDocker/config.toml:/opt/bin/config.toml
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    ports:
-      - "9004:5900"
-    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-
-  chrome:
-    image: selenium/node-chrome:4.1.3-20220405
-    container_name: Lendit_Book_Kiosk-node-chrome
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    deploy:
-      replicas: 1
-    ports:
-      - "9003:5900"
-    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-
-  edge:
-    image: selenium/node-edge:4.1.3-20220405
-    container_name: Lendit_Book_Kiosk-node-edge
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    deploy:
-      replicas: 1
-    ports:
-      - "9002:5900"
-    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-
-  firefox:
-    image: selenium/node-firefox:4.1.3-20220405
-    container_name: Lendit_Book_Kiosk-node-firefox
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-    deploy:
-      replicas: 1
-    ports:
-      - "9001:5900"
-    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-
+######################################################################
+# Selenium Grid
+######################################################################
   selenium-hub:
     image: selenium/hub:4.1.3-20220405
     container_name: Lendit_Book_Kiosk-selenium-hub
@@ -261,6 +191,109 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
+    environment:
+      GRID_MAX_SESSION: 12
+#####################################################################
+  node-docker:
+    image: selenium/node-docker:4.1.3-20220405
+#    build:
+#      context: .
+#      dockerfile: node_docker.Dockerfile
+    container_name: Lendit_Book_Kiosk-node-docker
+    volumes:
+      # To have the assets saved on your host
+      - ./nodeAssets:/opt/selenium/assets
+      # The "dynamic" execution mode needs to be told
+      # what Docker images to use when the containers get
+      # started. Additionally, the Grid needs to know the URI of the Docker daemon.
+      - ./nodeDocker/config.toml:/opt/bin/config.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - selenium-hub
+    links:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_MAX_SESSIONS=6
+      - SCREEN_HEIGHT=1080
+      - SCREEN_WIDTH=1920
+      - SCREEN_DPI=166  # 1920 x 1080
+      - SCREEN_DEPTH=32
+    ports:
+      - "9004:5900"
+      - "9005:4444"
+    privileged: true
+    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+######################################################################
+#  chrome:
+#    image: selenium/node-chrome:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-node-chrome
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#      - SE_NODE_MAX_SESSIONS=3
+#      - SCREEN_HEIGHT=1080
+#      - SCREEN_WIDTH=1920
+#      - SCREEN_DPI=166  # 1920 x 1080
+#      - SCREEN_DEPTH=32
+##      - START_NO_VNC=false
+#    deploy:
+#      replicas: 1
+#    ports:
+#      - "9003:5900"
+#    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+#
+#  edge:
+#    image: selenium/node-edge:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-node-edge
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#      - SE_NODE_MAX_SESSIONS=3
+#      - SCREEN_HEIGHT=1080
+#      - SCREEN_WIDTH=1920
+#      - SCREEN_DPI=166  # 1920 x 1080
+#      - SCREEN_DEPTH=32
+##      - START_NO_VNC=false
+#    deploy:
+#      replicas: 1
+#    ports:
+#      - "9002:5900"
+#    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+#
+#  firefox:
+#    image: selenium/node-firefox:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-node-firefox
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+#      - SE_NODE_MAX_SESSIONS=3
+#      - SCREEN_HEIGHT=1080
+#      - SCREEN_WIDTH=1920
+#      - SCREEN_DPI=166  # 1920 x 1080
+#      - SCREEN_DEPTH=32
+##      - START_NO_VNC=false
+#    deploy:
+#      replicas: 1
+#    ports:
+#      - "9001:5900"
+#    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
 #####################################################################
 ################################# volumes ###########################
 # since we are using direct access to host directories, we do not need to

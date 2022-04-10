@@ -1,15 +1,24 @@
 package com.library.lendit_book_kiosk.Security.Custom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 @Configuration(value = "CustomPasswordEncoder")
 @ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class CustomPasswordEncoder extends BCryptPasswordEncoder{
+    private static final Logger log = LoggerFactory.getLogger(CustomPasswordEncoder.class);
 
     @Autowired
     public CustomPasswordEncoder(){ super(-1); }
@@ -60,14 +69,6 @@ public class CustomPasswordEncoder extends BCryptPasswordEncoder{
         return super.toString();
     }
 
-//    public static void main(String[] args)
-//    {
-//        CustomPasswordEncoder cpe = new CustomPasswordEncoder();
-//        String encodedPasswd = cpe.encode("password");
-//        System.out.println("Password: " + encodedPasswd);
-//        boolean boolean_encode = cpe.matches("password",encodedPasswd);
-//        System.out.println("Matches1: " + boolean_encode);
-//        boolean_encode = cpe.upgradeEncoding(encodedPasswd);
-//        System.out.println("Upgraded: " + boolean_encode);
-//    }
+///////////////////////////////////////////////////////////////////////////////
+
 }

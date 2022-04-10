@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  *   SUPERUSER
  */
 @Entity
-@Table(name = "Role")
+@Table(name = "role")
 public class Role implements RoleInterface, Serializable {
 
     // Define a logger instance and log what you want.
@@ -42,7 +42,7 @@ public class Role implements RoleInterface, Serializable {
     @GeneratedValue(
             // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
     @Column(name = "role_id",
             unique = true,

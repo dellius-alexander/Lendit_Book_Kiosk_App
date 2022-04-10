@@ -7,14 +7,14 @@ import java.util.Set;
 
 // Tells Hibernate to make a table out of this class
 @Entity  // Tells Hibernate to make a table out of this class
-@Table(name = "Major")
+@Table(name = "major")
 public class Major implements Serializable {
     /////////////////////////////////////////////////////////////////
     @Id
     @GeneratedValue(
             // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
     @Column(
             name = "major_id",
@@ -30,7 +30,7 @@ public class Major implements Serializable {
     private String major;
     @ManyToMany( mappedBy = "majors"
             )
-    private Set<Student> students;
+    private Set<Student> student;
     ///////////////////////////////////////////////////////
     public Major(Long id, String major){
         this.id = id;

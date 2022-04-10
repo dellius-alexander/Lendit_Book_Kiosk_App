@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 // import logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -80,32 +81,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .permitAll()
                    // For OPENAPI callers and urs
-//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-//                        "/logout",
-//                        "/index",
-//                        "/hello",
-//                        // TODO: CREATE Role based access for api
-//                        "/user/**",
-//                        "/student/**",
-//                        "/book/**")
-//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//
-//                .antMatchers("/**")
-//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//            .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .logout()
-//                    .invalidateHttpSession(true)
-//                    .clearAuthentication(true)
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .exceptionHandling()
+                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+                        // TODO: CREATE Role based access for api
+                        "/**")
+                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
+            .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+                .permitAll()
+            .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login")
+                    .permitAll()
+            .and()
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling
+                                .accessDeniedPage("/errors"))
             ;
 
         // Cross-Site Request Forgery (CSRF) is an attack that

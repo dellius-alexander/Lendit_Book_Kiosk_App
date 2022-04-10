@@ -1,12 +1,13 @@
 package com.library.lendit_book_kiosk.selenium;
 
 
+import com.library.lendit_book_kiosk.LendITBookKioskApplication;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.annotations.*;
-
 
 public class ParallelTests extends BrowserOptions {
 
@@ -19,17 +20,23 @@ public class ParallelTests extends BrowserOptions {
      * Runs test using parallel browsers
      */
     @Test(
-            suiteName = "SeleniumGridDocker"
+            suiteName = "SeleniumGridDocker",
+            threadPoolSize = 3
     )
     public void runSafariTest() {
+
+        try{
         WebDriver driver = getDriver();
-//        driver.get("http://10.0.2.81:8081/login");
-//        driver.navigate().to("http://127.0.0.1:8081/login");
-//        driver.findElement(By.id("UserIDField")).sendKeys("jane@gmail.com");
-//        driver.findElement(By.id("UserPasswordField")).sendKeys("password");
-//        driver.findElement(By.id("LoginSubmitButton")).submit();
-        driver.navigate().to("www.google.com");
-//        driver.close();
+        driver.get("http://10.0.2.81:8081/login");
+//        driver.navigate().to("http://10.0.2.81:8081/login");
+        driver.findElement(By.id("UserIDField")).sendKeys("jane@gmail.com");
+        driver.findElement(By.id("UserPasswordField")).sendKeys("password");
+        driver.findElement(By.id("LoginSubmitButton")).click();
+        log.info("Current URL: {}",driver.getCurrentUrl());
+        driver.wait(20000);
+        } catch (Exception e){
+            log.info(e.getMessage());
+        }
 
     }
 ///////////////////////////////////////////////////////////////////////////////

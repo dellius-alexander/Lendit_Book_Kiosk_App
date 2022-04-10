@@ -1,7 +1,8 @@
 package com.library.lendit_book_kiosk.Security.UserDetails;
 
-import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
+import com.library.lendit_book_kiosk.Security.Custom.Password;
 import com.library.lendit_book_kiosk.User.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,34 +18,33 @@ import org.slf4j.Logger;
 import java.util.Set;
 
 @Configuration(value = "UserLoginDetails")
-@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security"})
 public class UserLoginDetails extends UsernamePasswordAuthenticationToken implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
     private Long id;
     private String username;
     private String displayName;
-    private String password;
+    private Password password;
     private Set<GrantedAuthority> authorities;
 
     public UserLoginDetails(){
         super("","");
         this.setUsername("");
         this.setPassword("");
-        ;
-    }
 
+    }
     public UserLoginDetails(
             Long id,
             String username,
             String displayName,
-            String password,
+            Password password,
             Set<GrantedAuthority> authorities){
         super(username,password,authorities);
         this.setAuthorities(authorities);
         this.setDisplayName(displayName);
         this.setUsername(username);
         this.setId(id);
-        this.setPassword(new CustomPasswordEncoder().encode(password));
+        this.setPassword(password);
         super.setDetails(this);
         log.info(toString());
     }
@@ -56,7 +56,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
          */
         super(
                 user.getEmail(),
-                new CustomPasswordEncoder().encode(user.getPassword()),
+                user.getPassword(),
                 user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
                         "ROLE_" + x.getRole().name())).collect(Collectors.toSet())
         );
@@ -65,13 +65,22 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.setDisplayName(user.getName());
         this.setUsername(user.getEmail());
         this.setId(user.getId());
-        this.setPassword(new CustomPasswordEncoder().encode(user.getPassword()));
+        this.setPassword(user.getPasswordClass());
         this.setDetails(user);
+        log.info(user.toString());
         log.info(toString());
     }
     public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){
         return new UsernamePasswordAuthenticationToken(
                         getPrincipal(), getCredentials(),getAuthorities());
+    }
+
+    public static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(User user){
+        return new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
+                        "ROLE_" + x.getRole().name())).collect(Collectors.toSet()));
     }
     /**
      * Set by an AuthenticationManager to indicate the authorities that the principal has been granted.
@@ -86,9 +95,10 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     }
     @Override
     public String getPassword() {
-        return password;
+        return password.getPasswordToString();
     }
 
+    public Password getPasswordClass(){return this.password;}
     @Override
     public String getName(){return username;}
 
@@ -160,8 +170,12 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.displayName = displayName;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
+    }
+
+    public void setPassword(String password){
+        this.password = new Password(password);
     }
 
     public void setAuthorities(Set<GrantedAuthority> authorities) {
@@ -229,4 +243,5 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
                 "\"principal\":\"" + this.getPrincipal() + "\",\n" +
                 "\n}";
     }
+
 }
