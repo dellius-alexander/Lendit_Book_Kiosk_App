@@ -132,7 +132,7 @@ public class LoginController implements Serializable {
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String logout(){
-        return "login";
+        return "redirect:login";
     }
     /**
      * Redirect logout to login

@@ -19,7 +19,7 @@ import java.util.Set;
 @RestController(value = "BookController")
 @RequestMapping(value = "/book")
 public class BookController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
 
     @Autowired
