@@ -30,9 +30,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-@Configuration("WebMvcConfig")
 @EnableWebMvc
-@ComponentScan
+@Configuration("WebMvcConfig")
+@ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
 public class WebMvcConfig implements WebMvcConfigInterface {
     private final static Logger log = LoggerFactory.getLogger(WebMvcConfig.class);
     @Autowired
@@ -112,6 +112,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/error").setViewName("error");
+        registry.addViewController("/student").setViewName("student");
     }
 
     /**

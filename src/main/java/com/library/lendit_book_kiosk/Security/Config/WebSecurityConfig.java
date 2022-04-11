@@ -3,11 +3,12 @@ package com.library.lendit_book_kiosk.Security.Config;
 import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 // import logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -33,6 +35,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 )
 @EnableWebSecurity(debug = false) // TODO: Security debugging is enabled.
 @ComponentScan(basePackages= {"com.library.lendit_book_kiosk"})
+//@EnableJpaRepositories(basePackages = {"com.library.lendit_book_kiosk"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final static Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
     @Autowired
@@ -74,36 +77,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/verify",
                         "/login",
                         "/error",
-                        "/index"
+                        "/index",
+                        "/student"
                 )
                 .permitAll()
                    // For OPENAPI callers and urs
-//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-//                        "/logout",
-//                        "/index",
-//                        "/hello",
-//                        // TODO: CREATE Role based access for api
-//                        "/user/**",
-//                        "/student/**",
-//                        "/book/**")
-//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//
-//                .antMatchers("/**")
-//                .hasAnyAuthority("GUEST","ADMIN","USER","FACULTY","SUPERUSER")
-//            .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .logout()
-//                    .invalidateHttpSession(true)
-//                    .clearAuthentication(true)
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login")
-//                    .permitAll()
-//            .and()
-//                .exceptionHandling()
+                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+                        // TODO: CREATE Role based access for api
+                        "/**")
+                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
+            .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+                .permitAll()
+            .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login")
+                    .permitAll()
+            .and()
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling
+                                .accessDeniedPage("/errors"))
             ;
 
         // Cross-Site Request Forgery (CSRF) is an attack that
@@ -127,6 +125,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select email, password from user where email = ?")
                 .getUserDetailsService()
+
 //                .inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder)
         /////////////////////////////////////////////////////////////
@@ -174,4 +173,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return dataSource.getDataSource();
     }
 
+//    @Override
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+//
+//        return null;
+//    }
 }

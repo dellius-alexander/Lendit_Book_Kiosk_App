@@ -1,4 +1,4 @@
-# TODO: Finish setting up Secret Vault
+# TODO: Finish setting up Hashicorp Vault to store secret credentials
 # create public/private key pair and keystore.jks files
 spring:
   application:

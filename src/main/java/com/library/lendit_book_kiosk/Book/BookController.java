@@ -19,7 +19,7 @@ import java.util.Set;
 @RestController(value = "BookController")
 @RequestMapping(value = "/book")
 public class BookController {
-    private static final Logger log = LoggerFactory.getLogger(BookController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final BookService bookService;
 
     @Autowired
@@ -38,7 +38,7 @@ public class BookController {
             method = RequestMethod.GET,
             consumes = "*/*",
             produces = "application/json")
-    public ResponseEntity<Set<Book>> getBooksByTitle(
+    public ResponseEntity<List<Book>> getBooksByTitle(
             @PathVariable("title")
             @RequestParam(value = "title")
                     String title

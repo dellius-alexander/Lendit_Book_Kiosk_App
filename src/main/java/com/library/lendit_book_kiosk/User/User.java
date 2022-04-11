@@ -1,16 +1,13 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
+import com.library.lendit_book_kiosk.Security.Custom.Password;
+import com.library.lendit_book_kiosk.Student.Major;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,14 +29,14 @@ public class User implements UserInterface {
     ///////////////////////////////////////////////////////
     @Id
     @SequenceGenerator(  // LendIT Book Kiosk
-            name = "TGVuZElUIEJvb2sgS2lvc2s_sequence",
-            sequenceName = "TGVuZElUIEJvb2sgS2lvc2s_sequence",
+            name = "LendIT_Book_Kiosk_DB_Sequence_Generator",
+            sequenceName = "LendIT_Book_Kiosk_DB_Sequence_Generator",
             allocationSize = 1
     )
     @GeneratedValue(
             // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
     @Column(
             name = "user_id",
@@ -54,7 +51,15 @@ public class User implements UserInterface {
             columnDefinition = "varchar(224)",
             unique = true)
     private String email;
-    private String password;
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinColumn(
+            name = "password",
+            nullable = false,
+            columnDefinition = "varchar(255)",
+            referencedColumnName = "password")
+    private Password password;
     @Enumerated(EnumType.STRING)
     @Column(
             name = "gender",
@@ -71,7 +76,7 @@ public class User implements UserInterface {
             targetEntity = Role.class,
             fetch = FetchType.EAGER,
             cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "User_Roles",
             joinColumns = @JoinColumn (name = "user_id_fk", nullable = false,table = "user"),
             inverseJoinColumns = @JoinColumn(name = "role_id_fk", nullable = false, table = "role"))
     private Set<Role> roles;
@@ -79,7 +84,7 @@ public class User implements UserInterface {
             targetEntity = Student.class,
             fetch = FetchType.EAGER,
             cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_student",
+    @JoinTable(name = "User_Student",
             joinColumns = @JoinColumn ( name = "user_id_fk", nullable = false, table = "user"),
             inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
     private Set<Student> student;
@@ -106,7 +111,7 @@ public class User implements UserInterface {
             Long id,
             String name,
             String email,
-            String password,
+            Password password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -116,7 +121,7 @@ public class User implements UserInterface {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = new CustomPasswordEncoder().encode(password);
+        this.password = password;
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
@@ -138,7 +143,7 @@ public class User implements UserInterface {
     public User(
             String name,
             String email,
-            String password,
+            Password password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -147,7 +152,7 @@ public class User implements UserInterface {
     ) {
         this.name = name;
         this.email = email;
-        this.password = new CustomPasswordEncoder().encode(password);
+        this.password = password;
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
@@ -168,7 +173,7 @@ public class User implements UserInterface {
     public User(
             String name,
             String email,
-            String password,
+            Password password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -176,13 +181,27 @@ public class User implements UserInterface {
     ) {
         this.name = name;
         this.email = email;
-        this.password = new CustomPasswordEncoder().encode(password);
+        this.password = password;
         this.gender = gender;
         this.dob = dob;
         this.profession = profession;
         this.roles = roles;
     }
+    /**
+     * Assigns the given user
+     * @param user
+     */
+    public User(User user){
+        this.setId(user.getId());
+        this.setName(user.getName());
+        this.setPassword(user.getPasswordClass());
+        this.setRoles(user.getRoles());
+        this.setDob(user.getDob());
+        this.setEmail(user.getEmail());
+        this.setGender(user.getGender());
+        this.setProfession(user.getProfession());
 
+    }
     /**
      * Get Granted Authorities
      * @return a Collection GrantedAuthority
@@ -221,11 +240,9 @@ public class User implements UserInterface {
      *
      * @return the user password
      */
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
 
+    public String getPassword(){return this.password.getPasswordToString();}
+    public Password getPasswordClass(){return this.password;}
     /**
      * Get the user gender
      *
@@ -266,17 +283,6 @@ public class User implements UserInterface {
         return this.profession;
     }
 
-    @Override
-    public void setUser(User user){
-        this.setId(user.getId());
-        this.setName(user.getName());
-        this.setPassword(user.getPassword());
-        this.setRoles(user.getRoles());
-        this.setDob(user.getDob());
-        this.setEmail(user.getEmail());
-        this.setGender(user.getGender());
-        this.setProfession(user.getProfession());
-    }
 
     /**
      * Set username
@@ -304,8 +310,8 @@ public class User implements UserInterface {
      * @param password
      */
     @Override
-    public void setPassword(String password) {
-        this.password =  new CustomPasswordEncoder().encode(password);
+    public void setPassword(Password password) {
+        this.password = password;
     }
 
     /**

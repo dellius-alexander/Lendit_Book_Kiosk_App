@@ -2,12 +2,14 @@ package com.library.lendit_book_kiosk.Student;
 
 
 
+import com.library.lendit_book_kiosk.User.User;
+
 import java.io.Serializable;
 
-public interface StudentInterface extends Serializable {
+public interface StudentInterface  {
 
 
-    boolean canEqual(Object other);
+    boolean canEqual(Object student);
 
     Long getStudentId();
 

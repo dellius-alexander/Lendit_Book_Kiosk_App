@@ -10,16 +10,14 @@ import java.util.Objects;
 //import java.util.regex.Pattern;
 
 @Entity
-@Table(name = "Books")
+@Table(name = "books")
 public class Book implements BookInterface {
     /////////////////////////////////////////////////////////////////
     @Id
     @GeneratedValue(
-            // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
-            generator = "TGVuZElUIEJvb2sgS2lvc2s_sequence"
+            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name = "isbn",
             unique = true,

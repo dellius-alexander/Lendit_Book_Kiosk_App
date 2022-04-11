@@ -2,6 +2,7 @@ package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
+import com.library.lendit_book_kiosk.Security.Custom.Password;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
@@ -15,11 +16,6 @@ public interface UserInterface extends Serializable {
      */
     void setRole(Role role);
 
-    /**
-     * Assigns the given user
-     * @param user
-     */
-    void setUser(User user);
 
     /**
      * Check if 'Object' 'user' is an instance of 'this' object
@@ -65,11 +61,6 @@ public interface UserInterface extends Serializable {
      * @return the user email
      */
     String getEmail();
-
-    /**
-     * Get the user password
-     * @return the user password
-     */
     String getPassword();
 
     /**
@@ -131,7 +122,7 @@ public interface UserInterface extends Serializable {
      * Set user password
      * @param password
      */
-    void setPassword(String password);
+    void setPassword(Password password);
 
     /**
      * Set user gender

@@ -40,10 +40,61 @@
         <nav></nav>
         <header></header>
         <main >
-            <div sec:authorize="hasAuthority('ROLE_USER')" >
-                <div th:replace="fragments/book_finder:: #book-finder"></div>
-            </div>
+<!--            <div sec:authorize="hasAuthority('ROLE_USER')" >-->
+<!--                <div th:replace="fragments/book_finder:: #book-finder"></div>-->
+<!--            </div>-->
 
+            <div class="container">
+                <div class="container-fluid" sec:authorize="isAuthenticated()">
+                    <p> This content is only shown to authenticated users.</p>
+                    <div >
+                        Authenticated as:
+                        <div th:text="${#authentication.name}">
+                            The value of the "name" property of the authentication object
+                            should appear here.
+                        </div>
+                    </div>
+                    <!--                    Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>-->
+                </div>
+
+                <div sec:authorize="hasRole('ROLE_GUEST')">
+                    This content is only shown to guests.
+                </div>
+                <div sec:authorize="hasRole('ROLE_USER')">
+                    This content is only shown to users.
+                </div>
+                <div sec:authorize="hasRole('ROLE_STUDENT')">
+                    This content is only shown to students.
+                </div>
+                <div sec:authorize="hasRole('ROLE_FACULTY')">
+                    This content is only shown to faculty.
+                </div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    This content is only shown to administrators.
+                </div>
+                <div sec:authorize="hasRole('ROLE_SUPERUSER')">
+                    This content is only shown to superusers.
+                </div>
+                <!--    authorities views   -->
+                <div sec:authorize="hasAuthority('ROLE_GUEST')">
+                    This content is only shown to guests authority only.
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_USER')">
+                    This content is only shown to users authority only.
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_STUDENT')">
+                    This content is only shown to student authority only.
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_FACULTY')">
+                    This content is only shown to faculty authority only.
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    This content is only shown to administrators authority only.
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_SUPERUSER')">
+                    This content is only shown to superusers authority only.
+                </div>
+            </div>
         </main>
         <footer></footer>
 <!--        &lt;!&ndash; jQuery (necessary for Bootstrap's JavaScript plugins) &ndash;&gt;-->

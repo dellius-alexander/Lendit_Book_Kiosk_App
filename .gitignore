@@ -15,8 +15,7 @@ core
 .settings
 .springBeans
 .sts4-cache
-
-
+.devcontainer/nodeAssets/**
 ### IntelliJ IDEA ###
 .idea
 *.iws

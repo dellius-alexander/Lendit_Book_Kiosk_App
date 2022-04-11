@@ -3,18 +3,18 @@ package com.library.lendit_book_kiosk.Security.UserDetails;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@Service(value = "CustomUserDetailsService")
 @Transactional
-@Component
+@Service(value = "CustomUserDetailsService")
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
 public class CustomUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
     private final static Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
     @Autowired
