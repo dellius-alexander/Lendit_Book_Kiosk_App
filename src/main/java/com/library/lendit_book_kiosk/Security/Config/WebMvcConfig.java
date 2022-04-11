@@ -107,12 +107,15 @@ public class WebMvcConfig implements WebMvcConfigInterface {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-
+        // Redirection controller
         registry.addRedirectViewController("/", "index");
+        registry.addRedirectViewController("/student","student");
+        // View Controller
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/error").setViewName("error");
         registry.addViewController("/student").setViewName("student");
+        registry.addViewController("/swagger-ui").setViewName("swagger-ui");
     }
 
     /**

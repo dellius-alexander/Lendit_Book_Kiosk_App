@@ -53,13 +53,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITELIST = {
             "/swagger-ui/**",
             "/v3/api-docs",
-            "/webjars/**"
+            "/webjars/**",
+            "/swagger-ui"
     };
 
     /**
      * Http Security Configuration Options
      * @param http  HttpSecurity.class
-     * @throws Exception
+     * @throws Exception HttpSecurity Exception
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -81,23 +82,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/student"
                 )
                 .permitAll()
-                   // For OPENAPI callers and urs
-                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-                        // TODO: CREATE Role based access for api
-                        "/**")
-                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
-            .and()
-                .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-                .permitAll()
-            .and()
-                .logout()
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/login")
-                    .permitAll()
+//                   // For OPENAPI callers and urs
+//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+//                        // TODO: CREATE Role based access for api
+//                        "/**")
+//                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
+//            .and()
+//                .formLogin()
+//                    .loginPage("/login")
+//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+//                .permitAll()
+//            .and()
+//                .logout()
+//                    .invalidateHttpSession(true)
+//                    .clearAuthentication(true)
+//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                    .logoutSuccessUrl("/login")
+//                    .permitAll()
             .and()
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling
@@ -111,7 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Configures Authentication for handler for application.
      * @param auth AuthenticationManagerBuilder.class
-     * @throws Exception
+     * @throws Exception AuthenticationManagerBuilder Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -149,8 +150,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Web Security configuration.
-     * @param web
-     * @throws Exception
+     * @param web WebSecurity object
+     * @throws Exception WebSecurity Exception
      */
     @Override
     public void configure(WebSecurity web) throws Exception { web.ignoring().antMatchers(  AUTH_WHITELIST ); }

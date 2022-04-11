@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.FilterChain;
@@ -66,7 +67,7 @@ public class LoginController implements Serializable {
             Model model
     ) {
         model.addAttribute("userLoginDetails", new UserLoginDetails());
-        log.info("\nUserLoginDetails form: {}\n", model.toString());
+        log.info("\nUserLoginDetails form: {}\n", model);
         return "login";
     }
 
@@ -88,7 +89,7 @@ public class LoginController implements Serializable {
         try{
             if (result.hasErrors())
             {
-                return "redirect:login";
+                return "error";
             }
 
             log.info("\n\nUserLoginDetails: {}" +
@@ -103,12 +104,19 @@ public class LoginController implements Serializable {
             );
             // set the SecurityContextHolder auth token
             SecurityContextHolder.getContext().setAuthentication(this.auth);
-            // now retrieve the auth token back from SecurityContextHolder
+            // now retrieve the auth token back from SecurityContextHolder to verify it is in place
             SecurityContext sc = SecurityContextHolder.getContext();
-            HttpSession session = request.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-            session.setAttribute("verified",true);
-//            response.sendRedirect(request.getRequestURI().split(";")[0]);
+            if (sc  == null){
+                throw new SecurityException(
+                        "SecurityContextHolder is null. " +
+                                "Use SecurityContextHolder.getContext().setAuthentication(token) " +
+                                "to set the security context."
+                );
+            }
+            log.info("Security Context Holder is active: {}", sc);
+//            HttpSession session = request.getSession(true);
+//            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+//            session.setAttribute("verified",true);
             log.info("\n\nUser Authentication Token: [ {} ]\n\n", this.auth.toString());
 //            chain.doFilter(request,response);
         } catch (Exception e) {
@@ -142,7 +150,7 @@ public class LoginController implements Serializable {
     @RequestMapping(path = "logout", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String logout(){
-        return "login";
+        return "redirect:login";
     }
     /**
      * Redirect logout to login
@@ -163,20 +171,22 @@ public class LoginController implements Serializable {
         }
         return "index";
     }
-    @RequestMapping(value = "student", method = RequestMethod.GET)
+
+    @RequestMapping(value = "student", method = {RequestMethod.POST,RequestMethod.GET})
     public String getStudentPage(HttpServletRequest request, HttpServletResponse response ){
         try {
             // set the SecurityContextHolder auth token
-            SecurityContextHolder.getContext().setAuthentication(this.auth);
+//            SecurityContextHolder.getContext().setAuthentication(this.auth);
             // now retrieve the auth token back from SecurityContextHolder
-            SecurityContext sc = SecurityContextHolder.getContext();
-            HttpSession session = request.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-            session.setAttribute("verified",true);
+//            SecurityContext sc = SecurityContextHolder.getContext();
+//            HttpSession session = request.getSession(true);
+//            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+//            session.setAttribute("verified",true);
 //            response.sendRedirect(request.getRequestURI().split(";")[0]);
             log.info("\n\nUser Authentication Token: [ {} ]\n\n", this.auth.toString());
             log.info("Authenticated User: {}",getPrincipal(request, response));
         } catch (Exception e) {
+            SecurityContextHolder.getContext().setAuthentication(null);
             log.error(e.getMessage());
         }
 
@@ -194,7 +204,7 @@ public class LoginController implements Serializable {
                                         HttpServletResponse response) {
         try {
             // set the SecurityContextHolder auth token
-            SecurityContextHolder.getContext().setAuthentication(this.auth);
+//            SecurityContextHolder.getContext().setAuthentication(this.auth);
             // now retrieve the auth token back from SecurityContextHolder
             SecurityContext sc = SecurityContextHolder.getContext();
             HttpSession session = request.getSession(true);
