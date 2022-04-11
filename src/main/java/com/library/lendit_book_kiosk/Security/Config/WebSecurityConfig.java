@@ -78,27 +78,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/verify",
                         "/login",
                         "/error",
-                        "/index",
-                        "/student"
+                        "/index"
                 )
                 .permitAll()
-//                   // For OPENAPI callers and urs
-//                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
-//                        // TODO: CREATE Role based access for api
-//                        "/**")
-//                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
-//            .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index", true).failureUrl("/login")
-//                .permitAll()
-//            .and()
-//                .logout()
-//                    .invalidateHttpSession(true)
-//                    .clearAuthentication(true)
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login")
-//                    .permitAll()
+                   // For OPENAPI callers and urs
+                .antMatchers(  // You must define all URL/URI path here to be accessible via http|api call
+                        // TODO: CREATE Role based access for api
+                        "/**")
+                .hasAnyAuthority("ROLE_ADMIN","ROLE_USER","ROLE_FACULTY","ROLE_SUPERUSER")
+            .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index", true).failureUrl("/login")
+                .permitAll()
+            .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login")
+                    .permitAll()
             .and()
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling

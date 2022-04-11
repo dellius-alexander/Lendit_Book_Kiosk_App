@@ -109,7 +109,6 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     public void addViewControllers(ViewControllerRegistry registry) {
         // Redirection controller
         registry.addRedirectViewController("/", "index");
-        registry.addRedirectViewController("/student","student");
         // View Controller
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/login").setViewName("login");
