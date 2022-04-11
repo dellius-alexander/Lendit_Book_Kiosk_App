@@ -111,6 +111,8 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
                 username,
                 password);
         return userLoginDetails.getUsernamePasswordAuthenticationToken( user );
+
+
     }
   @Override
   public boolean supports(Class<?> auth) {
