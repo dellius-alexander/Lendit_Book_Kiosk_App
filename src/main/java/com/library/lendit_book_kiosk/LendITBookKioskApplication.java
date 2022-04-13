@@ -63,6 +63,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 
 			if (!users.isPresent()){
 
+
 //				Major CSCI = new Major("CSCI");
 //				Major BSCS = new Major("BSCS");
 //				Major MBA = new Major("MBA");
