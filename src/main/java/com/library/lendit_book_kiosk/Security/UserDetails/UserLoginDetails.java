@@ -1,8 +1,7 @@
 package com.library.lendit_book_kiosk.Security.UserDetails;
 
-import com.library.lendit_book_kiosk.Security.Custom.Password;
+import com.library.lendit_book_kiosk.Security.Custom.Secret;
 import com.library.lendit_book_kiosk.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +23,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     private Long id;
     private String username;
     private String displayName;
-    private Password password;
+    private Secret password;
     private Set<GrantedAuthority> authorities;
 
     public UserLoginDetails(){
@@ -37,9 +36,9 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
             Long id,
             String username,
             String displayName,
-            Password password,
+            Secret password,
             Set<GrantedAuthority> authorities){
-        super(username,password,authorities);
+        super(username, password,authorities);
         this.setAuthorities(authorities);
         this.setDisplayName(displayName);
         this.setUsername(username);
@@ -98,7 +97,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         return password.getPasswordToString();
     }
 
-    public Password getPasswordClass(){return this.password;}
+    public Secret getPasswordClass(){return this.password;}
     @Override
     public String getName(){return username;}
 
@@ -136,7 +135,7 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     }
 
     /**
-     * The password
+     * The secret
      * @return
      */
     @Override
@@ -170,12 +169,12 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.displayName = displayName;
     }
 
-    public void setPassword(Password password) {
-        this.password = password;
+    public void setPassword(Secret secret) {
+        this.password = secret;
     }
 
     public void setPassword(String password){
-        this.password = new Password(password);
+        this.password = new Secret(password);
     }
 
     public void setAuthorities(Set<GrantedAuthority> authorities) {
@@ -237,8 +236,8 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         return "{\n" +
                 "\"username\":\"" + this.getUsername() + "\",\n" +
                 "\"displayName\":\"" + this.getDisplayName() + "\",\n" +
-                // TODO: comment out password on production deploy
-                "\"password\":\"" + this.getPassword() + "\",\n" +
+                // TODO: comment out secret on production deploy
+                "\"secret\":\"" + this.getPassword() + "\",\n" +
                 "\"authorities\":\"" + this.getAuthorities() + "\",\n" +
                 "\"principal\":\"" + this.getPrincipal() + "\",\n" +
                 "\n}";

@@ -1,17 +1,13 @@
 package com.library.lendit_book_kiosk.WebApp.Login;
 
+import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
-import com.library.lendit_book_kiosk.Security.Custom.Password;
-import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
-import com.library.lendit_book_kiosk.Student.Student;
-import com.library.lendit_book_kiosk.User.UserService;
 //import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.GrantedAuthority;
@@ -20,26 +16,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.security.auth.login.LoginException;
-import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -77,13 +65,17 @@ public class LoginController implements Serializable {
      * @param request
      * @return
      */
-    @RequestMapping(value = {"index"}, method = RequestMethod.POST)
+    @RequestMapping(
+            value = {"index"},
+            path = {"index"},
+            method = RequestMethod.POST)
     public String verify(
             @Valid
             @ModelAttribute("userLoginDetails") UserLoginDetails userLoginDetails,
             BindingResult result,
             HttpServletRequest request,
-            HttpServletResponse response)
+            HttpServletResponse response,
+            Model model)
     {
         try{
             if (result.hasErrors())
@@ -105,6 +97,7 @@ public class LoginController implements Serializable {
             SecurityContextHolder.getContext().setAuthentication(this.auth);
             // now retrieve the auth token back from SecurityContextHolder to verify it is in place
             SecurityContext sc = SecurityContextHolder.getContext();
+            model.addAttribute("book",new Book());
             if (sc  == null){
                 throw new SecurityException(
                         "SecurityContextHolder is null. " +
@@ -113,8 +106,7 @@ public class LoginController implements Serializable {
                 );
             }
             log.info("Security Context Holder is active: {}", sc);
-//            log.info("\n\nUser Authentication Token: [ {} ]\n\n", getPrincipal(request,response));
-//            chain.doFilter(request,response);
+
         } catch (Exception e) {
             SecurityContextHolder.getContext().setAuthentication(null);
             log.error("Failure in autoLogin. Redirection back to /login. \n{}", e.getMessage());
@@ -167,23 +159,23 @@ public class LoginController implements Serializable {
         }
         return "index";
     }
-
-    @RequestMapping(
-            path = {"student"},
-            value = {"student"},
-            method = {RequestMethod.GET})
-    public String getStudentPage(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ){
-        try {
-            log.info("Authenticated User: {}",getPrincipal(request, response));
-        } catch (Exception e) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-            log.error(e.getMessage());
-        }
-        return "student";
-    }
+//
+//    @RequestMapping(
+//            path = {"student"},
+//            value = {"student"},
+//            method = {RequestMethod.GET})
+//    public String getStudentPage(
+//            HttpServletRequest request,
+//            HttpServletResponse response
+//    ){
+//        try {
+//            log.info("Authenticated User: {}",getPrincipal(request, response));
+//        } catch (Exception e) {
+//            SecurityContextHolder.getContext().setAuthentication(null);
+//            log.error(e.getMessage());
+//        }
+//        return "student";
+//    }
     
     //////////////////////////////////////////////////////////////////////
     /**

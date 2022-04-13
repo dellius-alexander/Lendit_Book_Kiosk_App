@@ -58,7 +58,7 @@ unix2dos <file_name>
   "id": null,
   "name": "James Bond",
   "email": "james@gmail.com",
-  "password": "password",
+  "secret": "secret",
   "gender": "MALE",
   "dob": "1979-01-03",
   "profession": "Student:Senior",
@@ -97,7 +97,7 @@ unix2dos <file_name>
   "id": null,
   "name": "James Bond",
   "email": "james@gmail.com",
-  "password": "password",
+  "secret": "secret",
   "gender": "MALE",
   "dob": "1979-01-03",
   "profession": "Student:Senior",
@@ -136,7 +136,7 @@ unix2dos <file_name>
     "id": 1,
     "name": "Jane Doe",
     "email": "jane@gmail.com",
-    "password": "password",
+    "secret": "secret",
     "gender": "FEMALE",
     "dob": [
       1989,
@@ -181,7 +181,7 @@ unix2dos <file_name>
 {
    "name": "James Bond",
    "email": "james@gmail.com",
-   "password": "password",
+   "secret": "secret",
    "gender": "MALE",
    "dob": "1989-02-27",
    "profession": "Student:Senior",
@@ -209,7 +209,7 @@ unix2dos <file_name>
   "id": 1,
   "name": "Jane Doe",
   "email": "jane@gmail.com",
-  "password": "password",
+  "secret": "secret",
   "gender": "FEMALE",
   "dob": [
     1989,
@@ -1000,8 +1000,8 @@ usage: mvn [options] [<goal(s)>] [<phase(s)>]
 <tr class="b"><td><code>-<a name="cpu">cpu</a>,--<a name="check-plugin-updates">check-plugin-updates</a></code></td><td>Ineffective, only kept for backward compatibility</td></tr>
 <tr class="a"><td><code>-<a name="D">D</a>,--<a name="define">define</a> &lt;arg&gt;</code></td><td>Define a system property</td></tr>
 <tr class="b"><td><code>-<a name="e">e</a>,--<a name="errors">errors</a></code></td><td>Produce execution error messages</td></tr>
-<tr class="a"><td><code>-<a name="emp">emp</a>,--<a name="encrypt-master-password">encrypt-master-password</a> &lt;arg&gt;</code></td><td>Encrypt master security password</td></tr>
-<tr class="b"><td><code>-<a name="ep">ep</a>,--<a name="encrypt-password">encrypt-password</a> &lt;arg&gt;</code></td><td>Encrypt server password</td></tr>
+<tr class="a"><td><code>-<a name="emp">emp</a>,--<a name="encrypt-master-secret">encrypt-master-secret</a> &lt;arg&gt;</code></td><td>Encrypt master security secret</td></tr>
+<tr class="b"><td><code>-<a name="ep">ep</a>,--<a name="encrypt-secret">encrypt-secret</a> &lt;arg&gt;</code></td><td>Encrypt server secret</td></tr>
 <tr class="a"><td><code>-<a name="f">f</a>,--<a name="file">file</a> &lt;arg&gt;</code></td><td>Force the use of an alternate POM file (or directory with pom.xml).</td></tr>
 <tr class="b"><td><code>-<a name="fae">fae</a>,--<a name="fail-at-end">fail-at-end</a></code></td><td>Only fail the build afterwards; allow all non-impacted builds to continue</td></tr>
 <tr class="a"><td><code>-<a name="ff">ff</a>,--<a name="fail-fast">fail-fast</a></code></td><td>Stop at first failure in reactorized builds</td></tr>
@@ -2065,7 +2065,7 @@ click above to see more.
  hibernate.driver com.progress.sql.jdbc.JdbcProgressDriver
  hibernate.url jdbc:JdbcProgress:T:host:port:dbname;WorkArounds=536870912
  hibernate.username username
- hibernate.password password
+ hibernate.secret secret
 
  The WorkArounds parameter in the URL is required to avoid an error
  in the Progress 9.1C JDBC driver related to PreparedStatements.</td>
@@ -2299,7 +2299,7 @@ This package abstracts the SQL dialect of the underlying database.
  hibernate.driver com.progress.sql.jdbc.JdbcProgressDriver
  hibernate.url jdbc:JdbcProgress:T:host:port:dbname;WorkArounds=536870912
  hibernate.username username
- hibernate.password password
+ hibernate.secret secret
 
  The WorkArounds parameter in the URL is required to avoid an error
  in the Progress 9.1C JDBC driver related to PreparedStatements.</td>

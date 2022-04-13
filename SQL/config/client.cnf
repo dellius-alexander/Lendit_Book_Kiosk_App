@@ -1,6 +1,6 @@
 [client]
 user=admin
-password=developer
+secret=developer
 host=Lendit_Book_Kiosk-db
 port=3306
 socket=/var/lib/mysql/mysql.sock

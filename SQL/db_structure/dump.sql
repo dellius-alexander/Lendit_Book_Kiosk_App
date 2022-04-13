@@ -75,7 +75,7 @@ create table user
     email      varchar(255) null,
     gender     varchar(255) null,
     name       varchar(255) null,
-    password   varchar(255) null,
+    secret   varchar(255) null,
     profession varchar(255) null
 );
 

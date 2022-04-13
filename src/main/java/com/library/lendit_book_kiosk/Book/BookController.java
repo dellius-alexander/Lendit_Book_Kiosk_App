@@ -35,7 +35,7 @@ public class BookController {
     @RequestMapping(
             value = {"/getByTitle/{title}"},
             path = {"/getByTitle/{title}"},
-            method = RequestMethod.GET,
+            method = {RequestMethod.GET,RequestMethod.POST},
             consumes = "*/*",
             produces = "application/json")
     public ResponseEntity<List<Book>> getBooksByTitle(

@@ -1,8 +1,7 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.UserRole;
-import com.library.lendit_book_kiosk.Security.Custom.Password;
+import com.library.lendit_book_kiosk.Security.Custom.Secret;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
@@ -119,10 +118,10 @@ public interface UserInterface extends Serializable {
     void setEmail(String email);
 
     /**
-     * Set user password
-     * @param password
+     * Set user secret
+     * @param secret
      */
-    void setPassword(Password password);
+    void setPassword(Secret secret);
 
     /**
      * Set user gender

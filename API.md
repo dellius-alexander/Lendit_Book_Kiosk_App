@@ -60,11 +60,11 @@
 
 ---
 
-- Student will login via laker card or laker id and password
+- Student will login via laker card or laker id and secret
 
 ```json
 {
-  "login-by-id": "/student/login/student_id={student_id}&password={password}"
+  "login-by-id": "/student/login/student_id={student_id}&secret={secret}"
 }
 ```
 

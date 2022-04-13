@@ -122,21 +122,24 @@
           <div class="w-form">
 <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
             <form
+                    th:object="${book}"
                     id="email-form-2"
                     name="email-form-2"
                     data-name="Email Form 2"
                     method="get"
-                    th:action="@{/book/getByTitle/{title}}"
+                    th:action="@{/book/getByTitle/title=*{title}}"
+
             >
               <h4 class="heading-14">Search</h4>
               <input
                       type="text"
                       class="text-field-2 w-input"
                       maxlength="256"
-                      name="name"
+                      th:name="title"
                       data-name="Name"
                       placeholder="Search Terms"
-                      id="name"
+                      id="title"
+                      th:field="*{title}"
 
               >
               <input

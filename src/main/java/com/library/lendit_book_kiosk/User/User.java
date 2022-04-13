@@ -1,8 +1,7 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Security.Custom.Password;
-import com.library.lendit_book_kiosk.Student.Major;
+import com.library.lendit_book_kiosk.Security.Custom.Secret;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,7 @@ public class User implements UserInterface {
             nullable = false,
             columnDefinition = "varchar(255)",
             referencedColumnName = "password")
-    private Password password;
+    private Secret password;
     @Enumerated(EnumType.STRING)
     @Column(
             name = "gender",
@@ -111,7 +110,7 @@ public class User implements UserInterface {
             Long id,
             String name,
             String email,
-            Password password,
+            Secret password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -143,7 +142,7 @@ public class User implements UserInterface {
     public User(
             String name,
             String email,
-            Password password,
+            Secret password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -173,7 +172,7 @@ public class User implements UserInterface {
     public User(
             String name,
             String email,
-            Password password,
+            Secret password,
             GENDER gender,
             LocalDate dob,
             String profession,
@@ -236,13 +235,13 @@ public class User implements UserInterface {
     }
 
     /**
-     * Get the user password
+     * Get the user secret
      *
-     * @return the user password
+     * @return the user secret
      */
 
     public String getPassword(){return this.password.getPasswordToString();}
-    public Password getPasswordClass(){return this.password;}
+    public Secret getPasswordClass(){return this.password;}
     /**
      * Get the user gender
      *
@@ -305,13 +304,13 @@ public class User implements UserInterface {
     }
 
     /**
-     * Set user password
+     * Set user secret
      *
-     * @param password
+     * @param secret
      */
     @Override
-    public void setPassword(Password password) {
-        this.password = password;
+    public void setPassword(Secret secret) {
+        this.password = secret;
     }
 
     /**
@@ -455,7 +454,7 @@ public class User implements UserInterface {
                 "\n\"id\":" + this.getId() +
                 ",\n\"name\":\"" + this.getName() + "\"" +
                 ",\n\"email\":\"" + this.getEmail() + "\"" +
-                ",\n\"password\":\"" + this.getPassword() + "\"" +
+                ",\n\"secret\":\"" + this.getPassword() + "\"" +
                 ",\n\"gender\":\"" + this.getGender() + "\"" +
                 ",\n\"dob\":\"" + this.getDob() + "\"" +
                 ",\n\"profession\":\"" + this.getProfession() + "\"" +

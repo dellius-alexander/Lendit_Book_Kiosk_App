@@ -49,7 +49,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
         }
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        log.info("\nPassword: {}", password);
+        log.info("\nSecret: {}", password);
         User user = userService.getByEmail(username);
         log.info("User found: {}", user);
         if (user == null) {
@@ -62,7 +62,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
                     new BadCredentialsException("Authentication failed/1000"));
             throw new BadCredentialsException("Authentication failed/1000");
         }
-        if (!Password.matches(password, user.getPasswordClass())) {
+        if (!Secret.matches(password, user.getPasswordClass())) {
             log.info("USER NOT FOUND: {}",
                 new BadCredentialsException("Authentication failed/1000"));
             throw new BadCredentialsException("Authentication failed/1000");
@@ -86,8 +86,8 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
             throw new NullArgumentException("Authentication Object is null: " + userLoginDetails.toString());
         }
         String username = userLoginDetails.getUsername();
-        Password password = userLoginDetails.getPasswordClass();
-        log.info("\nPassword: {}", password);
+        Secret secret = userLoginDetails.getPasswordClass();
+        log.info("\nSecret: {}", secret);
 
         User user = userService.getByEmail(username);
         log.info("User found: {}", user);
@@ -101,7 +101,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
                     new BadCredentialsException("Authentication failed/1000"));
             throw new BadCredentialsException("Authentication failed/1000");
         }
-        if (!Password.matches(password, user.getPasswordClass())) {
+        if (!Secret.matches(secret, user.getPasswordClass())) {
             log.info("USER NOT FOUND: {}",
                     new BadCredentialsException("Authentication failed/1000"));
             throw new BadCredentialsException("Authentication failed/1000");
@@ -109,7 +109,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
 
         log.info("\nUSERNAME: {}\nPASSWORD: {}\n",
                 username,
-                password);
+                secret);
         return userLoginDetails.getUsernamePasswordAuthenticationToken( user );
     }
   @Override

@@ -161,7 +161,7 @@ create table if not exists Lendit_Book_Kiosk.user
     gender                varchar(8)   null,
     login_disabled        bit          not null,
     name                  varchar(255) null,
-    password              varchar(255) null,
+    secret              varchar(255) null,
     profession            varchar(255) null,
     secret                varchar(255) null,
     token                 varchar(255) null,

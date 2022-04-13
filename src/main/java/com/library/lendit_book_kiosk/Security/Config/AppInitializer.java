@@ -1,5 +1,6 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
+import com.library.lendit_book_kiosk.Security.Custom.CustomAccessDenialHandler;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;

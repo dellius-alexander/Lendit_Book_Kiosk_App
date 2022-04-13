@@ -87,7 +87,7 @@ create table if not exists Lendit_Book_Kiosk.user
     email      varchar(224) not null,
     gender     varchar(8)   null,
     name       varchar(255) null,
-    password   varchar(255) null,
+    secret   varchar(255) null,
     profession varchar(255) null,
     constraint `PRIMARY`
     primary key (user_id),

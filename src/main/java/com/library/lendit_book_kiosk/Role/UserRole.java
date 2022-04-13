@@ -5,6 +5,7 @@ public enum UserRole {
     GUEST,
     STUDENT,
     FACULTY,
+    STAFF,
     ADMIN,
     SUPERUSER
 }

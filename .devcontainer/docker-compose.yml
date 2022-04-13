@@ -12,7 +12,7 @@ services:
     container_name: Lendit_Book_Kiosk-db
     environment:
       # MYSQLD_USER=mysql
-      # # Disable User Password
+      # # Disable User Secret
       # MYSQL_ALLOW_EMPTY_PASSWORD: 1
       # Name of the database
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -22,7 +22,7 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       # # You can use whatever password you like
       MYSQL_PASSWORD: "${MYSQL_PASSWD}"
-      # Password for root access
+      # Secret for root access
       MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWD}"
     volumes:
       # # mysql logs

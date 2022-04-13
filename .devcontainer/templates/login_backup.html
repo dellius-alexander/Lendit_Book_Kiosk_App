@@ -72,7 +72,7 @@
 <main>
                 <!-- show notification on error -->
                 <div class="alert-danger" th:if="${param.error}" >
-                    Invalid username or password.
+                    Invalid username or secret.
                 </div>
 
                 <!-- show notification of logout -->
@@ -108,16 +108,16 @@
         <!--                        <br/>-->
         <!--                    </div>-->
         <!--                    <div class="form-group">-->
-        <!--                        <label for="password">Password</label>-->
+        <!--                        <label for="secret">Secret</label>-->
         <!--                        <input-->
         <!--                               class="form-control"-->
-        <!--                               id="password"-->
-        <!--                               type="password"-->
-        <!--                               name="password"-->
-        <!--                               placeholder="password"-->
+        <!--                               id="secret"-->
+        <!--                               type="secret"-->
+        <!--                               name="secret"-->
+        <!--                               placeholder="secret"-->
         <!--                               th:required="required"-->
         <!--                               th:autofocus="autofocus"-->
-        <!--                               th:field="*{password}" />-->
+        <!--                               th:field="*{secret}" />-->
         <!--                        <br/>-->
         <!--                    </div>-->
         <!--                    <div class="form-group">-->
