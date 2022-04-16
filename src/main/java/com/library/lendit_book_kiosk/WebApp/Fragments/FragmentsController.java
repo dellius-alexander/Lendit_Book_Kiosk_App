@@ -53,26 +53,26 @@ public class FragmentsController {
             HttpServletResponse response,
             BindingResult result,
             Model model
-    ){
-        try{
-            if (result.hasErrors())
-            {
+    ) {
+        try {
+            if (result.hasErrors()) {
                 return "error";
             }
             log.info("\nUser attribute contents: {}, \nUser Login Details: {}, \nBook Details: {}",
-                    user,userLoginDetails,title);
-            model.addAttribute("User",user);
+                    user, userLoginDetails, title);
+            model.addAttribute("User", user);
             model.addAttribute("userLoginDetails", userLoginDetails);
-            model.addAttribute("title",""); // now use the authentication token to assign a principal/user to the security context holder
+            model.addAttribute("title", ""); // now use the authentication token to assign a principal/user to the security context holder
             log.info("\nCurrent Session: {},\nResponse Headers: {}\n",
                     request.getSession(),
                     response.getHeaderNames());
             return "fragments/student";
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
+            ;
+            return null;
         }
-        return null;
     }
 }
 
