@@ -71,17 +71,15 @@ public class Secret implements Serializable {
     protected SecretKey secretKey = new SecretKey()
     {
         @Override
-//        @Column(name = "algorithm",columnDefinition = "varchar(255)")
         public String getAlgorithm() {
             return ALGORITHM;
         }
         @Override
-//        @Column(name = "format",columnDefinition = "varchar(255)")
         public String getFormat() {
             return KEY_FORMAT;
         }
         @Override // 16 bit encoding aka block sizes must be a multiples of 16
-//        @Column(name = "encoding",columnDefinition = "varbinary(255)")
+
         public byte[] getEncoded() {
             return new byte[GCM_TAG_LENGTH];
         }
@@ -625,4 +623,5 @@ public class Secret implements Serializable {
 //            ).collect(Collectors.toList()).toString());
 //        }
 //    }
+
 }

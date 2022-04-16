@@ -35,11 +35,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.io.Serializable;
+
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller(value = "LoginController")
 @RequestMapping( value = {"/"}, path = {"/"})
-public class LoginController  {
+public class LoginController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
