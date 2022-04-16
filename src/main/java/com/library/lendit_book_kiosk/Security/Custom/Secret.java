@@ -599,30 +599,30 @@ public class Secret implements Serializable {
                 "}";
     }
 
-
-    public static void main(String[] args)
-    {
-        try {
-
-            Secret password1 = new Secret("LendIT_Book_Kiosk");
-            log.info("-----------------------------------------| New Secret Object: {}", password1);
-            log.info("-----------------------------------------| Decrypted Plaintext Password1: {}",
-                    Secret.decrypt(password1.getSecretKey(), password1.getPasswordToString()));
-            log.info("-----------------------------------------| New Encrypted Password1: {}",
-                    password1.getPasswordToString());
-            Secret password2 = new Secret("password");
-            log.info("-----------------------------------------| New Secret Object: {}", password2);
-            log.info("-----------------------------------------| Decrypted Plaintext Password2: {}",
-                    Secret.decrypt(password2.getSecretKey(), password2.getPasswordToString()));
-            log.info("-----------------------------------------| New Encrypted Password2: {}",
-                    password2.getPasswordToString());
-
-
-        }catch (Exception e){
-            log.error(e.getMessage());
-            log.info(Arrays.stream(e.getStackTrace()).map(
-                    x -> x + "\n"
-            ).collect(Collectors.toList()).toString());
-        }
-    }
+//
+//    public static void main(String[] args)
+//    {
+//        try {
+//
+//            Secret password1 = new Secret("LendIT_Book_Kiosk");
+//            log.info("-----------------------------------------| New Secret Object: {}", password1);
+//            log.info("-----------------------------------------| Decrypted Plaintext Password1: {}",
+//                    Secret.decrypt(password1.getSecretKey(), password1.getPasswordToString()));
+//            log.info("-----------------------------------------| New Encrypted Password1: {}",
+//                    password1.getPasswordToString());
+//            Secret password2 = new Secret("password");
+//            log.info("-----------------------------------------| New Secret Object: {}", password2);
+//            log.info("-----------------------------------------| Decrypted Plaintext Password2: {}",
+//                    Secret.decrypt(password2.getSecretKey(), password2.getPasswordToString()));
+//            log.info("-----------------------------------------| New Encrypted Password2: {}",
+//                    password2.getPasswordToString());
+//
+//
+//        }catch (Exception e){
+//            log.error(e.getMessage());
+//            log.info(Arrays.stream(e.getStackTrace()).map(
+//                    x -> x + "\n"
+//            ).collect(Collectors.toList()).toString());
+//        }
+//    }
 }
