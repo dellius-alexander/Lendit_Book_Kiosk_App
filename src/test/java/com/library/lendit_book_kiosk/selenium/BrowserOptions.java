@@ -31,10 +31,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @ContextConfiguration({"classpath:testng-context.xml"})
-@SpringBootTest(classes = {LendITBookKioskApplication.class})
 public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
     private static final Logger log = LoggerFactory.getLogger(BrowserOptions.class);
-
+    // ThreadLocal will be used to manage each driver instance and process Id's associated with drivers
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     /**
@@ -141,11 +140,10 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
             if (driver.get() == null){
                 throw new NullArgumentException("RemoteWebDriver instance is null...\n " + driver.get().toString());
             }
-            log.info(browserType.toUpperCase() +
-                    " RemoteWebDriver was created successfully..............!!!\n"+
-                    "Launching Grid..............!!!\n"
-            );
+            log.info( browserType.toUpperCase() + " RemoteWebDriver was created successfully..............!!!\n" );
             log.info(driver.get().toString());
+            log.info( "Starting Remote Session..............!!!\n" );
+
         }catch (NullArgumentException nae) {
             log.error(nae.getMessage());
         } catch (SecurityException se) {
@@ -168,8 +166,16 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
     @AfterMethod(alwaysRun = true)
     public void tearDown()
     {
-        driver.get().quit();
-        log.info("Tearing down session.........");
+        try{
+//            driver.wait(5000L);
+            driver.get().close();
+            driver.get().quit();
+            log.info("Tearing down session.........");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     @AfterSuite(alwaysRun = true)

@@ -15,9 +15,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.Assert;
 
 
 /**
@@ -26,15 +29,67 @@ import org.slf4j.LoggerFactory;
  */
 @Configuration("CustomAuthenticationProvider")
 @ComponentScan(basePackages = {"com.library.lendit_book_kiosk"})
-public class CustomAuthenticationProvider  implements AuthenticationManager, AuthenticationProvider {
+public class CustomAuthenticationProvider extends UsernamePasswordAuthenticationToken  implements AuthenticationManager, AuthenticationProvider {
     private final static Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
     @Autowired
     private  UserService userService;
     @Autowired
     private UserLoginDetails userLoginDetails;
 
-    public CustomAuthenticationProvider(){}
+    public CustomAuthenticationProvider(){super("","");}
+    public CustomAuthenticationProvider(User user){
+        super(user.getEmail(),user.getPassword(),user.getAuthorities());
+    }
 
+    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){
+        return new UsernamePasswordAuthenticationToken(
+                getPrincipal(), getCredentials(),getAuthorities());
+    }
+
+    public static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(User user){
+        return new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
+                        "ROLE_" + x.getRole().name())).collect(Collectors.toSet()));
+    }
+
+    /**
+     * The secret
+     * @return
+     */
+    @Override
+    public String getCredentials() {
+        return super.getCredentials().toString();
+    }
+
+    /**
+     * The username
+     * @return
+     */
+    @Override
+    public String getPrincipal() {
+        return super.getPrincipal().toString();
+    }
+    @Override
+    public void eraseCredentials() {
+        super.eraseCredentials();
+    }
+
+    @Override
+    public String getName(){return super.getName();}
+
+    @Override
+    public void setDetails(Object details) {
+        super.setDetails(details);
+    }
+
+    @Override
+    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+        Assert.isTrue(!isAuthenticated,
+                "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
+        super.setAuthenticated(false);
+    }
     /**
      * Takes an <code>authentication</code> (token|payload|object) and validates the username
      * and password against a datastore of static values. We use the AuthenticationProvider,
@@ -49,7 +104,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
         }
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        log.info("\nSecret: {}", password);
+        log.info("\nUsername: {}\n, Secret: {}",username, password);
         User user = userService.getByEmail(username);
         log.info("User found: {}", user);
         if (user == null) {
@@ -72,7 +127,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
                 username,
                 password,
                 authentication);
-        return userLoginDetails.getUsernamePasswordAuthenticationToken( user );
+        return getUsernamePasswordAuthenticationToken( user );
       }
     /**
      * Takes an <code>UserLoginDetails</code> (token|payload|object) and validates the username
@@ -87,7 +142,7 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
         }
         String username = userLoginDetails.getUsername();
         Secret secret = userLoginDetails.getPasswordClass();
-        log.info("\nSecret: {}", secret);
+        log.info("\nUsername: {}\n, Secret: {}",username, secret);
 
         User user = userService.getByEmail(username);
         log.info("User found: {}", user);
@@ -107,10 +162,10 @@ public class CustomAuthenticationProvider  implements AuthenticationManager, Aut
             throw new BadCredentialsException("Authentication failed/1000");
         }
 
-        log.info("\nUSERNAME: {}\nPASSWORD: {}\n",
+        log.info("\nUSERNAME: {}\nPASSWORD: {}\nUser Authentication Successful............\n",
                 username,
                 secret);
-        return userLoginDetails.getUsernamePasswordAuthenticationToken( user );
+        return getUsernamePasswordAuthenticationToken( user );
     }
   @Override
   public boolean supports(Class<?> auth) {

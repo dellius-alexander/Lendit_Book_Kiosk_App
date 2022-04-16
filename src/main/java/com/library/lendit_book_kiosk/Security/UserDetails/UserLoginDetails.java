@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Configuration(value = "UserLoginDetails")
 @ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security"})
-public class UserLoginDetails extends UsernamePasswordAuthenticationToken implements UserDetails{
+public class UserLoginDetails implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
     private Long id;
     private String username;
@@ -27,7 +27,6 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     private Set<GrantedAuthority> authorities;
 
     public UserLoginDetails(){
-        super("","");
         this.setUsername("");
         this.setPassword("");
 
@@ -38,13 +37,12 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
             String displayName,
             Secret password,
             Set<GrantedAuthority> authorities){
-        super(username, password,authorities);
+//        super(username, password,authorities);
         this.setAuthorities(authorities);
         this.setDisplayName(displayName);
         this.setUsername(username);
         this.setId(id);
         this.setPassword(password);
-        super.setDetails(this);
         log.info(toString());
     }
 
@@ -53,34 +51,16 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
          * MUST pass user credentials to super class holding auth token.
          * Auth tokens can only be authenticated upon creation.
          */
-        super(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
-                        "ROLE_" + x.getRole().name())).collect(Collectors.toSet())
-        );
         this.setAuthorities(user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
                 "ROLE_" + x.getRole().name())).collect(Collectors.toSet()));
         this.setDisplayName(user.getName());
         this.setUsername(user.getEmail());
         this.setId(user.getId());
         this.setPassword(user.getPasswordClass());
-        this.setDetails(user);
         log.info(user.toString());
         log.info(toString());
     }
-    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(){
-        return new UsernamePasswordAuthenticationToken(
-                        getPrincipal(), getCredentials(),getAuthorities());
-    }
 
-    public static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(User user){
-        return new UsernamePasswordAuthenticationToken(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles().stream().map( x -> new SimpleGrantedAuthority(
-                        "ROLE_" + x.getRole().name())).collect(Collectors.toSet()));
-    }
     /**
      * Set by an AuthenticationManager to indicate the authorities that the principal has been granted.
      * Note that classes should not rely on this value as being valid unless it has been set by a trusted
@@ -98,8 +78,6 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
     }
 
     public Secret getPasswordClass(){return this.password;}
-    @Override
-    public String getName(){return username;}
 
     @Override
     public String getUsername() {
@@ -134,36 +112,10 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         return displayName;
     }
 
-    /**
-     * The secret
-     * @return
-     */
-    @Override
-    public Object getCredentials() {
-        return super.getCredentials();
-    }
-
-    /**
-     * The username
-     * @return
-     */
-    @Override
-    public Object getPrincipal() {
-        return super.getPrincipal();
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
-    @Override
-    public void eraseCredentials() {
-        super.eraseCredentials();
-    }
 
-    @Override
-    public void setDetails(Object details) {
-        super.setDetails(this);
-    }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
@@ -181,12 +133,6 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
         this.authorities = authorities;
     }
 
-    @Override
-    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-        Assert.isTrue(!isAuthenticated,
-                "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
-        super.setAuthenticated(false);
-    }
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof UserLoginDetails)) return false;
@@ -239,7 +185,6 @@ public class UserLoginDetails extends UsernamePasswordAuthenticationToken implem
                 // TODO: comment out secret on production deploy
                 "\"secret\":\"" + this.getPassword() + "\",\n" +
                 "\"authorities\":\"" + this.getAuthorities() + "\",\n" +
-                "\"principal\":\"" + this.getPrincipal() + "\",\n" +
                 "\n}";
     }
 
