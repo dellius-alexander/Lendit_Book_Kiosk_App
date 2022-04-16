@@ -1,14 +1,26 @@
 package com.library.lendit_book_kiosk.selenium;
 
 
+
 import com.library.lendit_book_kiosk.LendITBookKioskApplication;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
 import org.testng.annotations.*;
 
+import java.util.Set;
+
+import static org.apache.tomcat.util.net.SSLHostConfigCertificate.Type.EC;
+
+@SpringBootTest(classes = {LendITBookKioskApplication.class})
 public class ParallelTests extends BrowserOptions {
 
     public static final Logger log = LoggerFactory.getLogger(ParallelTests.class);
@@ -16,79 +28,67 @@ public class ParallelTests extends BrowserOptions {
     public ParallelTests(){
         super();
     }
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
-     * Runs test using parallel browsers
+     * Login to LendIT Book Kiosk
+     * @param appURL
      */
     @Test(
             suiteName = "SeleniumGridDocker",
-            threadPoolSize = 3
-    )
-    public void runSafariTest() {
-
+            priority = 1)
+    @Parameters( value = {"appURL"} )
+    public void login(String appURL)
+    {
         try{
-        WebDriver driver = getDriver();
-        driver.get("http://10.0.2.81:8081/login");
-//        driver.navigate().to("http://10.0.2.81:8081/login");
-        driver.findElement(By.id("UserIDField")).sendKeys("jane@gmail.com");
-        driver.findElement(By.id("UserPasswordField")).sendKeys("password");
-        driver.findElement(By.id("LoginSubmitButton")).click();
-        log.info("Current URL: {}",driver.getCurrentUrl());
-        driver.wait(20000);
+            WebDriver driver = getDriver();
+//            // just for google chrome
+//            if (browserType.equalsIgnoreCase("chrome"))
+//            {
+//                driver.getWindowHandles().forEach(
+//                    tab -> {
+//                        driver.switchTo().window(tab);
+//                        if (driver.getTitle().equalsIgnoreCase("What's New")) {
+//                            driver.close();
+//                        }
+//                    }
+//                );
+//            }
+            driver.get(appURL + "/login");
+            WebElement element = new WebDriverWait(driver,30).until(
+                    ExpectedConditions.presenceOfElementLocated((By.ById.id("UserIDField")))
+            );
+            driver.findElement(By.id("UserIDField")).sendKeys("adyos0@webs.com");
+            driver.findElement(By.id("UserPasswordField")).sendKeys("NwvX65L9BWF9");
+            driver.findElement(By.id("LoginSubmitButton")).submit();
+            log.info("Current URL: {}",driver.getCurrentUrl());
         } catch (Exception e){
             log.info(e.getMessage());
+        } finally {
+            log.info("Finished Login Test..........");
         }
-
     }
-///////////////////////////////////////////////////////////////////////////////
-//    /**
-//     * Run test using Chrome browser
-//     * @throws InterruptedException
-//     * @throws MalformedURLException
-//     */
-//    @Test
-//    public void runChromeTest() throws InterruptedException, MalformedURLException
-//    {
-//        remoteWebDriver.get(url);
-//        String pageTitle = remoteWebDriver.getTitle();
-//
-//		/*
-//		////////////////////////////////////////////////////////////////////////////////////////////////
-//		// test chrome browser
-//		//WebDriver chrome = getChromeDriver(driverpath);
-//		//WebDriver remoteWebDriver = getRemoteWebDriver("chrome");
-//		TestAuto.runTestCasesOnInputField(url, srcstr, remoteWebDriver, searchBoxBy_Locator, searchResultsPageTitle);
-//		for (int i = 0; i < footerXpath.length; i++) {
-//			TestAuto.runTestCasesOnFooterElements(url, remoteWebDriver, footerXpath[i], footerPagesTitles[i], pageSourcesURLs[i]);
-//		}
-//		for (int i = 0; i < settingsPagesTitle.length; i++) {
-//			TestAuto.runTestCasesForGoogleSettings(url, remoteWebDriver, settingsMenuXpathBy, settingsMenuOptionsXpath[i], settingsPagesTitle[i], settingsMenuOptionsLinkTexts[i]);
-//		}
-//		*/
-//    }
-//    /**
-//     * Run tests using Firefox browser
-//     * @throws InterruptedException
-//     * @throws MalformedURLException
-//     */
-//    @Test
-//    public void runFirefoxTest() throws InterruptedException, MalformedURLException
-//    {
-//        remoteWebDriver.get(url);
-//        remoteWebDriver.findElement(By.name("q")).sendKeys("Selenium");
-//        remoteWebDriver.findElement(By.linkText("www.selenium.dev")).click();
-//        /**
-//         ////////////////////////////////////////////////////////////////////////////////////////////////
-//         //test firefox browser
-//         //WebDriver firefox = getFirefoxDriver (driverpath);
-//         //WebDriver remoteWebDriver = BrowserOptions.getRemoteWebDriver("firefox");
-//         TestAuto.runTestCasesOnInputField(url, srcstr, remoteWebDriver, searchBoxBy_Locator, searchResultsPageTitle);
-//         for (int i = 0; i < footerXpath.length; i++) {
-//         TestAuto.runTestCasesOnFooterElements(url, remoteWebDriver, footerXpath[i], footerPagesTitles[i], pageSourcesURLs[i]);
-//         }
-//         for (int i = 0; i < settingsPagesTitle.length; i++) {
-//         TestAuto.runTestCasesForGoogleSettings(url, remoteWebDriver, settingsMenuXpathBy, settingsMenuOptionsXpath[i], settingsPagesTitle[i], settingsMenuOptionsLinkTexts[i]);
-//         }
-//         */
-//    }
 
+    /**
+     * Search for books
+     */
+    @Test(
+            suiteName = "SeleniumGridDocker",
+            priority = 2)
+    public void searchBook(){
+        try{
+            WebDriver driver = getDriver();
+            log.info("Current URL: {}",driver.getCurrentUrl());
+            WebElement element = new WebDriverWait(driver,30).until(
+                    ExpectedConditions.presenceOfElementLocated((By.ById.id("SearchTab")))
+            );
+            element.click();
+            driver.findElement(By.id("searchTitle")).sendKeys("potter");
+            driver.findElement(By.id("submitButton")).submit();
+        } catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////
 }

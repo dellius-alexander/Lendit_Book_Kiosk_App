@@ -1,7 +1,14 @@
 package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
+import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.Role.RoleRepository;
+import com.library.lendit_book_kiosk.Role.UserRole;
+import com.library.lendit_book_kiosk.Security.Custom.Secret;
+import com.library.lendit_book_kiosk.Student.Major;
+import com.library.lendit_book_kiosk.Student.Student;
 import com.library.lendit_book_kiosk.Tools.CSVParser;
 import com.library.lendit_book_kiosk.Tools.FileParser;
+import com.library.lendit_book_kiosk.User.GENDER;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserRepository;
 import org.slf4j.Logger;
@@ -15,8 +22,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 /////////////////////////////////////////////////////////////////////
 @SpringBootApplication
@@ -56,13 +66,23 @@ public class LendITBookKioskApplication implements CommandLineRunner
 	@Bean
 	@Autowired
 	CommandLineRunner commandLineRunner(
-			UserRepository userService){
+			UserRepository userService,
+			RoleRepository roleRepository){
 		return args -> {
 
-			Optional<User> users =  userService.findById((2727L));
-
+			Optional<User> users =  userService.findUserByEmail("tbrundle1@earthlink.net");
+//			Role student_role = roleRepository.findRoleByName("STUDENT").orElseThrow(
+//					() -> new IllegalStateException("Role does not exist......")
+//			);
+//			Role admin_role = roleRepository.findRoleByName("ADMIN").orElseThrow(
+//					() -> new IllegalStateException("Role does not exist......")
+//			);
+//			Role superuser_role = roleRepository.findRoleByName("SUPERUSER").orElseThrow(
+//					() -> new IllegalStateException("Role does not exist......")
+//			);
 			if (!users.isPresent()){
-
+//
+//
 //				Major CSCI = new Major("CSCI");
 //				Major BSCS = new Major("BSCS");
 //				Major MBA = new Major("MBA");
@@ -95,7 +115,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //						GENDER.FEMALE,
 //						LocalDate.of(1989, Month.JANUARY, 6),
 //						"Student:Senior",
-//						Set.of(STUDENT,USER),
+//						Set.of(student_role,admin_role),
 //						Set.of(janeDoe)
 //				);
 //
@@ -106,7 +126,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //						GENDER.MALE,
 //						LocalDate.of(1989, Month.JANUARY, 5),
 //						"Student:Senior",
-//						Set.of(STUDENT,USER,ADMIN),
+//						Set.of(student_role,admin_role),
 //						Set.of(johnDoe)
 //				);
 //
@@ -120,6 +140,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //						Set.of(GUEST),
 //						Set.of(bobDoe)
 //				);
+
 				CSVParser csv = new CSVParser(new FileParser(new File("target/classes/mock_data.csv")));
 				// save all new users
 				userService.saveAll(

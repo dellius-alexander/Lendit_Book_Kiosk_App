@@ -106,9 +106,11 @@ public class UserService implements UserDetailsService {
      */
     public User getUser(String username){
         log.info("Fetching USER: {}", username);
-        Optional<User> userOptional = userRepository.findUserByName(username);
+        User user = userRepository.findUserByEmail(username).orElseThrow(
+                () -> new UsernameNotFoundException("Unable to locate user.")
+        );
         // return User or else return null
-        return userOptional.orElse(null);
+        return user;
     }
     // TODO: REMEMBER TO REMOVE ON PRODUCTION DEPLOY
     /**
