@@ -66,6 +66,11 @@ public class Role implements RoleInterface, Serializable {
         log.info("UserRole: {}", this.toString());
     }
 
+    public Role(String role,String description){
+        this.name = UserRole.valueOfLabel(role);
+        this.description = description;
+    }
+
     public Role(UserRole name,String description) {
         this.name = name;
         this.description = description;

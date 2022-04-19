@@ -70,7 +70,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 			RoleRepository roleRepository){
 		return args -> {
 
-			Optional<User> users =  userService.findUserById(2727L);
+			Optional<User> users =  userService.findUserByEmail("adyos0@webs.com");
 //			Role student_role = roleRepository.findRoleByName("STUDENT").orElseThrow(
 //					() -> new IllegalStateException("Role does not exist......")
 //			);

@@ -20,11 +20,11 @@ import java.util.Set;
 @ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security"})
 public class UserLoginDetails implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
-    private Long id;
-    private String username;
-    private String displayName;
-    private Secret password;
-    private Set<GrantedAuthority> authorities;
+    private Long id = null;
+    private String username = null;
+    private String displayName = null;
+    private Secret password = null;
+    private Set<GrantedAuthority> authorities = null;
 
     public UserLoginDetails(){
         this.setUsername("");
@@ -45,7 +45,18 @@ public class UserLoginDetails implements UserDetails{
         this.setPassword(password);
         log.info(toString());
     }
-
+    public UserLoginDetails(
+            String username,
+            String displayName,
+            String password,
+            Set<GrantedAuthority> authorities){
+//        super(username, password,authorities);
+        this.setAuthorities(authorities);
+        this.setDisplayName(displayName);
+        this.setUsername(username);
+        this.setPassword(password);
+        log.info(toString());
+    }
     public UserLoginDetails(User user) {
         /**
          * MUST pass user credentials to super class holding auth token.
@@ -61,6 +72,17 @@ public class UserLoginDetails implements UserDetails{
         log.info(toString());
     }
 
+    /**
+     * Returns true if, and only if, length() of the Object is 0.
+     * @returns:
+     * true if length() is 0, otherwise false
+     */
+    public boolean isEmpty(){
+        if(username.isEmpty()){
+            return true;
+        }
+        return false;
+    }
     /**
      * Set by an AuthenticationManager to indicate the authorities that the principal has been granted.
      * Note that classes should not rely on this value as being valid unless it has been set by a trusted

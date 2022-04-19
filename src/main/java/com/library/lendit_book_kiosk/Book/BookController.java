@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -35,17 +38,28 @@ public class BookController {
     @RequestMapping(
             value = {"/getByTitle/{title}"},
             path = {"/getByTitle/{title}"},
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = {RequestMethod.GET},
             consumes = "*/*",
             produces = "application/json")
     public ResponseEntity<List<Book>> getBooksByTitle(
             @PathVariable("title")
             @RequestParam(value = "title")
-                    String title
-    ){
-        log.info("Title: {}",title);
-        return ResponseEntity.ok().body(
-                this.bookService.getBooksByTitle(title)
-        );
+                    String title,
+            HttpServletRequest req,
+            HttpServletResponse res
+    )  {
+        List<Book> books = null;
+        try{
+            books = this.bookService.getBooksByTitle(title);
+            req.setAttribute("book_list",books);
+            res.sendRedirect(req.getRequestURI());
+            res.setContentType("application/json");
+            log.info("Title: {}",title);
+
+        } catch (IOException e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body(books);
     }
 }

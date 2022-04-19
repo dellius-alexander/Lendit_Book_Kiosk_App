@@ -1,17 +1,21 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Custom.Secret;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Entity  // Tells Hibernate to make a table out of this class
 @Table(name = "user")
-public class User implements UserInterface {
+public class User extends org.springframework.security.core.userdetails.User implements UserInterface {
     private final static Logger log = LoggerFactory.getLogger(User.class);
     ///////////////////////////////////////////////////////
     @Id
@@ -92,7 +96,8 @@ public class User implements UserInterface {
     /**
      * Default Constructor.
      */
-    public User(){}
+//    public User(){super("","", Collections.singleton(new SimpleGrantedAuthority("RESTRICTED")));}
+    protected  User(){super("anonymous","password", Collections.singleton(new SimpleGrantedAuthority("RESTRICTED")));}
 
     /**
      * All Args Constructor
@@ -117,6 +122,9 @@ public class User implements UserInterface {
             Set<Role> roles,
             Set<Student> student
     ) {
+        super(email,password.getPasswordToString(),true, true, true, true,
+                roles.stream().map(
+                        x -> new SimpleGrantedAuthority(x.getRole().name())).collect(Collectors.toSet()));
         this.id = id;
         this.name = name;
         this.email = email;
@@ -149,6 +157,9 @@ public class User implements UserInterface {
             Set<Role> roles,
             Set<Student> student
     ) {
+        super(email,password.getPasswordToString(),true, true, true, true,
+                roles.stream().map(
+                        x -> new SimpleGrantedAuthority(x.getRole().name())).collect(Collectors.toSet()));
         this.name = name;
         this.email = email;
         this.password = password;
@@ -178,6 +189,8 @@ public class User implements UserInterface {
             String profession,
             Set<Role> roles
     ) {
+        super(email,password.getPasswordToString(), true, true, true, true,roles.stream().map(
+                x -> new SimpleGrantedAuthority(x.getRole().name())).collect(Collectors.toSet()));
         this.name = name;
         this.email = email;
         this.password = password;
@@ -191,6 +204,7 @@ public class User implements UserInterface {
      * @param user
      */
     public User(User user){
+        super(user.getEmail(), user.getPassword(),true, true, true, true, user.getAuthorities());
         this.setId(user.getId());
         this.setName(user.getName());
         this.setPassword(user.getPasswordClass());
@@ -201,6 +215,55 @@ public class User implements UserInterface {
         this.setProfession(user.getProfession());
 
     }
+
+    /**
+     * Calls the more complex constructor with all boolean arguments set to {@code true}.
+     */
+    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, new Secret(password).getPasswordToString(), true, true, true, true, authorities);
+    }
+
+    /**
+     * Construct the <code>User</code> with the details required by
+     * {@link DaoAuthenticationProvider}.
+     * @param username the username presented to the
+     * <code>DaoAuthenticationProvider</code>
+     * @param password the password that should be presented to the
+     * <code>DaoAuthenticationProvider</code>
+     * @param enabled set to <code>true</code> if the user is enabled
+     * @param accountNonExpired set to <code>true</code> if the account has not expired
+     * @param credentialsNonExpired set to <code>true</code> if the credentials have not
+     * expired
+     * @param accountNonLocked set to <code>true</code> if the account is not locked
+     * @param authorities the authorities that should be granted to the caller if they
+     * presented the correct username and password and the user is enabled. Not null.
+     * @throws IllegalArgumentException if a <code>null</code> value was passed either as
+     * a parameter or as an element in the <code>GrantedAuthority</code> collection
+     */
+    public User(String username, String password, boolean enabled, boolean accountNonExpired,
+                boolean credentialsNonExpired, boolean accountNonLocked,
+                Collection<? extends GrantedAuthority> authorities) {
+        super(username,new Secret(password).getPasswordToString(),enabled,accountNonExpired,credentialsNonExpired,accountNonLocked,authorities);
+        Assert.isTrue(username != null && !"".equals(username) && password != null,
+                "Cannot pass null or empty values to constructor");
+        this.setEmail(username);
+        this.password.setPassword(password);
+//        this.enabled = enabled;
+//        this.accountNonExpired = accountNonExpired;
+//        this.credentialsNonExpired = credentialsNonExpired;
+//        this.accountNonLocked = accountNonLocked;
+        this.setAuthorities(authorities.stream().collect(
+                Collectors.toSet()
+        ));
+    }
+
+
+    public void setAuthorities(Set<GrantedAuthority> authorities){
+        this.roles = (Set<Role>) authorities.stream().map(
+                x -> new Role(UserRole.valueOfLabel( x.getAuthority().replaceAll("ROLE_","")),
+                        UserRole.valueOfLabel( x.getAuthority().replaceAll("ROLE_","")).name())
+        );
+    }
     /**
      * Get Granted Authorities
      * @return a Collection GrantedAuthority
@@ -208,7 +271,7 @@ public class User implements UserInterface {
     @Override
     public Collection<GrantedAuthority> getAuthorities(){
         return this.getRoles().stream().map(
-                    x -> new SimpleGrantedAuthority(x.getRole().name())).collect(Collectors.toList());
+                    x -> new SimpleGrantedAuthority("ROLE_" + x.getRole().name())).collect(Collectors.toList());
     }
     @Override
     public Long getId() {
