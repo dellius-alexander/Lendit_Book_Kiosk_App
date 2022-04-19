@@ -1,16 +1,19 @@
 package com.library.lendit_book_kiosk.Security.Config;
 
 
+import com.library.lendit_book_kiosk.WebApp.Login.LoginController;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Encoding;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -76,16 +80,20 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeInterceptor());
     }
-    /*
-    This is optional, you need to define this in case you are using a different location for
-    your resource bundles e.g in i18n folder etc.
+
+    /**
+     * This is optional, you need to define this in case you are using a different location for
+     * your resource bundles e.g in i18n folder etc.
+     * @return MessageSource
+     * @inherit MessageSource
+     */
      @Bean
      public MessageSource messageSource() {
          ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
          messageSource.setBasename("classpath:messages");
          messageSource.setDefaultEncoding("UTF-8");
          return messageSource;
-     }*/
+     }
 
     @Override
     @Bean
@@ -160,9 +168,9 @@ public class WebMvcConfig implements WebMvcConfigInterface {
     /*  TemplateResolver <- TemplateEngine <- ViewResolver              */
     /* **************************************************************** */
 
-    //    @Override
+    @Override
     @Bean
-    public SpringResourceTemplateResolver templateResolver(){
+    public ITemplateResolver templateResolver(){
         // SpringResourceTemplateResolver automatically integrates with Spring's own
         // resource resolution infrastructure, which is highly recommended.
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
@@ -178,6 +186,8 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         resolver.setApplicationContext(this.ctx);
         resolver.setPrefix("classpath:/templates/");
         resolver.setSuffix(".html");
+        resolver.setCacheable(true);
+        resolver.setCharacterEncoding("UTF-8");
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCacheable(true);
         return resolver;
@@ -218,6 +228,7 @@ public class WebMvcConfig implements WebMvcConfigInterface {
         viewResolver.setCharacterEncoding("UTF-8");
         viewResolver.setContentType("text/html");
         viewResolver.setViewNames(new String[]{"*.html"});
+//        viewResolver.setViewClass();
         return viewResolver;
     }
 

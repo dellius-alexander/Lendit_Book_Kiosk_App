@@ -1,6 +1,8 @@
 package com.library.lendit_book_kiosk.Book;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +25,43 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    /**
-     * Get books by title
+     /**
+     * Find books By Title
      * @param title book title
-     * @return a list of books
+     * @return list of books matching the search term(s)
      */
     public List<Book> getBooksByTitle(String title){
 
         List<Book> books = this.bookRepository.findBookByTitle(title);
-        log.info("\nBooks: {}\n",books.stream().collect(Collectors.toList()));
+        log.info("\nBooks: {}\n",books);
+        return books;
+    }
+
+    /**
+     * Find book By Author
+     * @param author
+     * @return list of books matching the search term(s)
+     */
+    public List<Book> getBooksByAuthor(String author){
+        List<Book> books = this.bookRepository.findBookByAuthors(author);
+        log.info("\nBooks: {}\n",books);
+        return books;
+    }
+
+    /**
+     * Find book By Genres
+     * @param genres
+     * @return list of books matching the search term(s)
+     */
+    public List<Book> getBooksByGenres(String genres){
+        List<Book> books = this.bookRepository.findBookByGenres(genres);
+        log.info("\nBooks: {}\n",books);
+        return books;
+    }
+
+    public List<Book> getBooksByDescription(String description){
+        List<Book> books = this.bookRepository.findBookByDescription(description);
+        log.info("\nBooks: {}\n",books);
         return books;
     }
 }

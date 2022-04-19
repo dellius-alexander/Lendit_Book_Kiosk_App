@@ -18,6 +18,7 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 
 public interface WebMvcConfigInterface extends WebMvcConfigurer, ApplicationContextAware {
@@ -35,6 +36,9 @@ public interface WebMvcConfigInterface extends WebMvcConfigurer, ApplicationCont
 
     @Override
     void addInterceptors(InterceptorRegistry registry);
+
+    @Bean
+    ITemplateResolver templateResolver();
 
     @Bean
     LocalValidatorFactoryBean validator(MessageSource messageSource);
@@ -62,8 +66,8 @@ public interface WebMvcConfigInterface extends WebMvcConfigurer, ApplicationCont
     @Override
     void addResourceHandlers(ResourceHandlerRegistry registry);
 
-    @Bean
-    SpringResourceTemplateResolver templateResolver();
+//    @Bean
+//    SpringResourceTemplateResolver templateResolver();
 
     @Bean
     SpringTemplateEngine templateEngine();

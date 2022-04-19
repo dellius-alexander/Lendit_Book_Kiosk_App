@@ -54,7 +54,6 @@ book_result.html
             <div class="w-container">
                 <a href="#" class="w-nav-brand">
                     <img
-                            src="#"
                             th:src="@{/images/icons/laker/Daco_4188029.png}"
                             loading="lazy" sizes="65px"
                             th:attr="srcset=|@{/images/icons/laker/Daco_4188029-p-500.png} 500w, @{/images/icons/laker/Daco_4188029-p-130x130q80.png} 694w|"
@@ -62,7 +61,10 @@ book_result.html
                 </a>
                 <h2 class="nav-bar-heading-2">LendIT Book Kiosk</h2>
                 <nav role="navigation" class="w-nav-menu">
-                    <a href="#" onclick="history.back();" class="nav-link w-nav-link">Go Back To Book Search</a>
+                    <a
+                            href="#"
+                            onclick="history.go(-1);"
+                            class="nav-link w-nav-link">Go Back To Book Search</a>
                     <a href="#" onclick="window.location.replace('/login');" class="nav-link w-nav-link">Logout</a>
                 </nav>
                 <div class="w-nav-button">
@@ -111,6 +113,11 @@ book_result.html
                                 <small class="text-muted" >
                                     <p>Genres:
                                         <div th:text="${item.genres}">Genres go here</div>
+                                    </p>
+                                </small>
+                                <small class="text-muted">
+                                    <p>Authors:
+                                        <div th:text="${item.authors}">Authors go here</div>
                                     </p>
                                 </small>
                             </div>

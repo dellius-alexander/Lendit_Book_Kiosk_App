@@ -4,6 +4,7 @@ import com.library.lendit_book_kiosk.Security.Custom.CustomPasswordEncoder;
 import com.library.lendit_book_kiosk.Security.UserDetails.CustomUserDetailsService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

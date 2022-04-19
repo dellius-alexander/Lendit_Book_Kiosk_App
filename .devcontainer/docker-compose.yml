@@ -191,8 +191,9 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
-    environment:
-      GRID_MAX_SESSION: 12
+    deploy:
+      replicas: 1
+    restart: on-failure
     networks:
       lbk-network:
 #####################################################################
@@ -228,6 +229,9 @@ services:
       - "9004:5900"
       - "9005:4444"
     privileged: true
+    deploy:
+      replicas: 3
+    restart: on-failure
     entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
     networks:
       lbk-network:

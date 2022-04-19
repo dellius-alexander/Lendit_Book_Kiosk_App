@@ -124,17 +124,52 @@ index.html
                     <a data-w-tab="Tab 4" class="w-inline-block w-tab-link">
                         <div>Browse By Subject</div>
                     </a>
-                    <a data-w-tab="Tab 5" class="w-inline-block w-tab-link">
-                        <div>Search</div>
-                    </a>
+<!--/*
+                    <a data-w-tab="Tab 5" class="w-inline-block w-tab-link">-->
+<!--                        <div>Search</div>-->
+<!--                    </a>
+*/-->
                 </div>
                 <div class="tabs-content w-tab-content">
-                    <div data-w-tab="Tab 6" class="tab-pane-tab-6 w-tab-pane"></div>
-                    <div data-w-tab="Tab 2" class="tab-pane-tab-2 w-tab-pane"></div>
-                    <div data-w-tab="Tab 3" class="tab-pane-tab-3 w-tab-pane"></div>
-                    <div data-w-tab="Tab 4" class="tab-pane-tab-4 w-tab-pane"></div>
-                    <div data-w-tab="Tab 5" class="tab-pane-tab-5 w-tab-pane">
+<!--                    Daily suggestions -->
+                    <div data-w-tab="Tab 6" class="tab-pane-tab-6 w-tab-pane">
+                        <div class="w-form">
+                            <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
+                            <form
+                                    th:object="${Book}"
+                                    id="email-form-6"
+                                    name="email-form-6"
+                                    data-name="Email Form 6"
+                                    method="get"
+                                    th:action="@{/searchbookby/{book}?book=${Book}}"
+                            >
+                                <h4 class="heading-14">Search</h4>
+                                <input
+                                        type="text"
+                                        class="text-field-2 w-input"
+                                        maxlength="256"
+                                        name="description"
+                                        data-name="description"
+                                        placeholder="Wildcard Search"
+                                        th:id="description"
 
+                                >
+                                <input
+                                        type="submit"
+                                        value="Submit" data-wait="Please wait..."
+                                        class="submit-button-9 w-button"
+                                >
+                            </form>
+                            <div class="w-form-done">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="w-form-fail">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+<!--                    Search By Author -->
+                    <div data-w-tab="Tab 2" class="tab-pane-tab-3 w-tab-pane">
                         <div class="w-form">
                             <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
                             <form
@@ -150,9 +185,86 @@ index.html
                                         type="text"
                                         class="text-field-2 w-input"
                                         maxlength="256"
+                                        name="authors"
+                                        data-name="authors"
+                                        placeholder="Search By Authors"
+                                        th:id="authors"
+
+                                >
+                                <input
+                                        type="submit"
+                                        value="Submit" data-wait="Please wait..."
+                                        class="submit-button-9 w-button"
+                                >
+                            </form>
+                            <div class="w-form-done">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="w-form-fail">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+
+                    </div>
+<!--                    Search By Genres/Subject -->
+                    <div data-w-tab="Tab 4" class="tab-pane-tab-4 w-tab-pane">
+                        <div class="w-form">
+                            <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
+                            <form
+                                    th:object="${Book}"
+                                    id="email-form-4"
+                                    name="email-form-4"
+                                    data-name="Email Form 4"
+                                    method="get"
+                                    th:action="@{/searchbookby/{book}?book=${Book}}"
+                            >
+                                <h4 class="heading-14">Search</h4>
+                                <input
+                                        type="text"
+                                        class="text-field-2 w-input"
+                                        maxlength="256"
+                                        name="genres"
+                                        data-name="genres"
+                                        placeholder="Search By Subject/Genres"
+                                        th:id="genres"
+
+                                >
+                                <input
+                                        type="submit"
+                                        value="Submit" data-wait="Please wait..."
+                                        class="submit-button-9 w-button"
+                                >
+                            </form>
+                            <div class="w-form-done">
+                                <div>Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="w-form-fail">
+                                <div>Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+
+                    </div>
+<!--                    Search By Title -->
+                    <div data-w-tab="Tab 3" class="tab-pane-tab-4 w-tab-pane">
+
+                        <div class="w-form">
+                            <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
+                            <form
+                                    th:object="${Book}"
+                                    id="email-form-3"
+                                    name="email-form-3"
+                                    data-name="Email Form 3"
+                                    method="get"
+                                    th:action="@{/searchbookby/{book}?book=${Book}}"
+                            >
+                                <h4 class="heading-14">Search</h4>
+                                <input
+                                        type="text"
+                                        class="text-field-2 w-input"
+                                        maxlength="256"
                                         name="title"
-                                        data-name="Name"
-                                        placeholder="Search Terms"
+                                        data-name="title"
+                                        placeholder="Search By Title"
                                         th:id="title"
 
                                 >

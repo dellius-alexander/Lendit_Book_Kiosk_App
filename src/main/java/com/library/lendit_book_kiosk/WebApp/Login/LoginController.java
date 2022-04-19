@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thymeleaf.spring5.view.AbstractThymeleafView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 public class LoginController<T extends Map<String, Object>> implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     // payLoad should be used to manage DOM objects passed between server and client
-    protected static Map<String, Object> payLoad =  new HashMap<>();
+    protected final T payLoad = (T) new HashMap<String, Object>();
 
     @Autowired
     protected static UserService userService;
@@ -89,11 +90,12 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             Model model
     ) {
         try{
+            model.mergeAttributes(hierarchicalCheck((T) model));
             // reset our security context
             SecurityContextHolder.getContext().setAuthentication(null);
-            // reset our payLoad
+            // reset our payLoad object
             payLoad.clear();
-            /** Write the response headers */
+            /** Write the response headers for login */
             response.setContentType("text/html;charset=UTF-8");
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-cache");
@@ -102,8 +104,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             payLoad.put("userLoginDetails", new UserLoginDetails());
             // merge our attributes
             model.mergeAttributes(payLoad);
-            log.info("\nPayload: {}\n",
-                    payLoad);
+            log.info("\nPayload: {}\n", payLoad);
         } catch (Exception e){
             SecurityContextHolder.getContext().setAuthentication(null);
             log.error(e.getMessage());
@@ -125,7 +126,6 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     public String verify(
             @ModelAttribute("userLoginDetails") @Valid UserLoginDetails userLoginAttempt,
             HttpServletRequest request,
-            HttpServletResponse response,
             BindingResult result,
             Model model
     ) {
@@ -137,76 +137,50 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             log.info("\nModel Attributes: {}",
                     model.toString()
                     );
+
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
             UserLoginDetails uld = (UserLoginDetails) hierarchicalCheck(
                     new Object[]{
-                            (UserLoginDetails)request.getAttribute("userLoginDetails"),
-                            (UserLoginDetails)model.getAttribute("userLoginDetails"),
+                            request.getAttribute("userLoginDetails"),
+                            model.getAttribute("userLoginDetails"),
                             userLoginAttempt,
-                            userLoginDetails, null
+                            userLoginDetails
                     }
             ).get(0);
             ////////////////////////////////////////////////////////////////////////
             log.info("Searching for UserLoginDetails [uld]: {}",uld);
             // first search to see if user exists then we authenticate incoming client user
             loginUser = userService.getUser( uld.getUsername() );
-            userLoginDetails = new UserLoginDetails( loginUser );
+            uld = new UserLoginDetails( loginUser );
             // send userLoginDetails to be authenticated by our  customAuthenticationProvider
             // and retrieve an authentication token
             userAuth = customAuthenticationProvider.authenticate(
-                    userLoginDetails
+                    uld
             );
             // assign all the newly validated objects as our payLoad
-            payLoad.put("userLoginDetails",userLoginDetails);
+            payLoad.put("userLoginDetails",uld);
             payLoad.put("LoginUser",loginUser);
-            payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
+            payLoad.put("usernamePasswordAuthenticationToken",userAuth);
             payLoad.put("Book",new Book());
             ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            loginUser = (User) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("LoginUser") ,
-                            (UserLoginDetails)request.getAttribute("LoginUser"),
-                            (UserLoginDetails)model.getAttribute("LoginUser"),
-                            loginUser, null
-                    }
-            ).get(0);
+            // Set our security context for authenticated user
+            if(getPrincipal(request) == null ){
+                throw new SecurityException(
+                        "SecurityContextHolder is null. " +
+                                "Use SecurityContextHolder.getContext().setAuthentication(token) " +
+                                "to set the security context."
+                );
+            }
             ////////////////////////////////////////////////////////////////////////
-            payLoad.put("LoginUser",loginUser);
-            ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            userAuth = (UsernamePasswordAuthenticationToken) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("usernamePasswordAuthenticationToken"),
-                            (UserLoginDetails)request.getAttribute("usernamePasswordAuthenticationToken"),
-                            (UserLoginDetails)model.getAttribute("usernamePasswordAuthenticationToken"),
-                            userAuth, null
-                    }
-            ).get(0);
-            ////////////////////////////////////////////////////////////////////////
-            payLoad.put("usernamePasswordAuthenticationToken", userAuth);
-            ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            userLoginDetails = (UserLoginDetails) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("userLoginDetails"),
-                            (UserLoginDetails)request.getAttribute("userLoginDetails"),
-                            (UserLoginDetails)model.getAttribute("userLoginDetails"),
-                            userLoginDetails, null
-                    }
-            ).get(0);
-            ////////////////////////////////////////////////////////////////////////
-            payLoad.put("userLoginDetails",userLoginDetails);
             log.info("Model Attributes: {}",model);
+            log.info("\nPayload: {}\n",payLoad);
             ////////////////////////////////////////////////////////////////////////
             // merge our attributes
             model.mergeAttributes(payLoad);
-            SecurityContextHolder.getContext().setAuthentication((UsernamePasswordAuthenticationToken)payLoad.get("usernamePasswordAuthenticationToken"));
-
             ////////////////////////////////////////////////////////////////////////
             log.info("\nModel: {}\n", model);
-            log.info("\nPayload: {}\n",payLoad.values().stream().collect(Collectors.toList()));
+            log.info("\nPayload: {}\n",payLoad);
         } catch (Exception e) {
             log.error("Failure in autoLogin. Redirection back to /login. \n{}", e.getMessage());
             e.printStackTrace();
@@ -221,59 +195,23 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     @GetMapping(
             value = {"index"})
     public String index(
-            @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer,
+            HttpServletRequest request,
             Model model,
             BindingResult result) {
         try {
             log.info("Model: {}",model);
-            if( referrer != null ) {
-                model.addAttribute("previousUrl", referrer);
+            if(result.hasErrors()){
+                throw new Exception("Resultsbody has errors. Check parameter variables: " + model);
             }
-//            if(result.hasErrors()){
-//                throw new Exception("Resultsbody has errors. Check parameter variables: " + model);
-//            }
-            ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            loginUser = (User) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("LoginUser") ,
-                            (UserLoginDetails)model.getAttribute("LoginUser"),
-                            loginUser, null
-                    }
-            ).get(0);
-            ////////////////////////////////////////////////////////////////////////
-            payLoad.put("LoginUser",loginUser);
-            ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            userAuth = (UsernamePasswordAuthenticationToken) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("usernamePasswordAuthenticationToken"),
-                            (UserLoginDetails)model.getAttribute("usernamePasswordAuthenticationToken"),
-                            userAuth, null
-                    }
-            ).get(0);
-            ////////////////////////////////////////////////////////////////////////
-            payLoad.put("usernamePasswordAuthenticationToken", userAuth);
-            ////////////////////////////////////////////////////////////////////////
-            // hierarchical Check return <= [3,2,1]
-            userLoginDetails = (UserLoginDetails) hierarchicalCheck(
-                    new Object[]{
-                            payLoad.get("userLoginDetails"),
-                            (UserLoginDetails)model.getAttribute("userLoginDetails"),
-                            userLoginDetails, null
-                    }
-            ).get(0);
-            ////////////////////////////////////////////////////////////////////////
-            payLoad.put("userLoginDetails",userLoginDetails);
-            log.info("Model Attributes: {}",model);
-            ////////////////////////////////////////////////////////////////////////
+            // check the security context
+            payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
+            // set new book for searching
             payLoad.put("Book",new Book());
             ////////////////////////////////////////////////////////////////////////
             // merge our attributes
             model.mergeAttributes(payLoad);
-            SecurityContextHolder.getContext().setAuthentication((UsernamePasswordAuthenticationToken)payLoad.get("usernamePasswordAuthenticationToken"));
             ////////////////////////////////////////////////////////////////////////
-            log.info("Payload: {}",payLoad.values().stream().collect(Collectors.toList()));
+            log.info("Payload: {}",payLoad);
         }
         catch (Exception e){
             log.error("\nFailure to load: {}\n", e.getMessage());
@@ -304,10 +242,10 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             // hierarchical Check return <= [3,2,1]
             book = (Book) hierarchicalCheck(
                     new Object[]{
-                            (Book)request.getAttribute("Book"),
-                            (Book)model.getAttribute("Book"),
+                            request.getAttribute("Book"),
+                            model.getAttribute("Book"),
                             book,
-                            (Book)payLoad.get("Book"), null
+                            payLoad.get("Book"), null
                     }
             ).get(0);
             ////////////////////////////////////////////////////////////////////////
@@ -315,24 +253,23 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             ////////////////////////////////////////////////////////////////////////
             log.info("\nFrom Request PathVariable Book: \n{}", book);
             log.info("\nModel Attributes: {}",model);
-            log.info("\nPayload: {}\n",payLoad.values().stream().collect(Collectors.toList()));
+            log.info("\nPayload: {}\n",payLoad);
             if(result.hasErrors()){
                 throw new Exception("Resultsbody has errors. Check parameter variable: " + book);
             }
-            List<Book> bookListSearchResults = bookService.getBooksByTitle(book.getTitle());
+            List<Book> bookListSearchResults = searchBook(book);
             // replace our book list with a fresh list
             payLoad.put("book_list",bookListSearchResults);
+            // check the security context
+            payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
             ///////////////////////////////////////////////////////////////////////
             // merge our attributes
             model.mergeAttributes(payLoad);
-            SecurityContextHolder.getContext().setAuthentication((UsernamePasswordAuthenticationToken)payLoad.get("usernamePasswordAuthenticationToken"));
-//
             ////////////////////////////////////////////////////////////////////////
-            log.info("\nPayload: => KeySet:{}\nValues: {}\n",payLoad.keySet(), payLoad.values().stream().collect(Collectors.toList()));
+            log.info("\nPayload: {}\n",payLoad);
 
         }
         catch (Exception e){
-//            SecurityContextHolder.getContext().setAuthentication(null);
             log.error("\nFailure to load: {}\n", e.getMessage());
             return "login";
         }
@@ -347,45 +284,41 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     @GetMapping(
             value = {"book_result"})
     public String book_result(
+            @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer,
             @ModelAttribute("book_list") @Valid List<Book> bookList,
             HttpServletRequest request,
-            HttpServletResponse response,
             BindingResult result,
             Model model
     ) {
         try {
-            log.info("\nModel: \n{}", model.toString());
+            log.info("Model: {}",model);
+            if( referrer != null ) {
+                payLoad.put("previousUrl", referrer);
+            }
             if(result.hasErrors()){
                 throw new Exception("Resultsbody has errors. Check parameter variable: " + (List<Book>)payLoad.get("book_list"));
             }
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            bookList = (List<Book>) hierarchicalCheck(
+            payLoad.put("book_list",hierarchicalCheck(
                     new Object[]{
-                            (List<Book>)request.getAttribute("book_list"),
-                            (List<Book>)model.getAttribute("book_list"),
+                            model.getAttribute("book_list"),
                             bookList,
-                            (List<Book>)payLoad.get("book_list")
+                            payLoad.get("book_list")
                     }
-            );
+            ));
             ////////////////////////////////////////////////////////////////////////
-            payLoad.put("book_list",bookList);
             ////////////////////////////////////////////////////////////////////////
             // now use the authentication token to assign a principal/user to the security context holder
-            SecurityContextHolder.getContext().setAuthentication(
-                    (UsernamePasswordAuthenticationToken)payLoad.get("usernamePasswordAuthenticationToken")
-            );
+            // check the security context
+            payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
             ///////////////////////////////////////////////////////////////////////
             // merge our attributes
             model.mergeAttributes(payLoad);
-            model.addAttribute("book_list",bookList);
-            SecurityContextHolder.getContext().setAuthentication((UsernamePasswordAuthenticationToken)payLoad.get("usernamePasswordAuthenticationToken"));
-//            request.startAsync(request,response);
             ////////////////////////////////////////////////////////////////////////
-            log.info("Payload: {}",payLoad.values().stream().collect(Collectors.toList()));
+            log.info("Payload: {}",payLoad);
         }
         catch (Exception e){
-//            SecurityContextHolder.getContext().setAuthentication(null);
             log.error("\nFailure to load: {}\n", e.getMessage());
             return "login";
         }
@@ -420,7 +353,28 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     public String logout(){
         return "redirect:login";
     }
+    //////////////////////////////////////////////////////////////////////
 
+    /**
+     * Helper function to fetch books by search term type, i.e. title, author, etc.
+     * @param book the book object
+     * @return list of books matching the search term(s)
+     */
+    public List<Book> searchBook(Book book){
+        if (book.getTitle() != null) {
+            return bookService.getBooksByTitle(book.getTitle());
+        }
+        if (book.getAuthors() != null){
+            return bookService.getBooksByAuthor(book.getAuthors());
+        }
+        if (book.getGenres() != null){
+            return bookService.getBooksByGenres(book.getGenres());
+        }
+        if (book.getDescription() != null){
+            return bookService.getBooksByDescription(book.getDescription());
+        }
+        return null;
+    }
     //////////////////////////////////////////////////////////////////////
     /**
      * Sets the
@@ -431,12 +385,10 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     protected Authentication getPrincipal(HttpServletRequest req) {
         try {
             // set the SecurityContextHolder auth token
-            SecurityContextHolder.getContext().setAuthentication(userAuth);
+            SecurityContextHolder.getContext().setAuthentication( (Authentication) payLoad.get("usernamePasswordAuthenticationToken"));
             // now retrieve the auth token back from SecurityContextHolder to verify it is in place
             SecurityContext sc = SecurityContextHolder.getContext();
-            userAuth = sc.getAuthentication();
-            loginUser = userService.getUser(userAuth.getName());
-//            userLoginDetails = new UserLoginDetails(loginUser);
+            // check the security context
             if (sc  == null){
                 throw new SecurityException(
                         "SecurityContextHolder is null. " +
@@ -444,11 +396,11 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                                 "to set the security context."
                 );
             }
-            log.info("Security Context Holder is active: {}", sc);
+            log.info("Security Context Holder is active: {}", sc.getAuthentication());
             HttpSession session = req.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc.getAuthentication());
             session.setAttribute("verified",true);
-            log.info("\nSuccessfully Authenticated: {}\n", userAuth.toString());
+            log.info("\nSuccessfully Authenticated: {}\n", payLoad.get("usernamePasswordAuthenticationToken"));
 //            response.sendRedirect(request.getRequestURI().split("")[0]);
         }
         catch (Exception e){
@@ -459,8 +411,9 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         return SecurityContextHolder.getContext().getAuthentication();
     }
     //////////////////////////////////////////////////////////////////////
-    /**
+     /**
      * Checks if an object or list of objects are null and returns the first non null object.
+     * User only with same DataType Objects to find non-null object in list of objects.
      * @param object a single Object, a list or array
      * @return the first Not_Null object
      */
@@ -504,6 +457,13 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return null;
     }
+
+    /**
+     * Deconstructs Map objects and checks each part for null objects and return all
+     * non-null objects into separate Map.
+     * @param payLoad
+     * @return {@literal  T extends Map<String, ?>}
+     */
     private T  hierarchicalCheck(T payLoad){
         log.info("Payload (T): {}",payLoad.values().stream().collect(Collectors.toList()));
         int cnt=0;
@@ -520,6 +480,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return payLoad;
     }
+
 //    /////////////////////////////////////////////////////////////////////////////////
 //    public static void main(String[] args) {
 //        try {
