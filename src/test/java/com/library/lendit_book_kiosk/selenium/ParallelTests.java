@@ -3,7 +3,9 @@ package com.library.lendit_book_kiosk.selenium;
 
 
 import com.library.lendit_book_kiosk.LendITBookKioskApplication;
+import org.hibernate.query.criteria.internal.expression.function.CurrentTimeFunction;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -16,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.Order;
 import org.testng.annotations.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.apache.tomcat.util.net.SSLHostConfigCertificate.Type.EC;
@@ -37,31 +41,31 @@ public class ParallelTests extends BrowserOptions {
     @Test(
             suiteName = "SeleniumGridDocker",
             priority = 1)
-    @Parameters( value = {"appURL"} )
-    public void login(String appURL)
+    @Parameters( value = {"appURL","username","password"} )
+    public void login(String appURL, String username, String password)
     {
+        boolean waiting = true;
         try{
             WebDriver driver = getDriver();
-//            // just for google chrome
-//            if (browserType.equalsIgnoreCase("chrome"))
-//            {
-//                driver.getWindowHandles().forEach(
-//                    tab -> {
-//                        driver.switchTo().window(tab);
-//                        if (driver.getTitle().equalsIgnoreCase("What's New")) {
-//                            driver.close();
-//                        }
-//                    }
-//                );
-//            }
             driver.get(appURL + "/login");
+            // pageload helper
+
+                log.info("Still Waiting for page to load: {}", LocalDateTime.now());
+                log.info("Current URL: {}",driver.getCurrentUrl());
+                Thread.sleep(1000L);
+
             WebElement element = new WebDriverWait(driver,30).until(
                     ExpectedConditions.presenceOfElementLocated((By.ById.id("UserIDField")))
             );
-            driver.findElement(By.id("UserIDField")).sendKeys("adyos0@webs.com");
-            driver.findElement(By.id("UserPasswordField")).sendKeys("NwvX65L9BWF9");
-            driver.findElement(By.id("LoginSubmitButton")).submit();
-            log.info("Current URL: {}",driver.getCurrentUrl());
+            element.sendKeys(username);
+            driver.findElement(By.id("UserPasswordField")).sendKeys(password);
+            driver.findElement(By.id("LoginSubmitButton")).click();
+
+                log.info("Still Waiting for page to load: {}", LocalDateTime.now());
+                log.info("Current URL: {}",driver.getCurrentUrl());
+                Thread.sleep(5000L);
+
+
         } catch (Exception e){
             log.info(e.getMessage());
         } finally {
@@ -75,16 +79,33 @@ public class ParallelTests extends BrowserOptions {
     @Test(
             suiteName = "SeleniumGridDocker",
             priority = 2)
-    public void searchBook(){
+    @Parameters( value = {"appURL","username","password"} )
+    public void searchBook(String appURL, String username, String password){
+        boolean waiting = true;
         try{
             WebDriver driver = getDriver();
-            log.info("Current URL: {}",driver.getCurrentUrl());
-            WebElement element = new WebDriverWait(driver,30).until(
-                    ExpectedConditions.presenceOfElementLocated((By.ById.id("SearchTab")))
+            driver.navigate().refresh();
+            WebElement element = new WebDriverWait(driver,60).until(
+                    ExpectedConditions.presenceOfElementLocated((By.ById.id("search-tab-3")))
             );
             element.click();
-            driver.findElement(By.id("searchTitle")).sendKeys("potter");
-            driver.findElement(By.id("submitButton")).submit();
+            driver.findElement(By.id("title")).sendKeys("potter");
+            driver.findElement(By.id("submit-button-3")).submit();
+
+                log.info("Still Waiting for page to load: {}", LocalDateTime.now());
+            log.info("Window handleL: {}",driver.getWindowHandle());
+                Thread.sleep(1000L);
+
+            //to perform Scroll on application using Selenium
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("window.scrollBy(0,350)", "");
+            // go back to previous search page
+            driver.findElement(By.id("go-back-to-book-search")).click();
+
+                log.info("Still Waiting for page to load: {}", LocalDateTime.now());
+                log.info("Current URL: {}",driver.getCurrentUrl());
+                Thread.sleep(5000L);
+
         } catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

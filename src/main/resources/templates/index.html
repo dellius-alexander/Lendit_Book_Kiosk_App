@@ -112,27 +112,27 @@ index.html
             <h3>Browse Catalog</h3>
             <div data-current="" data-easing="linear" data-duration-in="300" data-duration-out="100" class="tabs w-tabs">
                 <div class="tabs-menu w-tab-menu">
-                    <a data-w-tab="Tab 6" class="w-inline-block w-tab-link">
+                    <a id="search-tab-6" data-w-tab="Tab 6" class="w-inline-block w-tab-link">
                         <div>Daily Suggestions</div>
                     </a>
-                    <a data-w-tab="Tab 2" class="w-inline-block w-tab-link">
+                    <a id="search-tab-2" data-w-tab="Tab 2" class="w-inline-block w-tab-link">
                         <div>Browse By Author</div>
                     </a>
-                    <a data-w-tab="Tab 3" class="w-inline-block w-tab-link">
+                    <a id="search-tab-3" data-w-tab="Tab 3" class="w-inline-block w-tab-link">
                         <div>Browse By Title</div>
                     </a>
-                    <a data-w-tab="Tab 4" class="w-inline-block w-tab-link">
+                    <a id="search-tab-4" data-w-tab="Tab 4" class="w-inline-block w-tab-link">
                         <div>Browse By Subject</div>
                     </a>
 <!--/*
-                    <a data-w-tab="Tab 5" class="w-inline-block w-tab-link">-->
+                    <a id="search-tab-5" data-w-tab="Tab 5" class="w-inline-block w-tab-link">-->
 <!--                        <div>Search</div>-->
 <!--                    </a>
 */-->
                 </div>
                 <div class="tabs-content w-tab-content">
 <!--                    Daily suggestions -->
-                    <div data-w-tab="Tab 6" class="tab-pane-tab-6 w-tab-pane">
+                    <div data-w-tab="Tab 6" class="tab-pane-tab-6 w-tab-pane container-fluid">
                         <div class="w-form">
                             <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
                             <form
@@ -158,6 +158,7 @@ index.html
                                         type="submit"
                                         value="Submit" data-wait="Please wait..."
                                         class="submit-button-9 w-button"
+                                        id="submit-button-6"
                                 >
                             </form>
                             <div class="w-form-done">
@@ -169,7 +170,7 @@ index.html
                         </div>
                     </div>
 <!--                    Search By Author -->
-                    <div data-w-tab="Tab 2" class="tab-pane-tab-3 w-tab-pane">
+                    <div data-w-tab="Tab 2" class="tab-pane-tab-3 w-tab-pane container-fluid">
                         <div class="w-form">
                             <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
                             <form
@@ -195,6 +196,7 @@ index.html
                                         type="submit"
                                         value="Submit" data-wait="Please wait..."
                                         class="submit-button-9 w-button"
+                                        id="submit-button-2"
                                 >
                             </form>
                             <div class="w-form-done">
@@ -207,7 +209,7 @@ index.html
 
                     </div>
 <!--                    Search By Genres/Subject -->
-                    <div data-w-tab="Tab 4" class="tab-pane-tab-4 w-tab-pane">
+                    <div data-w-tab="Tab 4" class="tab-pane-tab-4 w-tab-pane container-fluid">
                         <div class="w-form">
                             <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
                             <form
@@ -233,6 +235,7 @@ index.html
                                         type="submit"
                                         value="Submit" data-wait="Please wait..."
                                         class="submit-button-9 w-button"
+                                        id="submit-button-4"
                                 >
                             </form>
                             <div class="w-form-done">
@@ -245,7 +248,7 @@ index.html
 
                     </div>
 <!--                    Search By Title -->
-                    <div data-w-tab="Tab 3" class="tab-pane-tab-4 w-tab-pane">
+                    <div data-w-tab="Tab 3" class="tab-pane-tab-4 w-tab-pane container-fluid">
 
                         <div class="w-form">
                             <!--  Command search by title: curl -X GET "http://localhost:8081/book/getByTitle/{title}?title=potter" -->
@@ -272,6 +275,7 @@ index.html
                                         type="submit"
                                         value="Submit" data-wait="Please wait..."
                                         class="submit-button-9 w-button"
+                                        id="submit-button-3"
                                 >
                             </form>
                             <div class="w-form-done">

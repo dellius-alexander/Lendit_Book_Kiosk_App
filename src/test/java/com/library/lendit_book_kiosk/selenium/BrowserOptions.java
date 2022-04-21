@@ -7,6 +7,7 @@ import com.library.lendit_book_kiosk.LendITBookKioskApplication;
 import org.apache.commons.lang.NullArgumentException;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -43,21 +44,54 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
      * @return	The RemoteWebDriver if successfully created
      */
     @BeforeClass(alwaysRun = true)
-    @Parameters(value = {"browserType","hubURL"})
-    public void setupThread(String browserType, String hubURL)
+    @Parameters(value = {"browserType","hubURL","appURL"})
+    public void setupThread(String browserType, String hubURL, String appURL)
     {
-        log.info("BrowserType: {}, HubURL: {}",browserType,hubURL);
-        if(browserType == null){browserType = "chrome";}
-        if(hubURL == null){hubURL = "http://127.0.0.1:4444/wd/hub";}
         log.info("BrowserType: {}, HubURL: {}",browserType,hubURL);
         DesiredCapabilities desiredCapabilities = null;
         try {
-            if(browserType.equalsIgnoreCase("chrome")){
+            if (browserType.equalsIgnoreCase("firefox")) {
+//                // create now FirefoxProfile
+                FirefoxProfile profile = new FirefoxProfile();
+                // Add the WebDriver proxy capability.
+                // httpProxy – the proxy host, expected format is hostname:1234
+//                Proxy proxy = new Proxy();
+//                proxy.setHttpProxy(appURL);
+                profile.setAcceptUntrustedCertificates(true);
+                profile.setAssumeUntrustedCertificateIssuer(false);
+                //Use No Proxy Settings
+//                profile.setPreference("network.proxy.type", 0);
+                //Set Firefox profile to capabilities
+                // create FirefoxOptions and add the profile to FirefoxOptions
+                FirefoxOptions options = new FirefoxOptions();
+//                options.setProxy(proxy);
+                // Enable screen recording
+                options.setCapability("node_screen_recording", true);
+                // Set the recorder timeout to 60 seconds, The Screen recording will be stopped after 60 seconds
+                options.setCapability("node_recording_timeout", 120);
+                options.setProfile(profile);
+                options.setCapability("webSocketUrl",true);
+                options.setCapability("se:noVncPort", "7900");
+                options.setCapability("se:vncEnabled",true);
+                options.setCapability("se:recordVideo", true);
+                options.setCapability("se:timeZone", "america/new_york");
+                options.setCapability("se:screenResolution", "1920x1080" );
+                options.setCapability("se:probesize", "256" );
+                options.setAcceptInsecureCerts(true);
+                options.setPlatformName("Linux");
+                options.setBrowserVersion("99.0");
+                driver.set(new RemoteWebDriver(new URL(hubURL),options));
+            }
+            else if(browserType.equalsIgnoreCase("chrome")){
                 ChromeOptions options = new ChromeOptions();
 //                // Add the WebDriver proxy capability.
 //                Proxy proxy = new Proxy();
 //                proxy.setHttpProxy(appURL);
 //                options.setCapability("proxy", proxy);
+                // Enable screen recording
+                options.setCapability("node_screen_recording", true);
+                // Set the recorder timeout to 60 seconds, The Screen recording will be stopped after 60 seconds
+                options.setCapability("node_recording_timeout", 120);
                 options.setCapability("platform", Platform.LINUX);
                 // start chrome maximized and create set temp user profile
                 options.addArguments(Arrays.asList("start-maximized","user-data-dir=/tmp/temp_profile"));
@@ -66,12 +100,11 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
                 options.setBrowserVersion("100.0");
                 options.setCapability("se:noVncPort", 7900);
                 options.setCapability("se:recordVideo", true);
-                options.setCapability("se:timeZone", "US/Pacific");
+                options.setCapability("se:timeZone", "america/new_york");
                 options.setCapability("se:screenResolution", "1920x1080" );
+                options.setCapability("se:probesize", "256" );
 //                options.addArguments(whitelistedIps="");
-                // Add a ChromeDriver-specific capability.
-//                options.addExtensions(new File("/path/to/extension.crx"));
-//                ChromeDriver driver = new ChromeDriver(options);
+
                 driver.set(new RemoteWebDriver(new URL(hubURL), options));
             }
             else if (browserType.equalsIgnoreCase("safari")){
@@ -81,60 +114,26 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
                 desiredCapabilities.setJavascriptEnabled(true);
                 desiredCapabilities.setPlatform(Platform.MAC);
                 desiredCapabilities.setVersion("");
+                // Enable screen recording
+                desiredCapabilities.setCapability("node_screen_recording", true);
+                // Set the recorder timeout to 60 seconds, The Screen recording will be stopped after 60 seconds
+                desiredCapabilities.setCapability("node_recording_timeout", 120);
 
                 driver.set(new RemoteWebDriver(new URL(hubURL), new SafariOptions()));
             }
-            else if (browserType.equalsIgnoreCase("firefox")) {
-//                // create now FirefoxProfile
-                FirefoxProfile profile = new FirefoxProfile();
-//                // Add the WebDriver proxy capability.
-//                // httpProxy – the proxy host, expected format is hostname:1234
-//                Proxy proxy = new Proxy();
-//                proxy.setHttpProxy(hubURL);
-                profile.setAcceptUntrustedCertificates(true);
-                profile.setAssumeUntrustedCertificateIssuer(false);
-                //Use No Proxy Settings
-                profile.setPreference("network.proxy.type", 0);
-                //Set Firefox profile to capabilities
-                // create FirefoxOptions and add the profile to FirefoxOptions
-                FirefoxOptions options = new FirefoxOptions();
-                options.setProfile(profile);
-                options.setCapability("webSocketUrl",true);
-                options.setCapability("se:noVncPort", "7900");
-                options.setCapability("se:vncEnabled",true);
-                options.setCapability("se:recordVideo", true);
-                options.setCapability("se:timeZone", "US/Pacific");
-                options.setCapability("se:screenResolution", "1920x1080" );
-                options.setAcceptInsecureCerts(true);
-                options.setPlatformName("Linux");
-                options.setBrowserVersion("99.0");
-                driver.set(new RemoteWebDriver(new URL(hubURL),options));
-            }
             else if (browserType.equalsIgnoreCase("edge")) {
 
-//                desiredCapabilities = new DesiredCapabilities(new InternetExplorerOptions());
-//                desiredCapabilities.setBrowserName("internet explorer");
-//                desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.UNEXPECTED_ALERT_BEHAVIOR, "accept");
-//                desiredCapabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-//                desiredCapabilities.setCapability("ignoreProtectedModeSettings", true);
-//                desiredCapabilities.setCapability("javascriptEnabled", true);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
-//                desiredCapabilities.setCapability(InternetExplorerDriver.INITIAL_BROWSER_URL, "about:blank");
-//                desiredCapabilities.setCapability(InternetExplorerDriver.LOG_LEVEL, "DEBUG");
-//                desiredCapabilities.setPlatform(Platform.LINUX);
-//                driver.set(new RemoteWebDriver(new URL(hubURL), desiredCapabilities));
-
                 EdgeOptions options = new EdgeOptions();
+                // Enable screen recording
+                options.setCapability("node_screen_recording", true);
+                // Set the recorder timeout to 60 seconds, The Screen recording will be stopped after 60 seconds
+                options.setCapability("node_recording_timeout", 120);
                 options.setPageLoadStrategy(PageLoadStrategy.EAGER.toString());
                 options.setCapability("se:recordVideo", true);
-                options.setCapability("se:timeZone", "US/Pacific");
+                options.setCapability("se:timeZone", "america/new_york");
                 options.setCapability("se:screenResolution", "1920x1080" );
+                options.setCapability("se:probesize", "256" );
+
                 driver.set(new RemoteWebDriver(new URL(hubURL), options));
             }
             if (driver.get() == null){
@@ -146,29 +145,38 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
 
         }catch (NullArgumentException nae) {
             log.error(nae.getMessage());
+            nae.printStackTrace();
         } catch (SecurityException se) {
             log.error(se.getMessage());
+            se.printStackTrace();
         } catch (NullPointerException npe) {
             log.error(npe.getMessage());
+            npe.printStackTrace();
         } catch (IllegalArgumentException iae) {
             log.error(iae.getMessage());
+            iae.printStackTrace();
         } catch (MalformedURLException mue) {
             log.error(mue.getMessage());
+            mue.printStackTrace();
         }
     }
 
-    public WebDriver getDriver()
-    {
+    /**
+     * Get the webdriver
+     * @return
+     */
+    public WebDriver getDriver() throws InterruptedException {
         log.info("Getting WebDriver.........");
         return driver.get();
     }
 
+    /**
+     * Teardown treads
+     */
     @AfterMethod(alwaysRun = true)
     public void tearDown()
     {
         try{
-//            driver.wait(5000L);
-            driver.get().close();
             driver.get().quit();
             log.info("Tearing down session.........");
         } catch (Exception e) {
