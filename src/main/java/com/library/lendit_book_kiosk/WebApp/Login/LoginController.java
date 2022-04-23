@@ -2,14 +2,17 @@ package com.library.lendit_book_kiosk.WebApp.Login;
 
 import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Book.BookService;
+import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
+import com.library.lendit_book_kiosk.WebApp.Fragments.SearchBook;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -39,7 +42,7 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 public class LoginController<T extends Map<String, Object>> implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     // payLoad should be used to manage DOM objects passed between server and client
-    protected final T payLoad = (T) new HashMap<String, Object>();
+    protected  T payLoad = (T) new HashMap<String, Object>();
 
     @Autowired
     protected static UserService userService;
@@ -75,8 +78,6 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         this.userAuth = userAuthentication;
     }
 
-
-
     /**
      * Initial login
      * @param model
@@ -90,6 +91,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             Model model
     ) {
         try{
+            // cleanse the model of null objects
             model.mergeAttributes(hierarchicalCheck((T) model));
             // reset our security context
             SecurityContextHolder.getContext().setAuthentication(null);
@@ -99,7 +101,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             response.setContentType("text/html;charset=UTF-8");
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expires", 0);
+            response.setDateHeader("Expires", 0); // no expiration
             log.info(model.toString());
             payLoad.put("userLoginDetails", new UserLoginDetails());
             // merge our attributes
@@ -245,11 +247,13 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                             request.getAttribute("Book"),
                             model.getAttribute("Book"),
                             book,
-                            payLoad.get("Book"), null
+                            payLoad.get("Book")
                     }
             ).get(0);
             ////////////////////////////////////////////////////////////////////////
             payLoad.put("Book",book);
+            ////////////////////////////////////////////////////////////////////////
+            payLoad.put("Selection",new SelectionOptions());
             ////////////////////////////////////////////////////////////////////////
             log.info("\nFrom Request PathVariable Book: \n{}", book);
             log.info("\nModel Attributes: {}",model);
@@ -296,7 +300,8 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                 payLoad.put("previousUrl", referrer);
             }
             if(result.hasErrors()){
-                throw new Exception("Resultsbody has errors. Check parameter variable: " + (List<Book>)payLoad.get("book_list"));
+                throw new Exception("Resultsbody has errors. Check parameter variable: " +
+                        (List<Book>)payLoad.get("book_list"));
             }
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
@@ -308,6 +313,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                     }
             ));
             ////////////////////////////////////////////////////////////////////////
+            payLoad.put("Selection",new SelectionOptions());
             ////////////////////////////////////////////////////////////////////////
             // now use the authentication token to assign a principal/user to the security context holder
             // check the security context
@@ -375,6 +381,29 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return null;
     }
+    //////////////////////////////////////////////////////////////////////
+    @PostMapping(
+            value = "selection"
+    )
+    public ResponseEntity<HttpStatus> selection(
+            @ModelAttribute("selection") @Valid SelectionOptions selection,
+            HttpServletRequest request,
+            Model model,
+            BindingResult result){
+        try{
+            if(result.hasErrors()){
+                log.error("Results has error: {}",result);
+            }
+            log.info(hierarchicalCheck(
+                    new Object[]{selection, model}).toString());
+            log.info("Results: {}",result.toString());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
+    }
+    //////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////
     /**
      * Sets the

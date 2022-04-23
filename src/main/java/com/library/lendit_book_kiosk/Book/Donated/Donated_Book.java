@@ -26,15 +26,13 @@ public class Donated_Book implements Serializable {
     @Column(
             name = "id",
             unique = true
-
     )
     private Long id;
-    @ManyToOne(
+    @ManyToOne( // many donated books for every one book
             targetEntity = Book.class
     )
     @JoinColumn(name="isbn", nullable=false)
     private Book donated_books;
-    private String doner_name;
-    private Double estimated_value;
+    private String title;
     /////////////////////////////////////////////////////////////////
 }

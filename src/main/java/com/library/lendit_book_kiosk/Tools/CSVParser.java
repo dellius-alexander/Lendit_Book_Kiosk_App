@@ -1,5 +1,6 @@
 package com.library.lendit_book_kiosk.Tools;
 
+import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Custom.Secret;
@@ -55,7 +56,6 @@ public class CSVParser implements Serializable{
     public String[] getRow(int row){
         return this.file_contents.get(row);
     }
-
 
     public boolean equals(final Object o) {
         if (o == this) return true;
@@ -119,56 +119,56 @@ public class CSVParser implements Serializable{
         log.info("Total Students: {}",cnt);
         return users;
     }
+
+    public List<Book> getBookInfo(){
+        int cnt = 0;
+        List<Book> bookList = new ArrayList<>();
+        try{
+
+            for (int i = 1; i < file_contents.size(); i++)
+            {
+                String[] lBook = file_contents.get(i);
+                log.info("{}: {}",cnt, lBook);
+                for (int j = 0; j < 1; j++)
+                {
+                    bookList.add(
+                        new Book(
+                            lBook[j],   // isbn
+                            lBook[j+11],// title
+                            lBook[j+9], // series
+                            lBook[j+1], // authors
+                            lBook[j+3], // description
+                            lBook[j+5], // language
+                            (lBook[j+10] == null ? 0 : Double.valueOf(lBook[j+10])),// rating
+                            lBook[j+4], // genres
+                            Long.valueOf(lBook[j+6]), // num_of_pages
+                            lBook[j+8], // publisher
+                            LocalDate.of(Integer.parseInt(lBook[j+7].split("-")[0]),
+                                    Month.of(Integer.parseInt(lBook[j+7].split("-")[1])),
+                                    Integer.parseInt(lBook[j+7].split("-")[2])), // publication_date
+                            lBook[j+2]  // cover_img
+                        )
+                    );
+                    log.info("New Book Added: {}", bookList.get(j));
+                }
+            }
+
+        } catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return bookList;
+    }
     public String toString() {
         return "CSVParser(fp=" + this.getFp() + ")";
     }
 
-//    public static void main(String[] args) throws FileNotFoundException {
-//       CSVParser csv = new CSVParser(new FileParser(new File("target/classes/mock_data.csv")));
-//       System.out.println("ABS Path: " + csv.getFp().getNext().getAbsolutePath());
-//       System.out.println("Is File: " + csv.getFp().getNext().isFile());
-//       System.out.println(csv.getFp().getNext().toString());
-//       int cnt = 0;
-////       System.out.println(csv.getRow(9).toArray()[0]);
-//        for(int i = 1; i < csv.file_contents.size(); i++){
-////            log.info("{}",csv.file_contents.get(i));
-//            for (int j = 0; j < 1 ; j++) {
-//                String[] lUser = csv.file_contents.get(i);
-//
-////                log.info(lUser.toString());
-//                if (String.valueOf(lUser[j+6]).equalsIgnoreCase( "STUDENT" )){
-//                log.info(lUser[j+6]);
-//                log.info("Size: {}",lUser[j+6].trim());
-//                log.info("{}: {}",csv.file_contents.get(0)[j], lUser[0]);
-//                cnt++;
-//                User user = new User(
-//                        lUser[j],
-//                        lUser[j+1],
-//                        new Secret(lUser[j+2]),
-//                        (lUser[j+3].equalsIgnoreCase("FEMALE") ? GENDER.FEMALE : GENDER.MALE),
-//                        LocalDate.of(Integer.parseInt(lUser[j+4].split("-")[0]),
-//                                Month.of(Integer.parseInt(lUser[j+4].split("-")[1])),
-//                                Integer.parseInt(lUser[j+4].split("-")[2])),
-//                        lUser[j+5],
-//                        Set.of(new Role((
-//                                lUser[j+6].equalsIgnoreCase("STUDENT") ? UserRole.STUDENT :
-//                                        lUser[j+6].equalsIgnoreCase("FACULTY") ? UserRole.FACULTY :
-//                                                lUser[j+6].equalsIgnoreCase("STAFF") ? UserRole.STAFF:
-//                                                        lUser[j+6].equalsIgnoreCase("ADMIN") ? UserRole.ADMIN : UserRole.SUPERUSER),
-//                                (lUser[j+6].equalsIgnoreCase("STUDENT") ? "STUDENT"  :
-//                                        lUser[j+6].equalsIgnoreCase("FACULTY") ?"FACULTY"  :
-//                                                lUser[j+6].equalsIgnoreCase("STAFF") ? "STAFF":
-//                                                        lUser[j+6].equalsIgnoreCase("ADMIN") ? "ADMIN" : "SUPERUSER"))),
-//                        Set.of(new Student(
-//                                (lUser[j + 7].equals("1")),
-//                                Set.of(new Major(lUser[j + 8]))
-//                        ))
-//                );
-//
-//                log.info(user.toString());
-//                    }
-//            }
-//        }
-//        log.info("Total Students: {}",cnt);
-//    }
+    public static void main(String[] args) throws FileNotFoundException {
+       CSVParser csv = new CSVParser(new FileParser(new File("SQL/mysql_files/Lendit_Book_Kiosk_books.csv")));
+        log.info("ABS Path: " + csv.getFp().getNext().getAbsolutePath());
+        log.info("Is File: " + csv.getFp().getNext().isFile());
+        log.info(csv.getFp().getNext().toString());
+        int cnt = 0;
+        log.info(csv.getBookInfo().toString());
+    }
 }

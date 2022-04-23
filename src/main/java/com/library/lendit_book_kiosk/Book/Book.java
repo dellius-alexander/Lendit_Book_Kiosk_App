@@ -54,7 +54,19 @@ public class Book implements BookInterface {
     )
     private Set<Book_Copy> book_copy;
     ///////////////////////////////////////////////////////
-    public Book(String isbn, String title, String series, String authors, String description, String language, Double rating, String genres, Long num_of_pages, String publisher, LocalDate publication_date, String cover_img) {
+    public Book(
+            String isbn,
+            String title,
+            String series,
+            String authors,
+            String description,
+            String language,
+            Double rating,
+            String genres,
+            Long num_of_pages,
+            String publisher,
+            LocalDate publication_date,
+            String cover_img) {
         this.isbn = isbn;
         this.title = title;
         this.series = series;
@@ -71,13 +83,6 @@ public class Book implements BookInterface {
 
     public Book() {}
 
-//    public Set<Kiosk> getKiosk(){
-//        return this.kiosk;
-//    }
-
-//    public void setKiosk(Set<Kiosk> kiosk){
-//        this.kiosk = kiosk;
-//    }
     @Override
     public String getIsbn() {
         return this.isbn;

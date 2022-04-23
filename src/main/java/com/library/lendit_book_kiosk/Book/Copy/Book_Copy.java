@@ -4,9 +4,7 @@ package com.library.lendit_book_kiosk.Book.Copy;
 import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Book.Kiosk.Kiosk;
 import com.library.lendit_book_kiosk.Book.Reserve.Reserve_Book;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +12,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "book_copy")
@@ -50,4 +46,26 @@ public class Book_Copy implements Serializable {
     )
     private Set<Reserve_Book> reserve_books;
 
+    public Book_Copy(Long id, Book book_copy, Set<Kiosk> kiosk, Set<Reserve_Book> reserve_books) {
+        this.id = id;
+        this.book_copy = book_copy;
+        this.kiosk = kiosk;
+        this.reserve_books = reserve_books;
+    }
+    public Book_Copy(Book book_copy, Set<Kiosk> kiosk, Set<Reserve_Book> reserve_books) {
+
+        this.book_copy = book_copy;
+        this.kiosk = kiosk;
+        this.reserve_books = reserve_books;
+    }
+
+    public Book_Copy(Book book_copy, Set<Reserve_Book> reserve_books) {
+        this.book_copy = book_copy;
+        this.reserve_books = reserve_books;
+    }
+    public Book_Copy(Book book_copy) {
+        this.book_copy = book_copy;
+    }
+    public Book_Copy() {
+    }
 }

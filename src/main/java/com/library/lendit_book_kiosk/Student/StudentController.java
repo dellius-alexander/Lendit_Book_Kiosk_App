@@ -62,9 +62,9 @@ public class StudentController implements Serializable {
             value = {"/findById"},
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity<List<Student>> getByQueryId(
+    public ResponseEntity<Student> getByQueryId(
             @RequestParam Long studentId) {
-        List<Student> student = studentService.findStudentById(studentId);
+        Student student = studentService.findStudentById(studentId);
         log.info("RequestedMethod GET: StudentId => {}", student);
         return ResponseEntity.ok().body(student);
     }
@@ -77,9 +77,9 @@ public class StudentController implements Serializable {
             value = {"/findById/Id={student_Id}"},
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity<List<Student>> getStudentById(
+    public ResponseEntity<Student> getStudentById(
             @PathVariable("student_Id") Long studentId) {
-        List<Student> students = studentService.findStudentById(studentId);
+        Student students = studentService.findStudentById(studentId);
         log.info("RequestedMethod GET: Student_Id => {}", students.toString());
         return ResponseEntity.ok().body(students);
     }

@@ -157,11 +157,10 @@ public class StudentService {
      * @param studentId the student id
      * @return List<Student>
      */
-    public List<Student> findStudentById(Long studentId) throws IllegalArgumentException {
+    public Student findStudentById(Long studentId) throws IllegalArgumentException {
         Optional<Student> student = studentRepository.findById(studentId);
-        return List.of(
-                student.orElseThrow(() ->
-                        new IllegalStateException("Student with studentId: "+ studentId + ", not found.")));
+        return student.orElseThrow(() ->
+                        new IllegalStateException("Student with studentId: "+ studentId + ", not found."));
     }
 
 }

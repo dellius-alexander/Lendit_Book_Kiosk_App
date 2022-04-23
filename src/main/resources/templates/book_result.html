@@ -126,19 +126,78 @@ book_result.html
                                 </small>
                             </div>
                             <!--/*  SELECTION BUTTONS  */-->
-                            <div class="ui-widget-icon-block" role="switch">
-                                    <button type="button"  class="btn btn-primary active">
-                                        <input id="checkbox-btn btn--1" type="checkbox" class="checkbox btn-secondary"  autocomplete="off"> Rent
-                                    </button>
-                                    <button type="button"  class="btn btn-primary active">
-                                        <input id="checkbox-btn btn--2" type="checkbox" class="checkbox btn-secondary"  autocomplete="off"> Reserve
-                                    </button>
-                                    <button type="button"  class="btn btn-primary active">
-                                        <input id="checkbox-btn btn-3" type="checkbox" class="checkbox btn-secondary"   autocomplete="off"> Save
-                                    </button>
-                                    <button type="button"  class="btn btn-primary active">
-                                        <input id="checkbox-btn btn--4" type="checkbox" class="checkbox btn-secondary"   autocomplete="off"> Checked Out
-                                    </button>
+                            <div class="container-fluid">
+                                <form
+                                        th:object="${Selection}"
+                                        method="POST"
+                                        class="container-fluid"
+                                        th:action="@{/selection}"
+                                >
+                                    <div class="ui-widget" role="switch">
+                                            <button type="button"  class="btn btn-primary active" >
+                                                <label>Borrow</label>
+                                                <input
+                                                        id="checkbox-btn btn--1"
+                                                        type="checkbox"
+                                                        name="borrow"
+                                                        th:checked="*{borrow}"
+                                                        class="checkbox btn-secondary"
+                                                        autocomplete="off"
+                                                >
+                                            </button>
+                                    </div>
+                                    <div class="ui-widget" role="switch">
+                                            <button type="button"  class="btn btn-primary active" >
+                                                <label>Reserve</label>
+                                                <input
+                                                        id="checkbox-btn btn--2"
+                                                        type="checkbox"
+                                                        name="reserve"
+                                                        th:checked="*{reserve}"
+                                                        class="checkbox btn-secondary"
+                                                        autocomplete="off"
+                                                >
+                                            </button>
+                                    </div>
+                                    <div class="ui-widget" role="switch">
+                                            <button type="button"  class="btn btn-primary active" >
+                                                <label>Save</label>
+                                                <input
+                                                        id="checkbox-btn btn-3"
+                                                        type="checkbox"
+                                                        name="save"
+                                                        th:checked="*{save}"
+                                                        class="checkbox btn-secondary"
+                                                        autocomplete="off"
+                                                >
+                                            </button>
+
+                                    </div>
+                                    <div class="ui-widget" role="switch">
+                                        <button type="button"  class="btn btn-primary active" >
+                                            <label>Checked Out</label>
+                                            <input
+                                                    id="checkbox-btn btn--4"
+                                                    type="checkbox"
+                                                    name="Selection"
+                                                    th:checked="*{checked_out}"
+                                                    class="checkbox btn-secondary"
+                                                    autocomplete="off"
+                                            >
+                                        </button>
+                                    </div>
+                                    <div class="ui-widget" role="switch">
+                                        <button type="button" class="btn btn-primary active">
+                                            <input
+                                                    type="submit"
+                                                    value="Submit"
+                                                    data-wait="Please wait......"
+                                                    id="LoginSubmitButton"
+                                                    class="w-button"
+                                            >
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                             <!--/*  SELECTION BUTTONS  */-->
                             <hr/>

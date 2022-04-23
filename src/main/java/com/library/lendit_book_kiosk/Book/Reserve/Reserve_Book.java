@@ -1,5 +1,6 @@
 package com.library.lendit_book_kiosk.Book.Reserve;
 
+import com.library.lendit_book_kiosk.Book.BookRepository;
 import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Student.Student;
 import lombok.AllArgsConstructor;
@@ -46,4 +47,9 @@ public class Reserve_Book implements Serializable {
             referencedColumnName = "student_id"
     )
     private Student student;
+
+    public Reserve_Book(Book_Copy book_copy, Student student) {
+        this.book_copy = book_copy;
+        this.student = student;
+    }
 }
