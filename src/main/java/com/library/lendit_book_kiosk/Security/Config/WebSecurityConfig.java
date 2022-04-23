@@ -69,9 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 //        http.addFilter(new CustomAuthenticationFilter());
+        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
         // Apply options to our http client:
         http.authorizeRequests()    // authorize each request
-                .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(
                         "/css/**",
                         "/js/**",

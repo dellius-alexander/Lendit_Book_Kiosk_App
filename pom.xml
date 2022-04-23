@@ -541,6 +541,11 @@
 							<goal>stop</goal>
 						</goals>
 					</execution>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>

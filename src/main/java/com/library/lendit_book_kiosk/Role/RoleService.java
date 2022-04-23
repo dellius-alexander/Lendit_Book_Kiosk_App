@@ -1,10 +1,9 @@
 package com.library.lendit_book_kiosk.Role;
 
-//import com.fasterxml.jackson.core.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,22 +13,11 @@ import java.util.regex.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import javax.persistence.EntityManagerFactory;
-
 @Service(value = "RoleService")
 public class RoleService {
     private static final Logger log = LoggerFactory.getLogger(RoleService.class);
 
     private final RoleRepository roleRepository;
-
-
-    private enum ROLE {
-        GUEST,
-        STUDENT,
-        FACULTY,
-        ADMIN,
-        SUPERUSER
-    }
 
     @Autowired
     public RoleService(

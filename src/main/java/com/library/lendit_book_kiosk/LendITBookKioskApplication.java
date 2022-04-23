@@ -70,7 +70,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 			RoleRepository roleRepository){
 		return args -> {
 
-			Optional<User> users =  userService.findUserByEmail("adyos0@webs.com");
+//			Optional<User> users =  userService.findUserByEmail("adyos0@webs.com");
 //			Role student_role = roleRepository.findRoleByName("STUDENT").orElseThrow(
 //					() -> new IllegalStateException("Role does not exist......")
 //			);
@@ -80,77 +80,77 @@ public class LendITBookKioskApplication implements CommandLineRunner
 //			Role superuser_role = roleRepository.findRoleByName("SUPERUSER").orElseThrow(
 //					() -> new IllegalStateException("Role does not exist......")
 //			);
-			if (!users.isPresent()){
+//			if (!users.isPresent()){
+////
+////
+////				Major CSCI = new Major("CSCI");
+////				Major BSCS = new Major("BSCS");
+////				Major MBA = new Major("MBA");
+////
+////				Role USER = new Role(UserRole.USER, "User");
+////				Role ADMIN = new Role(UserRole.ADMIN, "Administrator");
+////				Role GUEST = new Role(UserRole.GUEST,"Guest visitor");
+////				Role STUDENT = new Role(UserRole.STUDENT, "Student");
+////				Role SUPERUSER = new Role(UserRole.SUPERUSER,"Super Administrator");
+////
+////				Student janeDoe = new Student (
+////						true,
+////						Set.of(CSCI, MBA )
+////				);
+////
+////				Student johnDoe = new Student (
+////						true,
+////						Set.of(BSCS, MBA)
+////				);
+////
+////				Student bobDoe = new Student (
+////						true,
+////						Set.of(MBA, BSCS)
+////				);
+////
+////				User jane = new User(
+////						"Jane Doe",
+////						"jane@gmail.com",
+////						new Secret("password"),
+////						GENDER.FEMALE,
+////						LocalDate.of(1989, Month.JANUARY, 6),
+////						"Student:Senior",
+////						Set.of(student_role,admin_role),
+////						Set.of(janeDoe)
+////				);
+////
+////				User john = new User(
+////						"John Doe",
+////						"john@gmail.com",
+////						new Secret("password"),
+////						GENDER.MALE,
+////						LocalDate.of(1989, Month.JANUARY, 5),
+////						"Student:Senior",
+////						Set.of(student_role,admin_role),
+////						Set.of(johnDoe)
+////				);
+////
+////				User bob = new User(
+////						"Bob Doe",
+////						"bob@gmail.com",
+////						new Secret("password"),
+////						GENDER.MALE,
+////						LocalDate.of(1979, Month.JANUARY, 12),
+////						"Visitor:GSU",
+////						Set.of(GUEST),
+////						Set.of(bobDoe)
+////				);
 //
-//
-//				Major CSCI = new Major("CSCI");
-//				Major BSCS = new Major("BSCS");
-//				Major MBA = new Major("MBA");
-//
-//				Role USER = new Role(UserRole.USER, "User");
-//				Role ADMIN = new Role(UserRole.ADMIN, "Administrator");
-//				Role GUEST = new Role(UserRole.GUEST,"Guest visitor");
-//				Role STUDENT = new Role(UserRole.STUDENT, "Student");
-//				Role SUPERUSER = new Role(UserRole.SUPERUSER,"Super Administrator");
-//
-//				Student janeDoe = new Student (
-//						true,
-//						Set.of(CSCI, MBA )
-//				);
-//
-//				Student johnDoe = new Student (
-//						true,
-//						Set.of(BSCS, MBA)
-//				);
-//
-//				Student bobDoe = new Student (
-//						true,
-//						Set.of(MBA, BSCS)
-//				);
-//
-//				User jane = new User(
-//						"Jane Doe",
-//						"jane@gmail.com",
-//						new Secret("password"),
-//						GENDER.FEMALE,
-//						LocalDate.of(1989, Month.JANUARY, 6),
-//						"Student:Senior",
-//						Set.of(student_role,admin_role),
-//						Set.of(janeDoe)
-//				);
-//
-//				User john = new User(
-//						"John Doe",
-//						"john@gmail.com",
-//						new Secret("password"),
-//						GENDER.MALE,
-//						LocalDate.of(1989, Month.JANUARY, 5),
-//						"Student:Senior",
-//						Set.of(student_role,admin_role),
-//						Set.of(johnDoe)
-//				);
-//
-//				User bob = new User(
-//						"Bob Doe",
-//						"bob@gmail.com",
-//						new Secret("password"),
-//						GENDER.MALE,
-//						LocalDate.of(1979, Month.JANUARY, 12),
-//						"Visitor:GSU",
-//						Set.of(GUEST),
-//						Set.of(bobDoe)
-//				);
-
-				CSVParser csv = new CSVParser(new FileParser(new File("target/classes/mock_data.csv")));
-				// save all new users
-				userService.saveAll(
-//						List.of(jane,john,bob)
-						csv.getStudentsInfo()
-				);
-//				log.info("\nSAVING NEW USERS TO DB: \n{} \n{} \n{}\n",jane,john,bob);
-			} else{
-				log.info("\nDB ALREADY HAS USERS: {}\n", users.stream().map(User::toString).collect(Collectors.toList()));
-			}
+////				CSVParser csv = new CSVParser(new FileParser(new File("target/classes/mock_data.csv")));
+////				// save all new users
+////				userService.saveAll(
+//////						List.of(jane,john,bob)
+////						csv.getStudentsInfo()
+////				);
+////				log.info("\nSAVING NEW USERS TO DB: \n{} \n{} \n{}\n",jane,john,bob);
+//			} else{
+////				log.info("\nDB ALREADY HAS USERS: {}\n", users.stream().map(User::toString).collect(Collectors.toList()));
+//			}
 		};
 	}
 }

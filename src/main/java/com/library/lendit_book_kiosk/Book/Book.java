@@ -1,23 +1,28 @@
 package com.library.lendit_book_kiosk.Book;
 ///////////////////////////////////////////////////////////////////////////////
 
+import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
+import com.library.lendit_book_kiosk.Book.Donated.Donated_Book;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 //import java.util.List;
 //import java.util.Set;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 public class Book implements BookInterface {
     /////////////////////////////////////////////////////////////////
-    @Id
+
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
+    @Id
     @Column(
             name = "isbn",
             unique = true,
@@ -32,21 +37,23 @@ public class Book implements BookInterface {
     private String description;
     private String language;
     private Double rating;
-    ///////////////////////////////////////////////////////
-//    @ManyToMany(
-//            targetEntity = Genre.class
-//    )
-//    @JoinTable(
-//            name = "book_genre",
-//            joinColumns = @JoinColumn (name = "isbn"),
-//            inverseJoinColumns = @JoinColumn(name = "genre"))
     private String genres;
-    ///////////////////////////////////////////////////////
     private Long num_of_pages;
     private String publisher;
     private LocalDate publication_date;
     private String cover_img;
-
+    ///////////////////////////////////////////////////////
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "donated_books"  // maps to field donated_books in Donated_Book.donated_books
+    )
+    private Set<Donated_Book> donated_books;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "book_copy"  // maps to field donated_books in Donated_Book.donated_books
+    )
+    private Set<Book_Copy> book_copy;
+    ///////////////////////////////////////////////////////
     public Book(String isbn, String title, String series, String authors, String description, String language, Double rating, String genres, Long num_of_pages, String publisher, LocalDate publication_date, String cover_img) {
         this.isbn = isbn;
         this.title = title;
@@ -62,10 +69,15 @@ public class Book implements BookInterface {
         this.cover_img = cover_img;
     }
 
-    public Book() {
-    }
-    ///////////////////////////////////////////////////////////////////////////
+    public Book() {}
 
+//    public Set<Kiosk> getKiosk(){
+//        return this.kiosk;
+//    }
+
+//    public void setKiosk(Set<Kiosk> kiosk){
+//        this.kiosk = kiosk;
+//    }
     @Override
     public String getIsbn() {
         return this.isbn;

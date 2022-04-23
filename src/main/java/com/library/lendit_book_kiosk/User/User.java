@@ -1,8 +1,10 @@
 package com.library.lendit_book_kiosk.User;
 
+import com.library.lendit_book_kiosk.Employee.Employee;
 import com.library.lendit_book_kiosk.Role.Role;
 import com.library.lendit_book_kiosk.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Custom.Secret;
+import com.library.lendit_book_kiosk.Student.Major;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,9 +90,26 @@ public class User extends org.springframework.security.core.userdetails.User imp
             fetch = FetchType.EAGER,
             cascade = { CascadeType.ALL })
     @JoinTable(name = "User_Student",
-            joinColumns = @JoinColumn ( name = "user_id_fk", nullable = false, table = "user"),
-            inverseJoinColumns = @JoinColumn(name = "student_id_fk", nullable = false, table = "student"))
+            joinColumns = @JoinColumn (
+                    name = "user_id",
+                    nullable = false,
+                    table = "user",
+                    referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "student_id",
+                    nullable = false,
+                    table = "student"))
     private Set<Student> student;
+    @ManyToMany(
+            targetEntity = Employee.class,
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_employee",
+            joinColumns = @JoinColumn(name = "user_id", nullable = false, table = "user"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id", nullable = false, table = "employee")
+    )
+    private Set<Employee> employees;
     ///////////////////////////////////////////////////////
 
     /**

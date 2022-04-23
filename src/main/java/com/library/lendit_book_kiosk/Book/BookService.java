@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service(value = "BookService")
 public class BookService {
     private final static Logger log = LoggerFactory.getLogger(BookService.class);
-
     private final BookRepository bookRepository;
 
     @Autowired

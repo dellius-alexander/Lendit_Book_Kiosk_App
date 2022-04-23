@@ -5,13 +5,13 @@ package com.library.lendit_book_kiosk.Student;
 // import java.util.ArrayList;
 // import java.util.List;
 
+import com.library.lendit_book_kiosk.Book.Borrow.Borrow_Book;
+import com.library.lendit_book_kiosk.Book.Reserve.Reserve_Book;
 import com.library.lendit_book_kiosk.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.util.AbstractSet;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,18 +31,16 @@ public class Student  implements StudentInterface {
     /////////////////////////////////////////////////////////////////
     @Id
     @GeneratedValue(
-            // strategy = AUTO
             strategy = GenerationType.SEQUENCE,
             generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
     )
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
+            name = "student_id",
             unique = true,
             columnDefinition = "bigint",
             nullable = false)
     private Long Id;
     private boolean enrolled;
-    // TODO: Expand String to Class Major to Create Set<Major>
     @ManyToMany(
             targetEntity = Major.class,
             fetch = FetchType.EAGER,
@@ -53,10 +51,29 @@ public class Student  implements StudentInterface {
             inverseJoinColumns = @JoinColumn(name = "major_id_fk", nullable = false, table = "major")
     )
     private Set<Major> majors;
-//    @ManyToMany(
-//            mappedBy = "user_id"
-//    )
-//    private Set<User> users;
+    @ManyToMany(
+            targetEntity = User.class,
+            fetch = FetchType.EAGER,
+            cascade = { CascadeType.ALL })
+    @JoinTable(name = "User_Student",
+            joinColumns = @JoinColumn (
+                    name = "student_id",
+                    nullable = false,
+                    table = "student",
+                    referencedColumnName = "student_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_id",
+                    nullable = false,
+                    table = "user"))
+    private Set<User> users;
+    @OneToMany(
+            mappedBy = "student" // student can borrow many books
+    )
+    private Set<Borrow_Book> borrow_books;
+    @OneToMany(
+            mappedBy = "student" // student can reserve many books
+    )
+    private Set<Reserve_Book> reserve_books;
     ///////////////////////////////////////////////////////
     public Student() {}
 
