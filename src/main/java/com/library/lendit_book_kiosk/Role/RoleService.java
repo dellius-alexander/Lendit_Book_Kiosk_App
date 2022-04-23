@@ -111,4 +111,13 @@ public class RoleService {
         }
         return results;
     }
+
+    /**
+     * Find role by name
+     * @param student
+     * @return Role object
+     */
+    public Optional<Role> findRoleByName(String student) {
+        return roleRepository.findRoleByName(student);
+    }
 }

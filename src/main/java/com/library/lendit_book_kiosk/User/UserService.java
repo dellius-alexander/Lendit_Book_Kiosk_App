@@ -129,11 +129,18 @@ public class UserService implements UserDetailsService {
      * @return User
      */
     public User getByEmail(String email){
-        Optional<User> user = userRepository.findUserByEmail(email);
-        log.info("\n\nUSER FOUND: {}\n\n",user.get());
-        return user.orElseThrow(() ->
-                new IllegalStateException("User with email " + email +
-                        " was not found."));
+        User user = null;
+        try{
+            user = userRepository.findUserByEmail(email)
+                    .orElseThrow(() ->
+                            new IllegalStateException("User with email " + email +
+                                    " was not found."));
+            log.info("\n\nUSER FOUND: {}\n\n",user);
+        } catch (Exception e){
+            log.info(e.getMessage());
+            user = null;
+        }
+        return user;
     }
     /**
      * Get <code>User</code> by id
@@ -179,6 +186,16 @@ public class UserService implements UserDetailsService {
      */
     public ResponseEntity<HttpStatus> deleteUserById(Long id){
         userRepository.deleteById(id);
+        return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Save all users to DB
+     * @param users
+     * @return http status code 200 ok or throws exception
+     */
+    public ResponseEntity<HttpStatus> saveAll(List<User> users){
+        userRepository.saveAll(users);
         return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
     }
 }
