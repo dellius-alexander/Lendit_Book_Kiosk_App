@@ -1,7 +1,5 @@
-package com.library.lendit_book_kiosk.Tools;
+package com.library.lendit_book_kiosk.Utility;
 
-import com.library.lendit_book_kiosk.WebApp.Fragments.SearchBook;
-import com.library.lendit_book_kiosk.WebApp.Login.LoginController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +40,7 @@ public class HierarchicalCheck<T extends Map<String, Object>> implements Seriali
             return List.of(object);
         }
         else {
-            return null;
+            return List.of("null");
         }
         return list;
     }
@@ -62,7 +60,7 @@ public class HierarchicalCheck<T extends Map<String, Object>> implements Seriali
             log.info("Not_Null Object Found: {}",object);
             return object;
         }
-        return null;
+        return "null";
     }
 
     /**

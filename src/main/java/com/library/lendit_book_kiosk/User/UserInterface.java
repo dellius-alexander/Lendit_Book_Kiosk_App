@@ -1,7 +1,7 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Security.Custom.Secret;
+import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;

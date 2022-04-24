@@ -2,9 +2,10 @@ package com.library.lendit_book_kiosk.Book;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-public interface BookInterface extends Serializable {
+public interface BookInterface<Objects> extends Serializable {
     ///////////////////////////////////////////////////////////////////////////
     // void setId(String ISBN);
 
@@ -16,7 +17,7 @@ public interface BookInterface extends Serializable {
 
 //    void SetGenres(List<String> genres);
 
-    String getIsbn();
-
-    void setIsbn(String isbn);
+//    String getIsbn();
+//
+//    void setIsbn(String isbn);
 }

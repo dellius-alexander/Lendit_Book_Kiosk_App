@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk.Security.Custom;
+package com.library.lendit_book_kiosk.Security.Secret;
 
 import com.library.lendit_book_kiosk.User.User;
 import org.junit.BeforeClass;
@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The Secret.class uses AES encryption algorithm to generate a random 256 bit

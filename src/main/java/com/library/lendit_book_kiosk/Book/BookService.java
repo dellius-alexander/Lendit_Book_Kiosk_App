@@ -27,7 +27,7 @@ public class BookService {
      /**
      * Find books By Title
      * @param title book title
-     * @return list of books matching the search term(s)
+     * @return {@literal List<Book>}
      */
     public List<Book> getBooksByTitle(String title){
 
@@ -39,7 +39,7 @@ public class BookService {
     /**
      * Find book By Author
      * @param author
-     * @return list of books matching the search term(s)
+     * @return {@literal List<Book>}
      */
     public List<Book> getBooksByAuthor(String author){
         List<Book> books = this.bookRepository.findBookByAuthors(author);
@@ -50,7 +50,7 @@ public class BookService {
     /**
      * Find book By Genres
      * @param genres
-     * @return list of books matching the search term(s)
+     * @return {@literal List<Book>}
      */
     public List<Book> getBooksByGenres(String genres){
         List<Book> books = this.bookRepository.findBookByGenres(genres);
@@ -58,9 +58,24 @@ public class BookService {
         return books;
     }
 
+    /**
+     * Perform keyword search description
+     * @param description
+     * @return {@literal List<Book>}
+     */
     public List<Book> getBooksByDescription(String description){
         List<Book> books = this.bookRepository.findBookByDescription(description);
         log.info("\nBooks: {}\n",books);
         return books;
+    }
+
+    /**
+     * Save all book entries
+     * @param books
+     * @return {@literal List<Book>}
+     */
+    public void saveAll(Iterable<Book> books){
+        List<Book> bks = this.bookRepository.saveAll(books);
+        log.info("\nBooks: {}\n",bks);
     }
 }

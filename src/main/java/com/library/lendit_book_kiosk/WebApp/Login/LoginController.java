@@ -2,18 +2,16 @@ package com.library.lendit_book_kiosk.WebApp.Login;
 
 import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Book.BookService;
-import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
+import com.library.lendit_book_kiosk.Utility.HierarchicalCheck;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
-import com.library.lendit_book_kiosk.WebApp.Fragments.SearchBook;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,16 +22,13 @@ import org.springframework.web.bind.annotation.*;
 // LOGGING CLASSES
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thymeleaf.spring5.view.AbstractThymeleafView;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -43,6 +38,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     // payLoad should be used to manage DOM objects passed between server and client
     protected  T payLoad = (T) new HashMap<String, Object>();
+    protected HierarchicalCheck hck = new HierarchicalCheck();
 
     @Autowired
     protected static UserService userService;
@@ -92,7 +88,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     ) {
         try{
             // cleanse the model of null objects
-            model.mergeAttributes(hierarchicalCheck((T) model));
+            model.mergeAttributes(hck.hierarchicalCheck((T) model));
             // reset our security context
             SecurityContextHolder.getContext().setAuthentication(null);
             // reset our payLoad object
@@ -142,7 +138,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
 
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            UserLoginDetails uld = (UserLoginDetails) hierarchicalCheck(
+            UserLoginDetails uld = (UserLoginDetails) hck.hierarchicalCheck(
                     new Object[]{
                             request.getAttribute("userLoginDetails"),
                             model.getAttribute("userLoginDetails"),
@@ -239,10 +235,10 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             Model model
     ) {
         try {// clean our payload
-//            payLoad.replaceAll((BiFunction<? super String, ? super Object, ?>) hierarchicalCheck(payLoad));
+//            payLoad.replaceAll((BiFunction<? super String, ? super Object, ?>) hck.hierarchicalCheck(payLoad));
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            book = (Book) hierarchicalCheck(
+            book = (Book) hck.hierarchicalCheck(
                     new Object[]{
                             request.getAttribute("Book"),
                             model.getAttribute("Book"),
@@ -305,7 +301,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             }
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            payLoad.put("book_list",hierarchicalCheck(
+            payLoad.put("book_list",hck.hierarchicalCheck(
                     new Object[]{
                             model.getAttribute("book_list"),
                             bookList,
@@ -394,7 +390,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             if(result.hasErrors()){
                 log.error("Results has error: {}",result);
             }
-            log.info(hierarchicalCheck(
+            log.info(hck.hierarchicalCheck(
                     new Object[]{selection, model}).toString());
             log.info("Results: {}",result.toString());
         } catch (Exception e) {
@@ -439,76 +435,76 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return SecurityContextHolder.getContext().getAuthentication();
     }
-    //////////////////////////////////////////////////////////////////////
-     /**
-     * Checks if an object or list of objects are null and returns the first non null object.
-     * User only with same DataType Objects to find non-null object in list of objects.
-     * @param object a single Object, a list or array
-     * @return the first Not_Null object
-     */
-    private  List<? extends Object> hierarchicalCheck(Object[] object){
-        log.info("Object[]: {}",object);
-        List<Object> list = new ArrayList<>();
-        // check if object if an array of objects
-        if (object instanceof Object[] && ((Object[]) object).length > 1){
-            for (Object o : (Object[]) object ) {
-                log.info("ForEach[]: {}", o);
-                if (o == null){continue;}
-                log.info("Object Found: {}", o);
-                list.addAll(List.of(hierarchicalCheck(o)));
-            }
-        }
-        // return the first Not_Null object we find
-        else if(object != null){
-            log.info("Not_Null[] Object Found: {}",object);
-            return List.of(object);
-        }
-        else {
-            return null;
-        }
-        return list;
-    }
-    //////////////////////////////////////////////////////////////////////
-    /**
-     * Checks if an object is null and returns the Not_Null object.
-     * @param object a single Object
-     * @return the first Not_Null object
-     */
-    private  Object hierarchicalCheck(Object object){
-        log.info("Object: {}",object);
-        if (object instanceof Object[] && ((Object[]) object).length > 1){
-            log.info("Found Object[] list: {}",object);
-            return hierarchicalCheck((Object[])  object);
-        }
-        else if(object != null){
-            log.info("Not_Null Object Found: {}",object);
-            return object;
-        }
-        return null;
-    }
-
-    /**
-     * Deconstructs Map objects and checks each part for null objects and return all
-     * non-null objects into separate Map.
-     * @param payLoad
-     * @return {@literal  T extends Map<String, ?>}
-     */
-    private T  hierarchicalCheck(T payLoad){
-        log.info("Payload (T): {}",payLoad.values().stream().collect(Collectors.toList()));
-        int cnt=0;
-        if (  payLoad.size() > 0 ){
-            Set set = payLoad.entrySet();  // convert to set so we can traverse Set
-            Iterator it = set.iterator();  // get iterator of Set to iterate over each set
-            while (it.hasNext()){ // check if we have any objects in the set
-                // get an entry set if we have objects in the set
-                T.Entry entry = (T.Entry) it.next();
-                log.info("\nObject (T) {}: =>\nKey: {}\nValue: {}\n", cnt, entry.getKey(), entry.getValue());
-                // replace the old object with new object if its not null
-                payLoad.replace( entry.getKey().toString(),entry.getValue(),hierarchicalCheck( entry.getValue()));
-            }
-        }
-        return payLoad;
-    }
+//    //////////////////////////////////////////////////////////////////////
+//     /**
+//     * Checks if an object or list of objects are null and returns the first non null object.
+//     * User only with same DataType Objects to find non-null object in list of objects.
+//     * @param object a single Object, a list or array
+//     * @return the first Not_Null object
+//     */
+//    private  List<? extends Object> hierarchicalCheck(Object[] object){
+//        log.info("Object[]: {}",object);
+//        List<Object> list = new ArrayList<>();
+//        // check if object if an array of objects
+//        if (object instanceof Object[] && ((Object[]) object).length > 1){
+//            for (Object o : (Object[]) object ) {
+//                log.info("ForEach[]: {}", o);
+//                if (o == null){continue;}
+//                log.info("Object Found: {}", o);
+//                list.addAll(List.of(hierarchicalCheck(o)));
+//            }
+//        }
+//        // return the first Not_Null object we find
+//        else if(object != null){
+//            log.info("Not_Null[] Object Found: {}",object);
+//            return List.of(object);
+//        }
+//        else {
+//            return null;
+//        }
+//        return list;
+//    }
+//    //////////////////////////////////////////////////////////////////////
+//    /**
+//     * Checks if an object is null and returns the Not_Null object.
+//     * @param object a single Object
+//     * @return the first Not_Null object
+//     */
+//    private  Object hierarchicalCheck(Object object){
+//        log.info("Object: {}",object);
+//        if (object instanceof Object[] && ((Object[]) object).length > 1){
+//            log.info("Found Object[] list: {}",object);
+//            return hierarchicalCheck((Object[])  object);
+//        }
+//        else if(object != null){
+//            log.info("Not_Null Object Found: {}",object);
+//            return object;
+//        }
+//        return null;
+//    }
+//
+//    /**
+//     * Deconstructs Map objects and checks each part for null objects and return all
+//     * non-null objects into separate Map.
+//     * @param payLoad
+//     * @return {@literal  T extends Map<String, ?>}
+//     */
+//    private T  hierarchicalCheck(T payLoad){
+//        log.info("Payload (T): {}",payLoad.values().stream().collect(Collectors.toList()));
+//        int cnt=0;
+//        if (  payLoad.size() > 0 ){
+//            Set set = payLoad.entrySet();  // convert to set so we can traverse Set
+//            Iterator it = set.iterator();  // get iterator of Set to iterate over each set
+//            while (it.hasNext()){ // check if we have any objects in the set
+//                // get an entry set if we have objects in the set
+//                T.Entry entry = (T.Entry) it.next();
+//                log.info("\nObject (T) {}: =>\nKey: {}\nValue: {}\n", cnt, entry.getKey(), entry.getValue());
+//                // replace the old object with new object if its not null
+//                payLoad.replace( entry.getKey().toString(),entry.getValue(),hierarchicalCheck( entry.getValue()));
+//            }
+//        }
+//        return payLoad;
+//    }
 
 //    /////////////////////////////////////////////////////////////////////////////////
 //    public static void main(String[] args) {

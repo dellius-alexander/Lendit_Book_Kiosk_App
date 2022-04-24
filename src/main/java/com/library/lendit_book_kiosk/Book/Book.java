@@ -3,26 +3,23 @@ package com.library.lendit_book_kiosk.Book;
 
 import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Book.Donated.Donated_Book;
-import com.library.lendit_book_kiosk.Department.Course;
+import com.library.lendit_book_kiosk.Course.Course;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
-//import java.util.List;
-//import java.util.Set;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
+
 
 @Entity
 @Table(name = "book")
-public class Book implements BookInterface {
+public class Book implements BookInterface<Object>  {
     /////////////////////////////////////////////////////////////////
-
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
-    )
+// Removed Gererator because the id is integer and not auto generated
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
+//    )
     @Id
     @Column(
             name = "isbn",
@@ -34,7 +31,15 @@ public class Book implements BookInterface {
     ///////////////////////////////////////////////////////
     private String title;
     private String series;
+    @Column(
+            name = "authors",
+            columnDefinition = "TEXT"
+    )
     private String authors;
+    @Column(
+            name = "description",
+            columnDefinition = "MEDIUMTEXT"
+    )
     private String description;
     private String language;
     private Double rating;
@@ -45,33 +50,25 @@ public class Book implements BookInterface {
     private String cover_img;
     ///////////////////////////////////////////////////////
     @OneToMany(
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             mappedBy = "donated_books"  // maps to field donated_books in Donated_Book.donated_books
     )
     private Set<Donated_Book> donated_books;
     @OneToMany(
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             mappedBy = "book_copy"  // maps to field donated_books in Donated_Book.donated_books
     )
     private Set<Book_Copy> book_copy;
     @ManyToMany(
+            cascade = CascadeType.PERSIST,
             mappedBy = "books"
     )
     private Set<Course> courses;
     ///////////////////////////////////////////////////////
-    public Book(
-            String isbn,
-            String title,
-            String series,
-            String authors,
-            String description,
-            String language,
-            Double rating,
-            String genres,
-            Long num_of_pages,
-            String publisher,
-            LocalDate publication_date,
-            String cover_img) {
+
+
+    public Book(Set<Donated_Book> donated_books, String isbn, String title, String series, String authors, String description, String language, Double rating, String genres, Long num_of_pages, String publisher, LocalDate publication_date, String cover_img) {
+        this.donated_books = donated_books;
         this.isbn = isbn;
         this.title = title;
         this.series = series;
@@ -86,15 +83,44 @@ public class Book implements BookInterface {
         this.cover_img = cover_img;
     }
 
-    public Book() {}
+    public Book(Set<Book_Copy> book_copy, Set<Course> courses, String isbn, String title, String series, String authors, String description, String language, Double rating, String genres, Long num_of_pages, String publisher, LocalDate publication_date, String cover_img) {
+        this.book_copy = book_copy;
+        this.courses = courses;
+        this.isbn = isbn;
+        this.title = title;
+        this.series = series;
+        this.authors = authors;
+        this.description = description;
+        this.language = language;
+        this.rating = rating;
+        this.genres = genres;
+        this.num_of_pages = num_of_pages;
+        this.publisher = publisher;
+        this.publication_date = publication_date;
+        this.cover_img = cover_img;
+    }
 
-    @Override
+    public Book(String isbn, String title, String series, String authors, String description, String language, Double rating, String genres, Long num_of_pages, String publisher, LocalDate publication_date, String cover_img) {
+        this.isbn = isbn;
+        this.title = title;
+        this.series = series;
+        this.authors = authors;
+        this.description = description;
+        this.language = language;
+        this.rating = rating;
+        this.genres = genres;
+        this.num_of_pages = num_of_pages;
+        this.publisher = publisher;
+        this.publication_date = publication_date;
+        this.cover_img = cover_img;
+    }
+
+
+    public Book() {
+    }
+
     public String getIsbn() {
         return this.isbn;
-    }
-    @Override
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     public String getTitle() {
@@ -141,6 +167,22 @@ public class Book implements BookInterface {
         return this.cover_img;
     }
 
+    public Set<Donated_Book> getDonated_books() {
+        return this.donated_books;
+    }
+
+    public Set<Book_Copy> getBook_copy() {
+        return this.book_copy;
+    }
+
+    public Set<Course> getCourses() {
+        return this.courses;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -183,6 +225,18 @@ public class Book implements BookInterface {
 
     public void setCover_img(String cover_img) {
         this.cover_img = cover_img;
+    }
+
+    public void setDonated_books(Set<Donated_Book> donated_books) {
+        this.donated_books = donated_books;
+    }
+
+    public void setBook_copy(Set<Book_Copy> book_copy) {
+        this.book_copy = book_copy;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 
     public boolean equals(final Object o) {
@@ -229,6 +283,16 @@ public class Book implements BookInterface {
         final Object this$cover_img = this.getCover_img();
         final Object other$cover_img = other.getCover_img();
         if (!Objects.equals(this$cover_img, other$cover_img)) return false;
+        final Object this$donated_books = this.getDonated_books();
+        final Object other$donated_books = other.getDonated_books();
+        if (!Objects.equals(this$donated_books, other$donated_books))
+            return false;
+        final Object this$book_copy = this.getBook_copy();
+        final Object other$book_copy = other.getBook_copy();
+        if (!Objects.equals(this$book_copy, other$book_copy)) return false;
+        final Object this$courses = this.getCourses();
+        final Object other$courses = other.getCourses();
+        if (!Objects.equals(this$courses, other$courses)) return false;
         return true;
     }
 
@@ -263,8 +327,15 @@ public class Book implements BookInterface {
         result = result * PRIME + ($publication_date == null ? 43 : $publication_date.hashCode());
         final Object $cover_img = this.getCover_img();
         result = result * PRIME + ($cover_img == null ? 43 : $cover_img.hashCode());
+        final Object $donated_books = this.getDonated_books();
+        result = result * PRIME + ($donated_books == null ? 43 : $donated_books.hashCode());
+        final Object $book_copy = this.getBook_copy();
+        result = result * PRIME + ($book_copy == null ? 43 : $book_copy.hashCode());
+        final Object $courses = this.getCourses();
+        result = result * PRIME + ($courses == null ? 43 : $courses.hashCode());
         return result;
     }
+
     @Override
     public String toString() {
         return "{\n" +

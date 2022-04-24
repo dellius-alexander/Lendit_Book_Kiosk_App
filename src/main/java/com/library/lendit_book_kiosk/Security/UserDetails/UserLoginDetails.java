@@ -1,14 +1,13 @@
 package com.library.lendit_book_kiosk.Security.UserDetails;
 
-import com.library.lendit_book_kiosk.Security.Custom.Secret;
+import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import com.library.lendit_book_kiosk.User.User;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.util.Assert;
+
 import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 import java.util.Collection;

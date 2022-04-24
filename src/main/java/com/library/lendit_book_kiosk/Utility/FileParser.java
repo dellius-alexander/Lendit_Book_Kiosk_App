@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk.Tools;
+package com.library.lendit_book_kiosk.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

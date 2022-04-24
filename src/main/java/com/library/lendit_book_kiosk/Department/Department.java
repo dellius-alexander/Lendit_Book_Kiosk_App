@@ -1,16 +1,14 @@
 package com.library.lendit_book_kiosk.Department;
 
-import lombok.AllArgsConstructor;
+import com.library.lendit_book_kiosk.Course.Course;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "department")
@@ -32,4 +30,9 @@ public class Department implements Serializable {
     )
     private Set<Course> course;
 
+    public Department(String department) {
+        this.department = department;
+    }
+    public Department() {
+    }
 }
