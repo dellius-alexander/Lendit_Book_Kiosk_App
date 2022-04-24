@@ -3,6 +3,7 @@ package com.library.lendit_book_kiosk.Book;
 
 import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Book.Donated.Donated_Book;
+import com.library.lendit_book_kiosk.Department.Course;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -53,6 +54,10 @@ public class Book implements BookInterface {
             mappedBy = "book_copy"  // maps to field donated_books in Donated_Book.donated_books
     )
     private Set<Book_Copy> book_copy;
+    @ManyToMany(
+            mappedBy = "books"
+    )
+    private Set<Course> courses;
     ///////////////////////////////////////////////////////
     public Book(
             String isbn,

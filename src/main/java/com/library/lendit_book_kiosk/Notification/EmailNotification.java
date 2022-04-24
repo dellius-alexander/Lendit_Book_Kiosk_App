@@ -34,8 +34,8 @@ public class EmailNotification implements Serializable {
             targetEntity = User.class
     )
     @JoinColumn(
-            name = "user_id",
-            referencedColumnName = "user_id"
+            name = "email",
+            referencedColumnName = "email"
     )
     private User user;
     @ManyToOne(

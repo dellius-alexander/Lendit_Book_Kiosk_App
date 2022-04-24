@@ -8,6 +8,7 @@ import com.library.lendit_book_kiosk.Student.Major;
 import com.library.lendit_book_kiosk.Student.Student;
 import com.library.lendit_book_kiosk.User.GENDER;
 import com.library.lendit_book_kiosk.User.User;
+import com.library.lendit_book_kiosk.WebApp.Login.LoginController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +132,7 @@ public class CSVParser implements Serializable{
                 log.info("{}: {}",cnt, lBook);
                 for (int j = 0; j < 1; j++)
                 {
+
                     bookList.add(
                         new Book(
                             lBook[j],   // isbn
@@ -152,7 +154,6 @@ public class CSVParser implements Serializable{
                     log.info("New Book Added: {}", bookList.get(j));
                 }
             }
-
         } catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

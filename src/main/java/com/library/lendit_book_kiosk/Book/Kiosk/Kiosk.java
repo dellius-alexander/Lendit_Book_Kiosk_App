@@ -21,6 +21,7 @@ import java.util.Set;
 @Table(name = "kiosk")
 public class Kiosk implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(Kiosk.class);
+    /////////////////////////////////////////////////////////////////
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,

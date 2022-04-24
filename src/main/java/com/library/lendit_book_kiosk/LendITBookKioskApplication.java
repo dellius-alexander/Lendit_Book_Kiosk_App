@@ -80,9 +80,9 @@ public class LendITBookKioskApplication implements CommandLineRunner
 
 				CSVParser csv = new CSVParser(new FileParser(new File("target/classes/users.csv")));
 				// save all new users
-//				userService.saveAll(
-//						csv.getStudentsInfo()
-//				);
+				userService.saveAll(
+						csv.getStudentsInfo()
+				);
 				log.info("\nSAVING NEW USERS TO DB: {}", csv.getStudentsInfo());
 			} else{
 				log.info("\nDB ALREADY HAS USERS: {}\n", user.toString());
