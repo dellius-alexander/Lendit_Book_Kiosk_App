@@ -3,6 +3,7 @@ package com.library.lendit_book_kiosk.WebApp.Login;
 import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Book.BookSelection;
 import com.library.lendit_book_kiosk.Book.BookService;
+import com.library.lendit_book_kiosk.Fines.Fines;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
 import com.library.lendit_book_kiosk.Utility.HierarchicalCheck;
@@ -40,21 +41,18 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     // payLoad should be used to manage DOM objects passed between server and client
     protected  T payLoad = (T) new HashMap<String, Object>();
-    protected HierarchicalCheck hck = new HierarchicalCheck();
-
-    @Autowired
+    // used to clean the payLoad of null objects
+    private HierarchicalCheck hck = new HierarchicalCheck();
+    // Resources
     protected static UserService userService;
-    @Autowired
     protected static BookService bookService;
-    @Autowired
     protected static CustomAuthenticationProvider customAuthenticationProvider;
-    @Autowired
     protected static UserLoginDetails userLoginDetails;
-    @Autowired
     protected static Authentication userAuth;
-
+    // keeps user info in session
     protected static User loginUser;
-
+    protected static Fines fines;
+    //////////////////////////////////////////////////////////////////////
     /**
      * Login Web MVC Controller
      * @param userSve
@@ -63,6 +61,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
      * @param userLogDetails
      * @param userAuthentication
      */
+    @Autowired
     public LoginController(
             UserService userSve,
             BookService bookSve,
@@ -75,7 +74,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         this.userLoginDetails = userLogDetails;
         this.userAuth = userAuthentication;
     }
-
+    //////////////////////////////////////////////////////////////////////
     /**
      * Initial login
      * @param model
@@ -89,16 +88,27 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             Model model
     ) {
         try{
-            // cleanse the model of null objects
-            model.mergeAttributes(hck.hierarchicalCheck((T) model));
-            // reset our security context
-            SecurityContextHolder.getContext().setAuthentication(null);
+            // clear out payLoad at login
             // reset our payLoad object
             payLoad.clear();
-            /** Write the response headers for login */
+            // cleanse the model of null objects
+            payLoad.putAll(hck.hierarchicalCheck(model.asMap()));
+            // reset our security context
+            SecurityContextHolder.getContext().setAuthentication(null);
+            /*************************************************************
+             * https://datatracker.ietf.org/doc/html/rfc7234#section-5.4
+             * ***********************************************************
+             * Write the response headers for login. The "Pragma" header
+             * field allows backwards compatibility with HTTP/1.0 caches,
+             * so that clients can specify a "no-cache" request that they
+             * will understand (as Cache-Control was not defined until
+             * HTTP/1.1).  When the Cache-Control header field is also
+             * present and understood in a request, Pragma is ignored.
+             ************************************************************/
             response.setContentType("text/html;charset=UTF-8");
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Private","no-cache");
             response.setDateHeader("Expires", 0); // no expiration
             log.info(model.toString());
             payLoad.put("userLoginDetails", new UserLoginDetails());
@@ -112,8 +122,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return "login";
     }
-
-
+    //////////////////////////////////////////////////////////////////////
     /**
      * User login form verification
      * @param request
@@ -140,28 +149,28 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
 
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            UserLoginDetails uld = (UserLoginDetails) hck.hierarchicalCheck(
+            LoginController.userLoginDetails = (UserLoginDetails) hck.hierarchicalCheck(
                     new Object[]{
                             request.getAttribute("userLoginDetails"),
                             model.getAttribute("userLoginDetails"),
-                            userLoginAttempt,
-                            userLoginDetails
+                            userLoginAttempt
                     }
             ).get(0);
             ////////////////////////////////////////////////////////////////////////
-            log.info("Searching for UserLoginDetails [uld]: {}",uld);
+            log.info("Searching for UserLoginDetails: {}",this.userLoginDetails);
             // first search to see if user exists then we authenticate incoming client user
-            loginUser = userService.getUser( uld.getUsername() );
-            uld = new UserLoginDetails( loginUser );
+            LoginController.loginUser = LoginController.userService.getUser(LoginController.userLoginDetails.getUsername() );
+            LoginController.userLoginDetails = new UserLoginDetails( LoginController.loginUser );
             // send userLoginDetails to be authenticated by our  customAuthenticationProvider
             // and retrieve an authentication token
-            userAuth = customAuthenticationProvider.authenticate(
-                    uld
+            LoginController.userAuth = LoginController.customAuthenticationProvider.authenticate(
+                    LoginController.userLoginDetails
             );
+            ////////////////////////////////////////////////////////////////////////
             // assign all the newly validated objects as our payLoad
-            payLoad.put("userLoginDetails",uld);
-            payLoad.put("LoginUser",loginUser);
-            payLoad.put("usernamePasswordAuthenticationToken",userAuth);
+            payLoad.put("userLoginDetails",LoginController.userLoginDetails);
+            payLoad.put("LoginUser",LoginController.loginUser);
+            payLoad.put("usernamePasswordAuthenticationToken",LoginController.userAuth);
             payLoad.put("Book",new Book());
             ////////////////////////////////////////////////////////////////////////
             // Set our security context for authenticated user
@@ -188,6 +197,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return "index";
     }
+    //////////////////////////////////////////////////////////////////////
     /**
      * Redirect logout to login
      * @return index
@@ -197,8 +207,9 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     public String index(
             HttpServletRequest request,
             Book book,
-            Model model,
-            BindingResult result) {
+            BindingResult result,
+            Model model
+            ) {
         try {
             log.info("Model: {}",model);
             if(result.hasErrors()){
@@ -220,7 +231,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return "index";
     }
-
+    //////////////////////////////////////////////////////////////////////
     /**
      * Search book by title @{/searchbookby/{book}}
      * @param book
@@ -236,8 +247,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             BindingResult result,
             Model model
     ) {
-        try {// clean our payload
-//            payLoad.replaceAll((BiFunction<? super String, ? super Object, ?>) hck.hierarchicalCheck(payLoad));
+        try {
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
             book = (Book) hck.hierarchicalCheck(
@@ -283,6 +293,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return "book_result";
     }
+    //////////////////////////////////////////////////////////////////////
     /**
      * Return book_results
      * @param result
@@ -293,7 +304,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             value = {"book_result"})
     public String book_result(
             @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer,
-            @ModelAttribute("selection") @Valid List<BookSelection> bookList,
+            @ModelAttribute("selections") @Valid List<BookSelection> bookList,
             HttpServletRequest request,
             BindingResult result,
             Model model
@@ -334,6 +345,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return "book_result";
     }
+    //////////////////////////////////////////////////////////////////////
     /**
      * Login-error
      * @param throwable
@@ -364,7 +376,6 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         return "redirect:login";
     }
     //////////////////////////////////////////////////////////////////////
-
     /**
      * Helper function to fetch books by search term type, i.e. title, author, etc.
      * @param book the book object
@@ -387,14 +398,16 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     }
     //////////////////////////////////////////////////////////////////////
     @PostMapping(
-            value = "selection"
+            value = "selections/{selections}"
     )
-    public ResponseEntity<HttpStatus> selection(
-            @ModelAttribute("selections") @Valid List<BookSelection> selections,
+    public String postSelections(
+             @ModelAttribute("selections") @Valid @RequestParam List<BookSelection> selections,
             HttpServletRequest request,
+            HttpServletResponse response,
             Model model,
             BindingResult result){
         try{
+            log.info("\nResponse Header: {}\n",response.getHeaderNames().stream().collect(Collectors.toList()));
             selections = hck.hierarchicalCheck(
                     new Object[]{
                             request.getAttribute("selections"),
@@ -402,7 +415,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                             selections
                     }
             );
-            log.info("\nBook Selections: {}\n",selections.stream().collect(Collectors.toList()).toString());
+            log.info("\nBook Selections: {}\n",selections.stream().collect(Collectors.toList()));
             if(result.hasErrors()){
                 log.error("Results has error: {}",result);
             }
@@ -413,9 +426,40 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             log.error(e.getMessage());
             e.printStackTrace();
         }
-        return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
+        return "index";
     }
     //////////////////////////////////////////////////////////////////////
+    @GetMapping(
+            value = "selections/{selections}"
+    )
+    public String getSelections(
+            @PathVariable @ModelAttribute("selections") @Valid @RequestParam List<BookSelection> selections,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Model model,
+            BindingResult result){
+        try{
+            log.info("\nResponse Header: {}\n",response.getHeaderNames().stream().collect(Collectors.toList()));
+            selections = hck.hierarchicalCheck(
+                    new Object[]{
+                            request.getAttribute("selections"),
+                            model.getAttribute("selections"),
+                            selections
+                    }
+            );
+            log.info("\nBook Selections: {}\n",selections.stream().collect(Collectors.toList()));
+            if(result.hasErrors()){
+                log.error("Results has error: {}",result);
+            }
+            log.info(hck.hierarchicalCheck(
+                    new Object[]{selections, model}).toString());
+            log.info("Results: {}",result.toString());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return "index";
+    }
     //////////////////////////////////////////////////////////////////////
     /**
      * Sets the
@@ -451,104 +495,8 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
         }
         return SecurityContextHolder.getContext().getAuthentication();
     }
-//    //////////////////////////////////////////////////////////////////////
-//     /**
-//     * Checks if an object or list of objects are null and returns the first non null object.
-//     * User only with same DataType Objects to find non-null object in list of objects.
-//     * @param object a single Object, a list or array
-//     * @return the first Not_Null object
-//     */
-//    private  List<? extends Object> hierarchicalCheck(Object[] object){
-//        log.info("Object[]: {}",object);
-//        List<Object> list = new ArrayList<>();
-//        // check if object if an array of objects
-//        if (object instanceof Object[] && ((Object[]) object).length > 1){
-//            for (Object o : (Object[]) object ) {
-//                log.info("ForEach[]: {}", o);
-//                if (o == null){continue;}
-//                log.info("Object Found: {}", o);
-//                list.addAll(List.of(hierarchicalCheck(o)));
-//            }
-//        }
-//        // return the first Not_Null object we find
-//        else if(object != null){
-//            log.info("Not_Null[] Object Found: {}",object);
-//            return List.of(object);
-//        }
-//        else {
-//            return null;
-//        }
-//        return list;
-//    }
-//    //////////////////////////////////////////////////////////////////////
-//    /**
-//     * Checks if an object is null and returns the Not_Null object.
-//     * @param object a single Object
-//     * @return the first Not_Null object
-//     */
-//    private  Object hierarchicalCheck(Object object){
-//        log.info("Object: {}",object);
-//        if (object instanceof Object[] && ((Object[]) object).length > 1){
-//            log.info("Found Object[] list: {}",object);
-//            return hierarchicalCheck((Object[])  object);
-//        }
-//        else if(object != null){
-//            log.info("Not_Null Object Found: {}",object);
-//            return object;
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * Deconstructs Map objects and checks each part for null objects and return all
-//     * non-null objects into separate Map.
-//     * @param payLoad
-//     * @return {@literal  T extends Map<String, ?>}
-//     */
-//    private T  hierarchicalCheck(T payLoad){
-//        log.info("Payload (T): {}",payLoad.values().stream().collect(Collectors.toList()));
-//        int cnt=0;
-//        if (  payLoad.size() > 0 ){
-//            Set set = payLoad.entrySet();  // convert to set so we can traverse Set
-//            Iterator it = set.iterator();  // get iterator of Set to iterate over each set
-//            while (it.hasNext()){ // check if we have any objects in the set
-//                // get an entry set if we have objects in the set
-//                T.Entry entry = (T.Entry) it.next();
-//                log.info("\nObject (T) {}: =>\nKey: {}\nValue: {}\n", cnt, entry.getKey(), entry.getValue());
-//                // replace the old object with new object if its not null
-//                payLoad.replace( entry.getKey().toString(),entry.getValue(),hierarchicalCheck( entry.getValue()));
-//            }
-//        }
-//        return payLoad;
-//    }
-
-//    /////////////////////////////////////////////////////////////////////////////////
-//    public static void main(String[] args) {
-//        try {
-//            SearchBook sb = new SearchBook("title","author","course");
-//            LoginController lg = new LoginController(
-//                    userService,
-//                    bookService,
-//                    customAuthenticationProvider,
-//                    userLoginDetails,
-//                    userAuth);
-//            lg.payLoad.put("objects", new Object[]{
-//                    "Hello World 1",
-//                    userService,
-//                    sb,
-//                    bookService,
-//                    customAuthenticationProvider,
-//                    userLoginDetails,
-//                    userAuth,
-//                    "Hello World 2"});
-//            log.info("Dirty List: {}", lg.payLoad.values().stream().collect(Collectors.toList()));
-//            lg.payLoad = lg.hierarchicalCheck(lg.payLoad);
-//            log.info("Cleaned List: {}", lg.payLoad.values().stream().collect(Collectors.toList()));
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
 }
 
 

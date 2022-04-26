@@ -54,18 +54,5 @@ public class FragmentsController {
         return "fragments/login_page";
     }
 
-    @GetMapping(value = {"book_finder"})
-    public String book_finder(Model model){
-        if( ! ((UserLoginDetails) model.getAttribute("userLoginDetails")).isEmpty()){
-            payLoad.put("userLoginDetails", ((UserLoginDetails) model.getAttribute("userLoginDetails")));
-        }
-        else if( ! userLoginDetails.isEmpty()){
-            payLoad.put("userLoginDetails", userLoginDetails);
-        }
-        payLoad.put("search_book", new SearchBook());
-        model.addAllAttributes( payLoad.values() );
-        log.info("\nPayload: {}\n",payLoad.values().stream().collect(Collectors.toList()));
-        return "fragments/book_finder";
-    }
 }
 

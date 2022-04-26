@@ -3,7 +3,9 @@
 <suite name="SeleniumGridDocker" parallel="tests" annotations="javadoc" thread-count="3" verbose="1" >
     <parameter name="appURL" value="http://10.0.0.190:8081" />
     <parameter name="hubURL" value="http://127.0.0.1:4444/wd/hub" />
-
+    <listeners>
+        <listener class-name="com.library.lendit_book_kiosk.Listener.CustomListener" />
+    </listeners>
     <test name="Microsoft Edge Test" >
         <parameter name="browserType" value="edge" />
         <parameter name="username" value="gmatantsevm@cdc.gov"/>
@@ -14,7 +16,7 @@
 <!--                    <include name="main"/>-->
 <!--                </methods>-->
 <!--            </class>-->
-            <class name="com.library.lendit_book_kiosk.selenium.ParallelTests" >
+            <class name="com.library.lendit_book_kiosk.Selenium.ParallelTests" >
                 <methods>
                     <include name="login"/>
                     <include name="searchBook"/>
@@ -32,7 +34,7 @@
 <!--                    <include name="main"/>-->
 <!--                </methods>-->
 <!--            </class>-->
-            <class name="com.library.lendit_book_kiosk.selenium.ParallelTests">
+            <class name="com.library.lendit_book_kiosk.Selenium.ParallelTests">
                 <methods>
                     <include name="login"/>
                     <include name="searchBook"/>
@@ -50,7 +52,7 @@
 <!--                    <include name="main"/>-->
 <!--                </methods>-->
 <!--            </class>-->
-            <class name="com.library.lendit_book_kiosk.selenium.ParallelTests">
+            <class name="com.library.lendit_book_kiosk.Selenium.ParallelTests">
                 <methods>
                     <include name="login" />
                     <include name="searchBook"/>

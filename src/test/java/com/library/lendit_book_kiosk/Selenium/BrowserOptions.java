@@ -1,13 +1,12 @@
-package com.library.lendit_book_kiosk.selenium;
+package com.library.lendit_book_kiosk.Selenium;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import com.library.lendit_book_kiosk.LendITBookKioskApplication;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -18,17 +17,9 @@ import org.openqa.selenium.safari.SafariOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.ISuite;
-import org.testng.ITestContext;
 import org.testng.annotations.*;
-import org.springframework.boot.test.context.SpringBootTest;
 
 
 @ContextConfiguration({"classpath:testng-context.xml"})
@@ -40,7 +31,7 @@ public abstract class BrowserOptions extends AbstractTestNGSpringContextTests {
     /**
      * Sets up the remote web driver instance
      * @param browserType represents browser type
-     * @param hubURL url to selenium hub url
+     * @param hubURL url to Selenium hub url
      * @return	The RemoteWebDriver if successfully created
      */
     @BeforeClass(alwaysRun = true)

@@ -191,7 +191,7 @@ services:
   #      - ./nodeDocker/nginx.conf:/etc/nginx/nginx.conf:ro
   #      - ./nodeDocker/nginx.conf:/usr/local/etc/nginx/nginx.conf:ro
   #    depends_on:
-  #      - selenium-hub
+  #      - Selenium-hub
   #    ports:
   #      - "5900:5900"
   #    networks:
@@ -201,80 +201,80 @@ services:
   ######################################################################
   # Hub is the Master that assigns tests to Node-[(edge|firefox|chrome)]
   ######################################################################
-#  selenium-hub:
-#    image: selenium/hub:4.1.3-20220405
-#    container_name: Lendit_Book_Kiosk-selenium-hub
-#    environment:
-#      - GRID_TIMEOUT=180
-#      - GRID_BROWSER_TIMEOUT=180
-#    expose:
-#      - "4442"
-#      - "4443"
-#      - "4444"
-#    ports:
-#      - "4442:4442"
-#      - "4443:4443"
-#      - "4444:4444"
-#    deploy:
-#      replicas: 1
-#    restart: on-failure
-#    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-#    networks:
-#      lbk-network:
+  selenium-hub:
+    image: selenium/hub:4.1.3-20220405
+    container_name: Lendit_Book_Kiosk-Selenium-hub
+    environment:
+      - GRID_TIMEOUT=180
+      - GRID_BROWSER_TIMEOUT=180
+    expose:
+      - "4442"
+      - "4443"
+      - "4444"
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    deploy:
+      replicas: 1
+    restart: on-failure
+    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+    networks:
+      lbk-network:
 #######################################################################
 #  # Node-Docker: used to spawn ffmpeg recording and browser (chrome,
 #  # edge,firefox) environments for UI Testing
 # #####################################################################
-#  node-docker:
-#    image: selenium/node-docker:4.1.3-20220405
-#    shm_size: 2g
-#    #    build:
-#    #      context: .
-#    #      dockerfile: node_docker.Dockerfile
-#    container_name: Lendit_Book_Kiosk-node-docker
-#    volumes:
-#      # To have the assets saved on your host
-#      - ./nodeAssets:/opt/selenium/assets
-#      # The "dynamic" execution mode needs to be told
-#      # what Docker images to use when the containers get
-#      # started. Additionally, the Grid needs to know the URI of the Docker daemon.
-#      - ./nodeDocker/config.toml:/opt/bin/config.toml
-#      - /var/run/docker.sock:/var/run/docker.sock
-#    depends_on:
-#      - selenium-hub
-#    links:
-#      - selenium-hub
-#    environment:
-#      - SE_EVENT_BUS_HOST=selenium-hub
-#      - SE_EVENT_BUS_PUBLISH_PORT=4442
-#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-#      - SCREEN_HEIGHT=1080
-#      - SCREEN_WIDTH=1920
-#      - SCREEN_DPI=166  # 1920 x 1080
-#      - SCREEN_DEPTH=24
-#    privileged: true
-#    deploy:
-#      replicas: 1
-#    restart: on-failure
-#    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-#    networks:
-#      lbk-network:
+  node-docker:
+    image: selenium/node-docker:4.1.3-20220405
+    shm_size: 2g
+    #    build:
+    #      context: .
+    #      dockerfile: node_docker.Dockerfile
+    container_name: Lendit_Book_Kiosk-node-docker
+    volumes:
+      # To have the assets saved on your host
+      - ./nodeAssets:/opt/Selenium/assets
+      # The "dynamic" execution mode needs to be told
+      # what Docker images to use when the containers get
+      # started. Additionally, the Grid needs to know the URI of the Docker daemon.
+      - ./nodeDocker/config.toml:/opt/bin/config.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - selenium-hub
+    links:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=Selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SCREEN_HEIGHT=1080
+      - SCREEN_WIDTH=1920
+      - SCREEN_DPI=166  # 1920 x 1080
+      - SCREEN_DEPTH=24
+    privileged: true
+    deploy:
+      replicas: 1
+    restart: on-failure
+    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+    networks:
+      lbk-network:
 #####################################################################
 ######################################################################
 # Selenium Collection of Browser Environments
 ######################################################################
 #  chrome:
-#    image: selenium/node-chrome:4.1.3-20220405
-#    container_name: Lendit_Book_Kiosk-selenium-node-chrome
+#    image: Selenium/node-chrome:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-Selenium-node-chrome
 #    shm_size: 2g
 ##    volumes:
 ##      - chrome-dev-shm:/dev/shm
 #    depends_on:
-#      - selenium-hub
+#      - Selenium-hub
 #    links:
-#      - selenium-hub
+#      - Selenium-hub
 #    environment:
-#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_HOST=Selenium-hub
 #      - SE_EVENT_BUS_PUBLISH_PORT=4442
 #      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 #      - SCREEN_HEIGHT=1080
@@ -290,17 +290,17 @@ services:
 #
 ######################################################################
 #  firefox:
-#    image: selenium/node-firefox:4.1.3-20220405
-#    container_name: Lendit_Book_Kiosk-selenium-node-firefox
+#    image: Selenium/node-firefox:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-Selenium-node-firefox
 #    shm_size: 2g
 ##    volumes:
 ##      - firefox-dev-shm:/dev/shm
 #    depends_on:
-#      - selenium-hub
+#      - Selenium-hub
 #    links:
-#      - selenium-hub
+#      - Selenium-hub
 #    environment:
-#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_HOST=Selenium-hub
 #      - SE_EVENT_BUS_PUBLISH_PORT=4442
 #      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 #      - SCREEN_HEIGHT=1080
@@ -315,17 +315,17 @@ services:
 #      lbk-network:
 ######################################################################
 #  edge:
-#    image: selenium/node-edge:4.1.3-20220405
-#    container_name: Lendit_Book_Kiosk-selenium-node-edge
+#    image: Selenium/node-edge:4.1.3-20220405
+#    container_name: Lendit_Book_Kiosk-Selenium-node-edge
 #    shm_size: 2g
 #    #    volumes:
 #    #      - firefox-dev-shm:/dev/shm
 #    depends_on:
-#      - selenium-hub
+#      - Selenium-hub
 #    links:
-#      - selenium-hub
+#      - Selenium-hub
 #    environment:
-#      - SE_EVENT_BUS_HOST=selenium-hub
+#      - SE_EVENT_BUS_HOST=Selenium-hub
 #      - SE_EVENT_BUS_PUBLISH_PORT=4442
 #      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 #      - SCREEN_HEIGHT=1080
@@ -341,7 +341,7 @@ services:
 #
 ######################################################################
 #  chrome_video:
-#    image: selenium/video:ffmpeg-4.3.1-20220405
+#    image: Selenium/video:ffmpeg-4.3.1-20220405
 #    container_name: chrome_video
 #    privileged: true
 #    volumes:
@@ -362,7 +362,7 @@ services:
 #
 ######################################################################
 #  edge_video:
-#    image: selenium/video:ffmpeg-4.3.1-20220405
+#    image: Selenium/video:ffmpeg-4.3.1-20220405
 #    container_name: edge_video
 #    privileged: true
 #    volumes:
@@ -381,7 +381,7 @@ services:
 #
 ######################################################################
 #  firefox_video:
-#    image: selenium/video:ffmpeg-4.3.1-20220405
+#    image: Selenium/video:ffmpeg-4.3.1-20220405
 #    privileged: true
 #    volumes:
 #      - ./nodeAssets:/videos

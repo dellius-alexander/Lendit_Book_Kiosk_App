@@ -110,8 +110,8 @@
 
 		<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server &ndash;&gt;-->
 		<!--		<dependency>-->
-		<!--			<groupId>org.seleniumhq.selenium</groupId>-->
-		<!--			<artifactId>selenium-server</artifactId>-->
+		<!--			<groupId>org.seleniumhq.Selenium</groupId>-->
+		<!--			<artifactId>Selenium-server</artifactId>-->
 		<!--			<version>3.141.59</version>-->
 		<!--		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/org.testng/testng -->

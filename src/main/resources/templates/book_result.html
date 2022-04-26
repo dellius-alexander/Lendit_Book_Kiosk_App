@@ -84,131 +84,133 @@ book_result.html
         <div
                 class="container-fluid"
                 sec:authorize="isAuthenticated()"
-                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_STUDENT'') or hasRole(''ROLE_USER'')')}"
-
-        >
+                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_STUDENT'') or hasRole(''ROLE_USER'')')}">
 <!--
                 sec:authorize="isAuthenticated()"
                 th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_STUDENT'') or hasRole(''ROLE_USER'')')}"
-
 -->
-              <div>
-                <div class="container-fluid">
+            <div class="container-fluid">
+                <form
+                        action="#"
+                        method="get"
+                        class="container-fluid"
+                        th:action="@{/selections/{selections}?selections=${selections}}">
+                    <div class="card-deck" th:each="bookSelection : ${selections}">
 
-                    <div class="card-deck" >
-                        <form
-                                action="#"
-                                method="POST"
-                                class="container-fluid"
-                                th:action="@{/selection}"
-                        >
                         <hr/>
                         <!--    Card 1    -->
-                        <div class="card"  th:each="bookSelection : ${selections}" th:object="${bookSelection}" >
+                        <div
+                                class="d-flex flex-nowrap"
+                                th:object="${bookSelection}">
                             <hr/>
                             <img
                                     class="card-img-top"
                                     th:src="*{book.cover_img}"
                                     th:alt="*{book.title}">
                             <div class="card-body">
-                                <h3 class="card-title" th:text="*{book.title}">Card title</h3>
-                                <p class="card-text" th:text="*{book.description}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <h3
+                                        class="card-title"
+                                        th:text="*{book.title}">
+                                    Card title
+                                </h3>
+                                <p
+                                        class="card-text"
+                                        th:text="*{book.description}">
+                                    This is a wider card with supporting text below
+                                    as a natural lead-in to additional content. This
+                                    content is a little bit longer.
+                                </p>
                             </div>
                             <div class="card-footer" >
                                 <small class="text-muted" >
                                     <p>Publication Date:
-                                        <div th:text="*{book.publication_date}"> Publication Date goes here</div>
+                                        <div
+                                        th:text="*{book.publication_date}">
+                                    Publication Date goes here
+                                        </div>
                                     </p>
                                 </small>
                                 <small class="text-muted" >
                                     <p>Genres:
-                                        <div th:text="*{book.genres}">Genres go here</div>
+                                        <div
+                                        th:text="*{book.genres}">
+                                    Genres go here
+                                        </div>
                                     </p>
                                 </small>
                                 <small class="text-muted">
                                     <p>Authors:
-                                        <div th:text="*{book.authors}">Authors go here</div>
+                                        <div th:text="*{book.authors}">
+                                    Authors go here
+                                        </div>
                                     </p>
                                 </small>
                             </div>
                             <!--/*  SELECTION BUTTONS  */-->
                             <div class="container-fluid">
-
-                                    <div class="ui-widget" role="switch">
-                                            <button type="button"  class="btn btn-primary active" >
-                                                <label>Borrow</label>
-                                                <input
-                                                        id="checkbox-btn btn--1"
-                                                        type="checkbox"
-                                                        name="borrow"
-                                                        th:checked="*{borrow}"
-                                                        class="checkbox btn-secondary"
-                                                        autocomplete="off"
-                                                >
-
-                                            </button>
-                                    </div>
-                                    <div class="ui-widget" role="switch">
-                                            <button type="button"  class="btn btn-primary active" >
-                                                <label>Reserve</label>
-                                                <input
-                                                        id="checkbox-btn btn--2"
-                                                        type="checkbox"
-                                                        name="reserve"
-                                                        th:checked="*{reserve}"
-                                                        class="checkbox btn-secondary"
-                                                        autocomplete="off"
-                                                >
-                                            </button>
-                                    </div>
-                                    <div class="ui-widget" role="switch">
-                                            <button type="button"  class="btn btn-primary active" >
-                                                <label>Save</label>
-                                                <input
-                                                        id="checkbox-btn btn-3"
-                                                        type="checkbox"
-                                                        name="save"
-                                                        th:checked="*{save}"
-                                                        class="checkbox btn-secondary"
-                                                        autocomplete="off"
-                                                >
-                                            </button>
-
-                                    </div>
-                                    <div class="ui-widget" role="switch">
-                                        <button type="button"  class="btn btn-primary active" >
-                                            <label>Checked Out</label>
-                                            <input
-                                                    id="checkbox-btn btn--4"
-                                                    type="checkbox"
-                                                    name="Selection"
-                                                    th:checked="*{checked_out}"
-                                                    class="checkbox btn-secondary"
-                                                    autocomplete="off"
-                                            >
-                                        </button>
-                                    </div>
-
-                            </div>
-                            <!--/*  SELECTION BUTTONS  */-->
-                            <hr/>
-                        </div>
-                        <!--       End of Card 1       -->
-                        <hr/>
-                            <div class="ui-widget" role="switch">
-                                <button type="button" class="btn btn-primary active">
+                                <button type="button"  class="btn btn-primary active" >
+                                    <label>Borrow</label>
                                     <input
-                                            type="submit"
-                                            value="Submit"
-                                            data-wait="Please wait......"
-                                            id="LoginSubmitButton"
-                                            class="w-button"
-                                    >
+                                            id="checkbox-btn btn--1"
+                                            th:id="borrow"
+                                            type="checkbox"
+                                            name="borrow"
+                                            th:checked="*{borrow}"
+                                            class="checkbox btn-secondary"
+                                            autocomplete="off">
+                                </button>
+                                <button type="button"  class="btn btn-primary active" >
+                                    <label>Reserve</label>
+                                    <input
+                                            id="checkbox-btn btn--2"
+                                            th:id="reserve"
+                                            type="checkbox"
+                                            name="reserve"
+                                            th:checked="*{reserve}"
+                                            class="checkbox btn-secondary"
+                                            autocomplete="off">
+                                </button>
+                                <button type="button"  class="btn btn-primary active" >
+                                    <label>Save To Favorites</label>
+                                    <input
+                                            id="checkbox-btn btn-3"
+                                            th:id="save"
+                                            type="checkbox"
+                                            name="save"
+                                            th:checked="*{save}"
+                                            class="checkbox btn-secondary"
+                                            autocomplete="off">
+                                </button>
+                                <button type="button"  class="btn btn-primary active" >
+                                    <label>Checked Out</label>
+                                    <input
+                                            id="checkbox-btn btn--4"
+                                            th:id="checked_out"
+                                            type="checkbox"
+                                            name="Selection"
+                                            th:checked="*{checked_out}"
+                                            class="checkbox btn-secondary"
+                                            autocomplete="off">
                                 </button>
                             </div>
-                        </form>
+                            <!--/*   END SELECTION BUTTONS   */-->
+                            <hr/>
+                        </div>
+                        <!--/*       End of Card 1      */-->
+                        <hr/>
+                        <div class="ui-widget" role="switch">
+                            <button type="button" class="btn btn-primary active">
+                                <input
+                                        type="submit"
+                                        value="Submit"
+                                        data-wait="Please wait......"
+                                        id="LoginSubmitButton"
+                                        class="w-button"
+                                >
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
