@@ -21,12 +21,14 @@ import javax.transaction.Transactional;
  */
 @Transactional
 @Service(value = "StudentService")
-public class StudentService {
+public class StudentService implements Serializable{
     private static final Logger log = LoggerFactory.getLogger(StudentService.class);
     /**
      * Import our Student Repository Data Access Layer, so we can Query the database
      */
+    @Autowired
     private final StudentRepository studentRepository;
+    @Autowired
     private final UserRepository userRepository;
 
     /**
@@ -35,7 +37,7 @@ public class StudentService {
      * @param studentRepository access to student repository
      * @param userRepository access to user repository
      */
-    @Autowired // needed to automatically connect to StudentRepository and UserRepository
+    // needed to automatically connect to StudentRepository and UserRepository
     public StudentService(StudentRepository studentRepository, UserRepository userRepository) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;

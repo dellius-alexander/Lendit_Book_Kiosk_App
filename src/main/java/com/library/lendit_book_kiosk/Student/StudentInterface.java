@@ -6,7 +6,7 @@ import com.library.lendit_book_kiosk.User.User;
 
 import java.io.Serializable;
 
-public interface StudentInterface  {
+public interface StudentInterface extends Serializable {
 
 
     boolean canEqual(Object student);

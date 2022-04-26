@@ -15,25 +15,49 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     // find books by title match
     @Query(value = "SELECT b from Book b WHERE b.title LIKE %?1%")
-    List<Book> findBookByTitle(String title);
+    List<BookSelection>  findBookBySelectionTitle(String title);
+
+    @Query(value = "SELECT b from Book b WHERE b.title LIKE %?1%")
+    List<Book>  findBookByTitle(String title);
 
     // find books by author name match
     @Query(value = "SELECT b from Book b WHERE b.authors LIKE %?1%")
     List<Book> findBookByAuthors(String author);
 
+    // find books by author name match
+    @Query(value = "SELECT b from Book b WHERE b.authors LIKE %?1%")
+    List<BookSelection> findBookBySelectionAuthors(String author);
+
     // find books by publisher
     @Query(value = "select b from Book b where b.publisher like %?1%")
     List<Book> findBookByPublisher(String publisher);
 
+    // find books by publisher
+    @Query(value = "select b from Book b where b.publisher like %?1%")
+    List<BookSelection> findBookBySelectionPublisher(String publisher);
+
     // find books by isbn
     @Query(value = "select b from Book b where b.isbn like %?1%")
     Book findBookByIsbn(String isbn);
+
+    // find books by isbn
+    @Query(value = "select b from Book b where b.isbn like %?1%")
+    BookSelection findBookBySelectionIsbn(String isbn);
 
     // find book by genres
     @Query(value = "SELECT b FROM Book b WHERE b.genres LIKE %?1%")
     List<Book> findBookByGenres(String genres);
 
     // find book by genres
+    @Query(value = "SELECT b FROM Book b WHERE b.genres LIKE %?1%")
+    List<BookSelection> findBookBySelectionGenres(String genres);
+
+    // find book by genres
     @Query(value = "SELECT b FROM Book b WHERE b.description LIKE %?1%")
     List<Book> findBookByDescription(String description);
+
+    // find book by genres
+    @Query(value = "SELECT b FROM Book b WHERE b.description LIKE %?1%")
+    List<BookSelection> findBookBySelectionDescription(String description);
+
 }

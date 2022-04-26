@@ -248,11 +248,11 @@ set @special_char_regex = '[\-\+\(\)\\[\\]\_\=\*\%\^\#\!\&\/\~\'\"\?\>\<\.\,\:\;
 # #-- ----------------------------------------------------------------------
 ##########################################################################
 -- #
-# LOAD DATA INFILE '/mysql_files/Lendit_Book_Kiosk_books.csv'
-#     INTO TABLE Lendit_Book_Kiosk_Test.book
-#     FIELDS TERMINATED BY ','
-#     ENCLOSED BY  '"'
-#     LINES TERMINATED BY '\n'
-#     IGNORE 1 LINES (isbn,authors,cover_img,description,genres,language,num_of_pages,publication_date,publisher,rating,series,title)
-# ;
+LOAD DATA INFILE '/mysql_files/Lendit_Book_Kiosk_books.csv'
+    INTO TABLE Lendit_Book_Kiosk_Test.book
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY  '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES (isbn,authors,cover_img,description,genres,language,num_of_pages,publication_date,publisher,rating,series,title)
+;
 -- #

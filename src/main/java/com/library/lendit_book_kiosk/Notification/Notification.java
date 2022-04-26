@@ -1,5 +1,6 @@
 package com.library.lendit_book_kiosk.Notification;
 
+import com.library.lendit_book_kiosk.Notification.Email.EmailNotification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,4 +35,12 @@ public class Notification implements Serializable {
             mappedBy = "notification"
     )
     private Set<EmailNotification> emailNotifications;
+
+    /////////////////////////////////////////////////////////////////
+
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import java.util.Set;
 
 @Configuration(value = "UserLoginDetails")
-@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security"})
+@ComponentScan(basePackages = {"com.library.lendit_book_kiosk.Security.UserDetails"})
 public class UserLoginDetails implements UserDetails{
     private static final Logger log = LoggerFactory.getLogger(UserLoginDetails.class);
     private Long id = null;

@@ -1,4 +1,4 @@
-package com.library.lendit_book_kiosk.Role;
+package com.library.lendit_book_kiosk.User.Role;
 // LOGGING CLASSES
 
 import com.library.lendit_book_kiosk.User.User;
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Table(name = "role")
-public class Role implements RoleInterface, Serializable {
+public class Role implements RoleInterface {
 
     // Define a logger instance and log what you want.
 	private static final Logger log = LoggerFactory.
@@ -89,6 +89,11 @@ public class Role implements RoleInterface, Serializable {
     }
 
     public Role() {
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override

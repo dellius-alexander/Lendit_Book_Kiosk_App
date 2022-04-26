@@ -81,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error",
                         "/index",
                         "/verify",
-                        "/searchbookby/**"
+                        "/searchbookby/**",
+                        "/selection/**"
                 )
                 .permitAll()
                    // For OPENAPI callers and urs

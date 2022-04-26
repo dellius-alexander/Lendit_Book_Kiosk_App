@@ -1,6 +1,7 @@
 package com.library.lendit_book_kiosk.WebApp.Login;
 
 import com.library.lendit_book_kiosk.Book.Book;
+import com.library.lendit_book_kiosk.Book.BookSelection;
 import com.library.lendit_book_kiosk.Book.BookService;
 import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -194,6 +196,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             value = {"index"})
     public String index(
             HttpServletRequest request,
+            Book book,
             Model model,
             BindingResult result) {
         try {
@@ -204,7 +207,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             // check the security context
             payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
             // set new book for searching
-            payLoad.put("Book",new Book());
+            payLoad.put("Book", book);
             ////////////////////////////////////////////////////////////////////////
             // merge our attributes
             model.mergeAttributes(payLoad);
@@ -230,7 +233,6 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
     public String searchbookbyTitle(
             @ModelAttribute("Book") @Valid Book book,
             HttpServletRequest request,
-            HttpServletResponse response,
             BindingResult result,
             Model model
     ) {
@@ -249,8 +251,6 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             ////////////////////////////////////////////////////////////////////////
             payLoad.put("Book",book);
             ////////////////////////////////////////////////////////////////////////
-            payLoad.put("Selection",new SelectionOptions());
-            ////////////////////////////////////////////////////////////////////////
             log.info("\nFrom Request PathVariable Book: \n{}", book);
             log.info("\nModel Attributes: {}",model);
             log.info("\nPayload: {}\n",payLoad);
@@ -258,8 +258,16 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
                 throw new Exception("Resultsbody has errors. Check parameter variable: " + book);
             }
             List<Book> bookListSearchResults = searchBook(book);
+            log.info(bookListSearchResults.stream().collect(Collectors.toList()).toString());
+            List<BookSelection> selections = new ArrayList<>();
+            for(Book b : bookListSearchResults)
+            {
+                selections.add(new BookSelection(b));
+            }
+            log.info(selections.stream().collect(Collectors.toList()).toString());
             // replace our book list with a fresh list
-            payLoad.put("book_list",bookListSearchResults);
+//            payLoad.put("book_list", bookListSearchResults);
+            payLoad.put("selections", selections);
             // check the security context
             payLoad.put("usernamePasswordAuthenticationToken",getPrincipal(request));
             ///////////////////////////////////////////////////////////////////////
@@ -285,7 +293,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             value = {"book_result"})
     public String book_result(
             @RequestHeader(value = HttpHeaders.REFERER, required = false) final String referrer,
-            @ModelAttribute("book_list") @Valid List<Book> bookList,
+            @ModelAttribute("selection") @Valid List<BookSelection> bookList,
             HttpServletRequest request,
             BindingResult result,
             Model model
@@ -297,19 +305,19 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             }
             if(result.hasErrors()){
                 throw new Exception("Resultsbody has errors. Check parameter variable: " +
-                        (List<Book>)payLoad.get("book_list"));
+                        (List<BookSelection>)payLoad.get("selections"));
             }
             ////////////////////////////////////////////////////////////////////////
             // hierarchical Check return <= [3,2,1]
-            payLoad.put("book_list",hck.hierarchicalCheck(
+            payLoad.put("selections", (List<BookSelection>) hck.hierarchicalCheck(
                     new Object[]{
-                            model.getAttribute("book_list"),
+                            model.getAttribute("selections"),
                             bookList,
-                            payLoad.get("book_list")
+                            payLoad.get("selections")
                     }
             ));
             ////////////////////////////////////////////////////////////////////////
-            payLoad.put("Selection",new SelectionOptions());
+            payLoad.put("Selection",new BookSelection());
             ////////////////////////////////////////////////////////////////////////
             // now use the authentication token to assign a principal/user to the security context holder
             // check the security context
@@ -364,7 +372,7 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
      */
     public List<Book> searchBook(Book book){
         if (book.getTitle() != null) {
-            return bookService.getBooksByTitle(book.getTitle());
+            return  bookService.getBooksByTitle(book.getTitle());
         }
         if (book.getAuthors() != null){
             return bookService.getBooksByAuthor(book.getAuthors());
@@ -382,16 +390,24 @@ public class LoginController<T extends Map<String, Object>> implements Serializa
             value = "selection"
     )
     public ResponseEntity<HttpStatus> selection(
-            @ModelAttribute("selection") @Valid SelectionOptions selection,
+            @ModelAttribute("selections") @Valid List<BookSelection> selections,
             HttpServletRequest request,
             Model model,
             BindingResult result){
         try{
+            selections = hck.hierarchicalCheck(
+                    new Object[]{
+                            request.getAttribute("selections"),
+                            model.getAttribute("selections"),
+                            selections
+                    }
+            );
+            log.info("\nBook Selections: {}\n",selections.stream().collect(Collectors.toList()).toString());
             if(result.hasErrors()){
                 log.error("Results has error: {}",result);
             }
             log.info(hck.hierarchicalCheck(
-                    new Object[]{selection, model}).toString());
+                    new Object[]{selections, model}).toString());
             log.info("Results: {}",result.toString());
         } catch (Exception e) {
             log.error(e.getMessage());

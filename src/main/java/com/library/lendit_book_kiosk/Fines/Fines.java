@@ -39,4 +39,8 @@ public class Fines implements Serializable {
     private Borrow_Book borrowed_book;
     ///////////////////////////////////////////////////////
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

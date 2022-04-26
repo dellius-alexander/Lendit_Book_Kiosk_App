@@ -35,4 +35,9 @@ public class Donated_Book implements Serializable {
     private Book donated_books;
     private String title;
     /////////////////////////////////////////////////////////////////
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

@@ -15,8 +15,8 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-// import com.library.lendit_book_kiosk.Role.Role;
-// import com.library.lendit_book_kiosk.Role.Role;
+// import Role;
+// import Role;
 // LOGGING CLASSES
 /////////////////////////////////////////////////////////////////////
 /**
@@ -90,6 +90,11 @@ public class Student  implements StudentInterface {
         this.Id = id;
         this.enrolled = enrolled;
         this.majors = majors;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public Long getStudentId() {

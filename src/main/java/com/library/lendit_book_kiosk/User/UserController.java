@@ -3,9 +3,8 @@ package com.library.lendit_book_kiosk.User;
 import java.net.URI;
 import java.util.List;
 
-import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.Role;
 // LOGGING CLASSES
-import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.NullArgumentException;

@@ -47,9 +47,15 @@ public class Reserve_Book implements Serializable {
             referencedColumnName = "student_id"
     )
     private Student student;
+    /////////////////////////////////////////////////////////////////
 
     public Reserve_Book(Book_Copy book_copy, Student student) {
         this.book_copy = book_copy;
         this.student = student;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.io.Serializable;
 
+@Transactional
 @Service(value = "ReserveService")
 public class ReserveService implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(ReserveService.class);

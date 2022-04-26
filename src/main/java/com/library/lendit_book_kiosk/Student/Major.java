@@ -48,6 +48,12 @@ public class Major implements Serializable {
 //        return Objects.hash(this.id, this.major);
 //    }
 
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public Long getId() {
         return this.id;
     }

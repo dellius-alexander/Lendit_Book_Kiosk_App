@@ -2,15 +2,15 @@ package com.library.lendit_book_kiosk;
 /////////////////////////////////////////////////////////////////////
 import com.library.lendit_book_kiosk.Book.Book;
 import com.library.lendit_book_kiosk.Book.BookService;
-import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.RoleService;
-import com.library.lendit_book_kiosk.Role.UserRole;
+import com.library.lendit_book_kiosk.User.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.RoleService;
+import com.library.lendit_book_kiosk.User.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import com.library.lendit_book_kiosk.Student.Major;
 import com.library.lendit_book_kiosk.Student.Student;
 import com.library.lendit_book_kiosk.Utility.CSVParser;
 import com.library.lendit_book_kiosk.Utility.FileParser;
-import com.library.lendit_book_kiosk.User.GENDER;
+import com.library.lendit_book_kiosk.User.Gender;
 import com.library.lendit_book_kiosk.User.User;
 import com.library.lendit_book_kiosk.User.UserService;
 import org.slf4j.Logger;
@@ -141,7 +141,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 				"Jane Doe",
 				"jane@gmail.com",
 				new Secret("password"),
-				GENDER.FEMALE,
+				Gender.FEMALE,
 				LocalDate.of(1989, Month.JANUARY, 6),
 				"Student:Senior",
 				Set.of(student_role,admin_role),
@@ -152,7 +152,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 				"John Doe",
 				"john@gmail.com",
 				new Secret("password"),
-				GENDER.MALE,
+				Gender.MALE,
 				LocalDate.of(1989, Month.JANUARY, 5),
 				"Student:Senior",
 				Set.of(student_role,admin_role),
@@ -163,7 +163,7 @@ public class LendITBookKioskApplication implements CommandLineRunner
 				"Bob Doe",
 				"bob@gmail.com",
 				new Secret("password"),
-				GENDER.MALE,
+				Gender.MALE,
 				LocalDate.of(1979, Month.JANUARY, 12),
 				"Visitor:GSU",
 				Set.of(GUEST),

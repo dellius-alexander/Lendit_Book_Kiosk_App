@@ -42,4 +42,10 @@ public class Employee implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, table = "user")
     )
     private Set<User> users;
+    /////////////////////////////////////////////////////////////////
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

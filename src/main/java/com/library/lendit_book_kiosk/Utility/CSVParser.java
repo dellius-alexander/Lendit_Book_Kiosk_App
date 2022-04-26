@@ -1,17 +1,21 @@
 package com.library.lendit_book_kiosk.Utility;
 
 import com.library.lendit_book_kiosk.Book.Book;
-import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.UserRole;
+import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
+import com.library.lendit_book_kiosk.Department.Course.Course;
+import com.library.lendit_book_kiosk.Department.Department;
+import com.library.lendit_book_kiosk.User.Gender;
+import com.library.lendit_book_kiosk.User.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import com.library.lendit_book_kiosk.Student.Major;
 import com.library.lendit_book_kiosk.Student.Student;
-import com.library.lendit_book_kiosk.User.GENDER;
 import com.library.lendit_book_kiosk.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -106,7 +110,8 @@ public class CSVParser implements Serializable{
         CSVInit(String.format(","));
         Role STUDENT = new Role(UserRole.STUDENT,"STUDENT");
 //       System.out.println(csv.getRow(9).toArray()[0]);
-        for(int i = 1; i < file_contents.size(); i++){
+        for(int i = 1; i < file_contents.size(); i++)
+        {
             log.info("User: {}", Arrays.stream(file_contents.get(i)).collect(Collectors.toList()));
             List<Object> lUser = Arrays.stream(file_contents.get(i)).collect(Collectors.toList());
             if (String.valueOf(lUser.get(6)).equalsIgnoreCase( "STUDENT" )){
@@ -117,7 +122,7 @@ public class CSVParser implements Serializable{
                         lUser.get(0).toString().trim(),
                         lUser.get(1).toString().trim(),
                         new Secret(lUser.get(2).toString().trim()),
-                        (lUser.get(3).toString().trim().equalsIgnoreCase("FEMALE") ? GENDER.FEMALE : GENDER.MALE),
+                        (lUser.get(3).toString().trim().equalsIgnoreCase("FEMALE") ? Gender.FEMALE : Gender.MALE),
                         LocalDate.of(Integer.parseInt(lUser.get(4).toString().trim().split("-")[0]),
                                 Month.of(Integer.parseInt(lUser.get(4).toString().trim().split("-")[1])),
                                 Integer.parseInt(lUser.get(4).toString().trim().split("-")[2])),
@@ -131,6 +136,8 @@ public class CSVParser implements Serializable{
                 users.add(user);
                 log.info(user.toString());
             }
+            // limit the amount of dummy Users added to DB
+            if(i == 100){break;}
         }
         log.info("Total Users: {}",cnt);
         return users;
@@ -160,6 +167,29 @@ public class CSVParser implements Serializable{
                 for (int j = 0; j < 1; j++)
                 {
                     // TODO: use hierarchicalCheck to check each value
+//                    Book bookCopy = new Book(
+//                            (lBook[j].isEmpty() ? "9999999999" : lBook[j]),   // 0 isbn,
+//                            lBook[j+11],// 11 title
+//                            lBook[j+10], // 10 series,
+//                            lBook[j+1], // 1 authors,
+//                            lBook[j+3].replaceAll("\"\"",""), // 3 description,
+//                            lBook[j+5], // 5 language,
+//                            (lBook[j+9] == null ? 0.0 : Double.parseDouble(lBook[j+9])), // 9 rating,
+//                            lBook[j+4].replaceAll("\"\"",""), // 4 genres,
+//                            lBook[j+6].isEmpty() ? 0 : Long.parseLong(lBook[j+6]), // 6 num_of_pages,
+//                            lBook[j+8], // 8 publisher,
+//                            // 7 publication_date,
+//                            LocalDate.of( (lBook[j+7].isEmpty() ? 0000 : Integer.parseInt(lBook[j+7].split("-")[0])), // year
+//                                    Month.of( (lBook[j+7].isEmpty() ? 1 : Integer.parseInt(lBook[j+7].split("-")[1]))), // month
+//                                    (lBook[j+7].isEmpty() ? 1 : Integer.parseInt(lBook[j+7].split("-")[2]))), // day // publication_date
+//                            lBook[j+2]  // 2 cover_img
+//                    );
+
+//                    List<Course> courses = new ArrayList<>();
+//                    for(String d : bookCopy.getGenres().split(",(?!\\[\\])"))
+//                    {
+//                    }
+                    // TODO: use hierarchicalCheck to check each value
                     Book book = new Book(
                             (lBook[j].isEmpty() ? "9999999999" : lBook[j]),   // 0 isbn,
                             lBook[j+11],// 11 title
@@ -177,9 +207,12 @@ public class CSVParser implements Serializable{
                                     (lBook[j+7].isEmpty() ? 1 : Integer.parseInt(lBook[j+7].split("-")[2]))), // day // publication_date
                             lBook[j+2]  // 2 cover_img
                     );
-//                    log.info("New Book Added: {}", book);
+                    log.info("New Book Added: {}", book);
                     books.add(book);
+//                    System.exit(0);
                 }
+                // limit the amount of dummy Users added to DB
+                if(i == 1000){break;}
             }
         } catch (Exception e){
             log.error(e.getMessage());
@@ -190,14 +223,14 @@ public class CSVParser implements Serializable{
     }
 
 ///////////////////////////////////////////////////////////////////////////////
-//    public static void main(String[] args) throws IOException {
-//        CSVParser csv = new CSVParser(new FileParser(new File("SQL/mysql_files/Lendit_Book_Kiosk_book.csv")));
-////        CSVParser csv = new CSVParser(new FileParser(new File("src/main/resources/users.csv")));
-//        log.info("ABS Path: " + csv.getFp().getNext().getAbsolutePath());
-//        log.info("Is File: " + csv.getFp().getNext().isFile());
-//        log.info(csv.getFp().getNext().toString());
-//        log.info(csv.getBooksFromCsvFile().toString());
-//
-//    }
+    public static void main(String[] args) throws IOException {
+        CSVParser csv = new CSVParser(new FileParser(new File("src/main/resources/Lendit_Book_Kiosk_book.csv")));
+//        CSVParser csv = new CSVParser(new FileParser(new File("src/main/resources/users.csv")));
+        log.info("ABS Path: " + csv.getFp().getNext().getAbsolutePath());
+        log.info("Is File: " + csv.getFp().getNext().isFile());
+        log.info(csv.getFp().getNext().toString());
+        log.info(csv.getBooksFromCsvFile().toString());
+
+    }
 
 }

@@ -1,8 +1,8 @@
 package com.library.lendit_book_kiosk.User;
 
 import com.library.lendit_book_kiosk.Employee.Employee;
-import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.UserRole;
+import com.library.lendit_book_kiosk.User.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.UserRole;
 import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import com.library.lendit_book_kiosk.Student.Student;
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
             name = "gender",
             columnDefinition = "varchar(8)"
     )
-    private GENDER gender;
+    private Gender gender;
     @Column(
             name = "dob",
             columnDefinition = "date"
@@ -134,7 +134,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
             String name,
             String email,
             Secret password,
-            GENDER gender,
+            Gender gender,
             LocalDate dob,
             String profession,
             Set<Role> roles,
@@ -169,7 +169,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
             String name,
             String email,
             Secret password,
-            GENDER gender,
+            Gender gender,
             LocalDate dob,
             String profession,
             Set<Role> roles,
@@ -202,7 +202,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
             String name,
             String email,
             Secret password,
-            GENDER gender,
+            Gender gender,
             LocalDate dob,
             String profession,
             Set<Role> roles
@@ -329,7 +329,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
      * @return the user gender
      */
     @Override
-    public GENDER getGender() {
+    public Gender getGender() {
         return this.gender;
     }
 
@@ -400,7 +400,7 @@ public class User extends org.springframework.security.core.userdetails.User imp
      * @param gender
      */
     @Override
-    public void setGender(GENDER gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

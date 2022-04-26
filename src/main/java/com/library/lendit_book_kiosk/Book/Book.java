@@ -3,9 +3,10 @@ package com.library.lendit_book_kiosk.Book;
 
 import com.library.lendit_book_kiosk.Book.Copy.Book_Copy;
 import com.library.lendit_book_kiosk.Book.Donated.Donated_Book;
-import com.library.lendit_book_kiosk.Course.Course;
+import com.library.lendit_book_kiosk.Department.Course.Course;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
@@ -13,9 +14,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "book")
-public class Book implements BookInterface<Object>  {
+public class Book implements Serializable {
     /////////////////////////////////////////////////////////////////
-// Removed Gererator because the id is integer and not auto generated
+// Removed Gererator because the id is String and not auto generated integer
 //    @GeneratedValue(
 //            strategy = GenerationType.SEQUENCE,
 //            generator = "LendIT_Book_Kiosk_DB_Sequence_Generator"
@@ -115,8 +116,29 @@ public class Book implements BookInterface<Object>  {
         this.cover_img = cover_img;
     }
 
+    public Book(Book book) {
+        this.isbn = book.isbn;
+        this.title = book.title;
+        this.series = book.series;
+        this.authors = book.authors;
+        this.description = book.description;
+        this.language = book.language;
+        this.rating = book.rating;
+        this.genres = book.genres;
+        this.num_of_pages = book.num_of_pages;
+        this.publisher = book.publisher;
+        this.publication_date = book.publication_date;
+        this.cover_img = book.cover_img;
+    }
 
     public Book() {
+    }
+
+    protected Book getBook(){return this;}
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public String getIsbn() {

@@ -1,6 +1,7 @@
-package com.library.lendit_book_kiosk.Notification;
+package com.library.lendit_book_kiosk.Notification.Email;
 
 import com.library.lendit_book_kiosk.Book.Borrow.Borrow_Book;
+import com.library.lendit_book_kiosk.Notification.Notification;
 import com.library.lendit_book_kiosk.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,20 +1,13 @@
 package com.library.lendit_book_kiosk.WebApp.Fragments;
 
-import com.library.lendit_book_kiosk.Book.Book;
-import com.library.lendit_book_kiosk.Book.BookService;
-import com.library.lendit_book_kiosk.Security.Custom.CustomAuthenticationProvider;
 import com.library.lendit_book_kiosk.Security.UserDetails.UserLoginDetails;
-import com.library.lendit_book_kiosk.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,9 +18,13 @@ public class FragmentsController {
     private static final Logger log = LoggerFactory.getLogger(FragmentsController.class);
 
     @Autowired
-    private static UserLoginDetails userLoginDetails;
+    private final UserLoginDetails userLoginDetails;
 
     private static final Map<String, Object> payLoad = new HashMap<>();
+
+    public FragmentsController(UserLoginDetails userLoginDetails) {
+        this.userLoginDetails = userLoginDetails;
+    }
 
     @GetMapping(value = {"login_form"})
     public String login_form(Model model){
@@ -36,7 +33,7 @@ public class FragmentsController {
             payLoad.put("userLoginDetails", ((UserLoginDetails) model.getAttribute("userLoginDetails")));
         }
         else if(userLoginDetails.isEmpty()){
-            payLoad.put("userLoginDetails", new UserLoginDetails());
+            payLoad.put("userLoginDetails", userLoginDetails);
         }
         model.addAllAttributes( payLoad.values() );
         log.info("\nPayload: {}\n",payLoad.values().stream().collect(Collectors.toList()));
@@ -50,7 +47,7 @@ public class FragmentsController {
             payLoad.put("userLoginDetails", ((UserLoginDetails) model.getAttribute("userLoginDetails")));
         }
         else if(userLoginDetails.isEmpty()){
-            payLoad.put("userLoginDetails", new UserLoginDetails());
+            payLoad.put("userLoginDetails", userLoginDetails);
         }
 //        model.addAllAttributes( payLoad.values() );
         log.info("\nPayload: {}\n",payLoad.values().stream().collect(Collectors.toList()));

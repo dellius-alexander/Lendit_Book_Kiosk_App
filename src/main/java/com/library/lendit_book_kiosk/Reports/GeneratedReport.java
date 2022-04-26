@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 public class GeneratedReport implements Serializable {
@@ -20,7 +21,7 @@ public class GeneratedReport implements Serializable {
 
     public static void main(String[] args) {
         GeneratedReport r = new GeneratedReport();
-        r.getReport().set("dion",new Student(true, Set.of(new Major("CSCI"))));
+        r.getReport().set("dion", new Student(true, Set.of(new Major("CSCI"))));
         Student dion = (Student) r.getReport().get("dion");
         log.info(dion.toString());
     }

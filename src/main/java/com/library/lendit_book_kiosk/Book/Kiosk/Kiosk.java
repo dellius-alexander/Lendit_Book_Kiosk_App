@@ -42,4 +42,9 @@ public class Kiosk implements Serializable {
     )
     private Set<Borrow_Book> borrow_books;
 
+    /////////////////////////////////////////////////////////////////
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

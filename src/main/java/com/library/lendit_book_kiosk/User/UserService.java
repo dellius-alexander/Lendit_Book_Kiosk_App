@@ -1,13 +1,13 @@
 package com.library.lendit_book_kiosk.User;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import com.library.lendit_book_kiosk.Role.Role;
-import com.library.lendit_book_kiosk.Role.RoleRepository;
+import com.library.lendit_book_kiosk.User.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.RoleRepository;
 
 
 // LOGGING CLASSES
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
  */
 @Transactional
 @Service(value = "UserService")
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, Serializable {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -194,6 +194,7 @@ public class UserService implements UserDetailsService {
      * @param users
      * @return http status code 200 ok or throws exception
      */
+    @Async
     public ResponseEntity<HttpStatus> saveAll(List<User> users){
         userRepository.saveAll(users);
         return ResponseEntity.ok().body(HttpStatus.ACCEPTED);

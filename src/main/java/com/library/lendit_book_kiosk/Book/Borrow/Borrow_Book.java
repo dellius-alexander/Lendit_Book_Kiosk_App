@@ -2,7 +2,7 @@ package com.library.lendit_book_kiosk.Book.Borrow;
 
 import com.library.lendit_book_kiosk.Book.Kiosk.Kiosk;
 import com.library.lendit_book_kiosk.Fines.Fines;
-import com.library.lendit_book_kiosk.Notification.EmailNotification;
+import com.library.lendit_book_kiosk.Notification.Email.EmailNotification;
 import com.library.lendit_book_kiosk.Student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -63,6 +63,10 @@ public class Borrow_Book implements Serializable {
     private Double duration;
     /////////////////////////////////////////////////////////////////
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 //    public static void main(String[] args) throws InterruptedException {
 //        Borrow_Book bb = new Borrow_Book();

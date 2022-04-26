@@ -1,6 +1,6 @@
 package com.library.lendit_book_kiosk.User;
 
-import com.library.lendit_book_kiosk.Role.Role;
+import com.library.lendit_book_kiosk.User.Role.Role;
 import com.library.lendit_book_kiosk.Security.Secret.Secret;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -66,7 +66,7 @@ public interface UserInterface extends Serializable {
      * Get the user gender
      * @return the user gender
      */
-    GENDER getGender();
+    Gender getGender();
 
     /**
      * Get the user age
@@ -127,7 +127,7 @@ public interface UserInterface extends Serializable {
      * Set user gender
      * @param gender
      */
-    void setGender(GENDER gender);
+    void setGender(Gender gender);
 
     /**
      * Set user dob
